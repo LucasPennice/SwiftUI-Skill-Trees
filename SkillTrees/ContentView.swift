@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var showingCollectionNotAvailablePopUp: Bool = false
+    @State private var showingAddNewTreePopUp: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -44,7 +45,7 @@ struct ContentView: View {
 
                         Spacer()
 
-                        Button("Add") {}
+                        Button("Add") { showingAddNewTreePopUp = true }
                             .font(.system(size: 18))
                             .padding(.horizontal)
                             .padding(.vertical, 8)
@@ -144,6 +145,9 @@ struct ContentView: View {
                         action: { showingCollectionNotAvailablePopUp = false }
                     )
                 }
+            }
+            .sheet(isPresented: $showingAddNewTreePopUp) {
+                AddNewProgressTreeView()
             }
         }
     }
