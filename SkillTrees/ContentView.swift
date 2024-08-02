@@ -8,14 +8,144 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var showingCollectionNotAvailablePopUp: Bool = false
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            ZStack {
+                VStack(alignment: .center) {
+                    HStack {
+                        HStack {
+                            Image(systemName: "flame")
+                                .font(.system(size: 18))
+                                .foregroundStyle(AppColors.textGray)
+
+                            Text("5")
+                                .fontWeight(.medium)
+                                .font(.system(size: 18))
+                                .foregroundStyle(.white)
+                        }
+                        .frame(height: 33)
+                        .padding(.horizontal)
+                        .background(AppColors.darkGray)
+                        .cornerRadius(15)
+
+                        Spacer()
+
+                        Button("", systemImage: "gear") {}
+                            .font(.system(size: 20))
+                    }
+                    .padding(.horizontal)
+
+                    HStack {
+                        Text("Progress Trees")
+                            .foregroundStyle(.white)
+                            .font(.system(size: 34).bold())
+
+                        Spacer()
+
+                        Button("Add") {}
+                            .font(.system(size: 18))
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
+                            .foregroundColor(.accentColor)
+                            .background(.blue.opacity(0.3))
+                            .cornerRadius(15)
+                    }
+                    .padding(.horizontal)
+
+                    List {
+                        ///
+                        /// JOIN COMMUNITY BUTTON
+                        /// Visible only after the user uses the app for 3 days (🚨 NOT IMPLEMENTED)
+                        /// After the user presses the close button it should show up again (🚨 NOT IMPLEMENTED)
+                        /// Tapping it takes you to the discord server (🚨 NOT IMPLEMENTED)
+                        ///
+                        HStack(alignment: .top) {
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("We’d love to hear your thoughts")
+                                    .font(.system(size: 16))
+                                    .foregroundColor(.white)
+
+                                Text("Tap here to join our Discord")
+                                    .font(.system(size: 14))
+                                    .foregroundStyle(AppColors.textGray)
+                            }
+
+                            Spacer()
+
+                            Image(systemName: "xmark")
+                                .font(.system(size: 14).bold())
+                                .foregroundColor(AppColors.textGray)
+                                .frame(width: 24, height: 24)
+                                .background(AppColors.darkGray)
+                                .cornerRadius(20)
+                        }
+                        .listRowBackground(AppColors.semiDarkGray)
+
+                        ///
+                        /// OPEN COLLECTION BUTTON
+                        /// Navigates only after the user earns their first collectible (🚨 NOT IMPLEMENTED)
+                        /// Lock icon goes away after the user earns their first collectible (🚨 NOT IMPLEMENTED)
+                        ///
+                        if false {
+                            NavigationLink(destination: Text("Hello, World!")) {}
+                                .opacity(0)
+                                .background(
+                                    HStack {
+                                        Image(systemName: "lock.fill")
+                                            .foregroundColor(AppColors.textGray)
+
+                                        Text("Collection")
+                                            .foregroundColor(.white)
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 7)
+                                            .foregroundColor(AppColors.textGray)
+                                    }
+                                )
+                                .listRowBackground(AppColors.semiDarkGray)
+                        } else {
+                            Button(action: { showingCollectionNotAvailablePopUp = true }) {
+                                HStack {
+                                    Image(systemName: "lock.fill")
+                                        .foregroundColor(AppColors.textGray)
+
+                                    Text("Collection")
+                                        .foregroundColor(.white)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 7)
+                                        .foregroundColor(AppColors.textGray)
+                                }
+                            }
+                            .listRowBackground(AppColors.semiDarkGray)
+                        }
+                    }
+                    .scrollContentBackground(.hidden)
+                    .listStyle(InsetGroupedListStyle())
+                    .listRowSpacing(18)
+                    .scrollBounceBehavior(.basedOnSize)
+                    .offset(y: -35)
+                }
+                .padding(.vertical)
+                .background(.black)
+                .allowsHitTesting(!showingCollectionNotAvailablePopUp)
+
+                if showingCollectionNotAvailablePopUp {
+                    DialoguePopUpView(
+                        title: "Get your first Fiber to unlock your Collection",
+                        messages: [["Complete a milestone in any Progress Tree to get your first Fiber"]],
+                        buttonTitle: "Continue",
+                        action: { showingCollectionNotAvailablePopUp = false }
+                    )
+                }
+            }
         }
-        .padding()
     }
 }
 
