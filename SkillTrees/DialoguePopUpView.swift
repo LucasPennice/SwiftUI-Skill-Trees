@@ -23,6 +23,7 @@ struct DialoguePopUpView: View {
                 .font(.system(size: 24))
                 .padding(.bottom, 30)
                 .multilineTextAlignment(.center)
+                .opacity(showing ? 1 : 0)
 
             VStack(alignment: .leading, spacing: 30) {
                 ForEach(0 ..< messages.count) { textBlockIdx in
@@ -44,11 +45,12 @@ struct DialoguePopUpView: View {
                 }
             }
             .padding(.bottom, 30)
+            .opacity(showing ? 1 : 0)
 
             Button(action: {
                 let closeDurationSeconds = 0.5
 
-                withAnimation(.spring(duration: closeDurationSeconds)) {
+                withAnimation(.default) {
                     showing = false
                 }
 
@@ -63,6 +65,7 @@ struct DialoguePopUpView: View {
             }
             .buttonStyle(.bordered)
             .foregroundColor(.accentColor)
+            .opacity(showing ? 1 : 0)
         }
         .padding(.horizontal)
         .foregroundColor(.white)
@@ -73,7 +76,7 @@ struct DialoguePopUpView: View {
         .shadow(color: .black, radius: 10)
         .scaleEffect(showing ? 1 : 0.1)
         .offset(y: showing ? 0 : 1000)
-        .blur(radius: showing ? 0 : 6)
+        .blur(radius: showing ? 0 : 8)
         .onAppear {
             withAnimation {
                 showing = true

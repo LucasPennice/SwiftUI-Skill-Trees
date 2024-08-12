@@ -79,6 +79,7 @@
 		D19AB9BD2C5D22EB00399662 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				D1B3891F2C697147008E9306 /* Extensions */,
 				D19AB9BE2C5D22F200399662 /* Entities */,
 				D19AB9BF2C5D230600399662 /* Colors.swift */,
 			);
@@ -90,6 +91,13 @@
 			children = (
 			);
 			path = Entities;
+			sourceTree = "<group>";
+		};
+		D1B3891F2C697147008E9306 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -7,9 +7,91 @@
 
 import SwiftUI
 
+class AppDateFormatter {
+    static let shared = AppDateFormatter()
+
+    var formatter: DateFormatter
+
+    private init() {
+        let nativeFormatter = DateFormatter()
+        nativeFormatter.locale = .current
+        nativeFormatter.dateStyle = .full
+        nativeFormatter.timeStyle = .full
+
+        formatter = nativeFormatter
+    }
+}
+
+class Settings: ObservableObject {
+    @AppStorage("appFirstOpenDateString") var appFirstOpenDateString: String = ""
+    @AppStorage("doNotShowDiscordPopUpAgain") var doNotShowDiscordPopUpAgain: Bool = false
+    @AppStorage("startDateString") var startDateString: String = ""
+    @AppStorage("lastLogInDateString") var lastLogInDateString: String = ""
+    /// We have a variable instead of a derived variable because the content transition doesn't work otherwise
+    @AppStorage("streakDays") var streakDays: Int = 3
+
+    var appFirstOpenDate: Date {
+        return AppDateFormatter.shared.formatter.date(from: appFirstOpenDateString) ?? .now
+    }
+
+    var daysSinceFirstOpen: Int {
+        let diff = Calendar.current.dateComponents([.day], from: appFirstOpenDate, to: .now)
+
+        return diff.day ?? 0
+    }
+
+    func updateStreak() {
+        let lastLogIn = AppDateFormatter.shared.formatter.date(from: lastLogInDateString) ?? .now
+
+        let diff = Calendar.current.dateComponents([.day], from: .now, to: lastLogIn)
+
+        guard let diff = diff.day else { return }
+
+        /// We are logging on the same day as the last log in
+        if diff == 0 { }
+
+        /// We are logging a day after the last log in, the streak is still valid and increases by one
+        if diff == 1 {
+            withAnimation {
+                streakDays = self.streakDays + 1
+            }
+        }
+
+        /// We are logging more than a day after the last log in, the streak is no longer valid, therefore it resets
+        if diff > 1 {
+            startDateString = AppDateFormatter.shared.formatter.string(from: .now)
+
+            withAnimation {
+                streakDays = 0
+            }
+        }
+
+        lastLogInDateString = AppDateFormatter.shared.formatter.string(from: .now)
+    }
+
+    init() {
+        /// If there is no set first open date we set that to today
+        if appFirstOpenDateString.isEmpty {
+            appFirstOpenDateString = AppDateFormatter.shared.formatter.string(from: .now)
+        }
+
+        /// If there is no set last open date we set that to 3 days before today. Because we want the user to start with a streak of 3
+        if startDateString.isEmpty {
+            startDateString = AppDateFormatter.shared.formatter.string(from: Calendar.current.date(byAdding: .day, value: -3, to: .now)!)
+        }
+
+        /// If there is no last log in we set that to today
+        if lastLogInDateString.isEmpty {
+            lastLogInDateString = AppDateFormatter.shared.formatter.string(from: .now)
+        }
+    }
+}
+
 struct ContentView: View {
     @State private var showingCollectionNotAvailablePopUp: Bool = false
     @State private var showingAddNewTreePopUp: Bool = false
+
+    @StateObject var settings = Settings()
 
     var body: some View {
         NavigationStack {
@@ -21,10 +103,11 @@ struct ContentView: View {
                                 .font(.system(size: 18))
                                 .foregroundStyle(AppColors.textGray)
 
-                            Text("5")
+                            Text("\(settings.streakDays)")
                                 .fontWeight(.medium)
                                 .font(.system(size: 18))
                                 .foregroundStyle(.white)
+                                .contentTransition(.numericText())
                         }
                         .frame(height: 33)
                         .padding(.horizontal)
@@ -58,31 +141,34 @@ struct ContentView: View {
                     List {
                         ///
                         /// JOIN COMMUNITY BUTTON
-                        /// Visible only after the user uses the app for 3 days (🚨 NOT IMPLEMENTED)
-                        /// After the user presses the close button it should show up again (🚨 NOT IMPLEMENTED)
+                        /// Visible only after the user uses the app for 3 days
+                        /// After the user presses the close button it should show up again
                         /// Tapping it takes you to the discord server (🚨 NOT IMPLEMENTED)
                         ///
-                        HStack(alignment: .top) {
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text("We’d love to hear your thoughts")
-                                    .font(.system(size: 16))
-                                    .foregroundColor(.white)
+                        if settings.daysSinceFirstOpen >= 3 && !settings.doNotShowDiscordPopUpAgain {
+                            HStack(alignment: .top) {
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text("We’d love to hear your thoughts")
+                                        .font(.system(size: 16))
+                                        .foregroundColor(.white)
 
-                                Text("Tap here to join our Discord")
-                                    .font(.system(size: 14))
-                                    .foregroundStyle(AppColors.textGray)
+                                    Text("Tap here to join our Discord")
+                                        .font(.system(size: 14))
+                                        .foregroundStyle(AppColors.textGray)
+                                }
+
+                                Spacer()
+
+                                Image(systemName: "xmark")
+                                    .font(.system(size: 14).bold())
+                                    .foregroundColor(AppColors.textGray)
+                                    .frame(width: 24, height: 24)
+                                    .background(AppColors.darkGray)
+                                    .cornerRadius(20)
+                                    .onTapGesture { withAnimation { settings.doNotShowDiscordPopUpAgain = true } }
                             }
-
-                            Spacer()
-
-                            Image(systemName: "xmark")
-                                .font(.system(size: 14).bold())
-                                .foregroundColor(AppColors.textGray)
-                                .frame(width: 24, height: 24)
-                                .background(AppColors.darkGray)
-                                .cornerRadius(20)
+                            .listRowBackground(AppColors.semiDarkGray)
                         }
-                        .listRowBackground(AppColors.semiDarkGray)
 
                         ///
                         /// OPEN COLLECTION BUTTON
@@ -137,6 +223,7 @@ struct ContentView: View {
                 .background(.black)
                 .allowsHitTesting(!showingCollectionNotAvailablePopUp)
 
+                #warning("SI EL USUARIO NO TIENEN NINGUN PROGRESS TREE EL POPUP ESTE TE DEBERIA REDIRIGIR, CAMBIAR MENSAJE BOTON Y ACTION")
                 if showingCollectionNotAvailablePopUp {
                     DialoguePopUpView(
                         title: "Get your first Fiber to unlock your Collection",
@@ -149,6 +236,10 @@ struct ContentView: View {
             .sheet(isPresented: $showingAddNewTreePopUp) {
                 AddNewProgressTreeView()
             }
+        }
+        .environmentObject(settings)
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            settings.updateStreak()
         }
     }
 }
