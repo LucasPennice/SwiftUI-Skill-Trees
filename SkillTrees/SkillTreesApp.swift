@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct SkillTreesApp: App {
@@ -14,5 +15,6 @@ struct SkillTreesApp: App {
             ContentView()
                 .preferredColorScheme(.dark)
         }
+        .modelContainer(for: ProgressTree.self)
     }
 }
