@@ -18,6 +18,9 @@
 		D1B389252C699B75008E9306 /* ProgressTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389242C699B75008E9306 /* ProgressTree.swift */; };
 		D1B389272C699DDD008E9306 /* TreeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389262C699DDD008E9306 /* TreeNode.swift */; };
 		D1B389292C699DFD008E9306 /* ItemCompletionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389282C699DFD008E9306 /* ItemCompletionRecord.swift */; };
+		D1B3892B2C69A05E008E9306 /* SwiftDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B3892A2C69A05E008E9306 /* SwiftDataController.swift */; };
+		D1B3892E2C6AA748008E9306 /* MCEmojiPicker in Frameworks */ = {isa = PBXBuildFile; productRef = D1B3892D2C6AA748008E9306 /* MCEmojiPicker */; };
+		D1B389312C6AAB00008E9306 /* ProgressTreeTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389302C6AAB00008E9306 /* ProgressTreeTemplates.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +36,8 @@
 		D1B389242C699B75008E9306 /* ProgressTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTree.swift; sourceTree = "<group>"; };
 		D1B389262C699DDD008E9306 /* TreeNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeNode.swift; sourceTree = "<group>"; };
 		D1B389282C699DFD008E9306 /* ItemCompletionRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCompletionRecord.swift; sourceTree = "<group>"; };
+		D1B3892A2C69A05E008E9306 /* SwiftDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataController.swift; sourceTree = "<group>"; };
+		D1B389302C6AAB00008E9306 /* ProgressTreeTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTreeTemplates.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1B3892E2C6AA748008E9306 /* MCEmojiPicker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,9 +93,11 @@
 		D19AB9BD2C5D22EB00399662 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				D1B3892F2C6AAAE9008E9306 /* Constants */,
 				D1B3891F2C697147008E9306 /* Extensions */,
 				D19AB9BE2C5D22F200399662 /* Entities */,
 				D19AB9BF2C5D230600399662 /* Colors.swift */,
+				D1B3892A2C69A05E008E9306 /* SwiftDataController.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -112,6 +120,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		D1B3892F2C6AAAE9008E9306 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				D1B389302C6AAB00008E9306 /* ProgressTreeTemplates.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -128,6 +144,9 @@
 			dependencies = (
 			);
 			name = SkillTrees;
+			packageProductDependencies = (
+				D1B3892D2C6AA748008E9306 /* MCEmojiPicker */,
+			);
 			productName = SkillTrees;
 			productReference = D11080E32C5D1C4100C5E225 /* SkillTrees.app */;
 			productType = "com.apple.product-type.application";
@@ -156,6 +175,9 @@
 				Base,
 			);
 			mainGroup = D11080DA2C5D1C4100C5E225;
+			packageReferences = (
+				D1B3892C2C6AA748008E9306 /* XCRemoteSwiftPackageReference "MCEmojiPicker" */,
+			);
 			productRefGroup = D11080E42C5D1C4100C5E225 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -190,7 +212,9 @@
 				D11080E72C5D1C4100C5E225 /* SkillTreesApp.swift in Sources */,
 				D19AB9C22C5D2E9600399662 /* DialoguePopUpView.swift in Sources */,
 				D1B389252C699B75008E9306 /* ProgressTree.swift in Sources */,
+				D1B389312C6AAB00008E9306 /* ProgressTreeTemplates.swift in Sources */,
 				D1B389272C699DDD008E9306 /* TreeNode.swift in Sources */,
+				D1B3892B2C69A05E008E9306 /* SwiftDataController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +420,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D1B3892C2C6AA748008E9306 /* XCRemoteSwiftPackageReference "MCEmojiPicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/izyumkin/MCEmojiPicker";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D1B3892D2C6AA748008E9306 /* MCEmojiPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1B3892C2C6AA748008E9306 /* XCRemoteSwiftPackageReference "MCEmojiPicker" */;
+			productName = MCEmojiPicker;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D11080DB2C5D1C4100C5E225 /* Project object */;
 }

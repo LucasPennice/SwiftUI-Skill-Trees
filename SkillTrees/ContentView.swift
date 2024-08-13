@@ -5,6 +5,7 @@
 //  Created by Lucas Pennice on 02/08/2024.
 //
 
+import SwiftData
 import SwiftUI
 
 class AppDateFormatter {
@@ -23,6 +24,8 @@ class AppDateFormatter {
 }
 
 struct ContentView: View {
+    @Query var progressTrees: [ProgressTree]
+
     @State private var showingCollectionNotAvailablePopUp: Bool = false
     @State private var showingAddNewTreePopUp: Bool = false
 
@@ -149,6 +152,13 @@ struct ContentView: View {
                             }
                             .listRowBackground(AppColors.semiDarkGray)
                         }
+
+                        ///
+                        /// List of all Progress Trees
+                        ///
+                        ForEach(progressTrees) {
+                            Text("\($0.treeNodes.count) \($0.name)")
+                        }
                     }
                     .scrollContentBackground(.hidden)
                     .listStyle(InsetGroupedListStyle())
@@ -175,6 +185,7 @@ struct ContentView: View {
             }
         }
         .environmentObject(settings)
+        /// Each time the app becomes active this function runs
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
             settings.updateStreak()
         }
@@ -183,4 +194,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .modelContainer(SwiftDataController.previewContainer)
 }
