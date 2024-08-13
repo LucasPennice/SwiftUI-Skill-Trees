@@ -8,19 +8,35 @@
 import Foundation
 import SwiftData
 
+struct Coordinate: Codable {
+    var x: Double
+    var y: Double
+
+    init(x: Double, y: Double) {
+        self.x = x
+        self.y = y
+    }
+
+    init() {
+        x = 0
+        y = 0
+    }
+}
+
 @Model
 final class TreeNode {
-//    let id = UUID()
+    var layer: Int = 0
 
-//    var layer: Int
+    var coordinates: Coordinate = Coordinate()
 
-//    var coordinates: CGPoint
-
-//    @Relationship(deleteRule: .cascade, inverse: \TreeNode.parent)
-//    var successors: [TreeNode]
-//    var parent: TreeNode?
-//    var additionalParents: [TreeNode]
     var progressTree: ProgressTree?
+    
+    var parent: TreeNode?
+    
+    @Relationship(deleteRule: .cascade, inverse: \TreeNode.parent)
+    var successors: [TreeNode]
+    
+    var additionalParents: [TreeNode]
 
     ///
     /// Data Related Attributes
@@ -100,11 +116,28 @@ final class TreeNode {
         self.items = items
         self.completionHistory = completionHistory
         self.emojiIcon = emojiIcon
-//        layer = -1
-//        coordinates = CGPoint(x: 0.0, y: 0.0)
-//        successors = []
-//        parent = nil
-//        additionalParents = []
+        layer = -1
+        coordinates = Coordinate()
+        successors = []
+        parent = nil
+        additionalParents = []
+    }
+
+    init(progressTree: ProgressTree? = nil, name: String, emojiIcon: String, coordinates: Coordinate, successors: [TreeNode], parent: TreeNode? = nil) {
+        self.progressTree = progressTree
+        unit = ""
+        amount = 0.0
+        complete = false
+        progressiveQuest = false
+        self.name = name
+        items = []
+        completionHistory = []
+        self.emojiIcon = emojiIcon
+        layer = -1
+        self.coordinates = coordinates
+        self.successors = successors
+        self.parent = parent
+        additionalParents = []
     }
 }
 

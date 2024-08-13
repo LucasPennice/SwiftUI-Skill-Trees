@@ -25,6 +25,7 @@
 		D1B389362C6BCC3F008E9306 /* ProgressTreeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389352C6BCC3F008E9306 /* ProgressTreeCardView.swift */; };
 		D1B389382C6BE193008E9306 /* ProgressTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389372C6BE193008E9306 /* ProgressTreeView.swift */; };
 		D1B3893A2C6BEA3A008E9306 /* TreeNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389392C6BEA3A008E9306 /* TreeNodeView.swift */; };
+		D1B3893C2C6C1A38008E9306 /* ContentViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B3893B2C6C1A38008E9306 /* ContentViewVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		D1B389352C6BCC3F008E9306 /* ProgressTreeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTreeCardView.swift; sourceTree = "<group>"; };
 		D1B389372C6BE193008E9306 /* ProgressTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTreeView.swift; sourceTree = "<group>"; };
 		D1B389392C6BEA3A008E9306 /* TreeNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeNodeView.swift; sourceTree = "<group>"; };
+		D1B3893B2C6C1A38008E9306 /* ContentViewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,9 +81,9 @@
 		D11080E52C5D1C4100C5E225 /* SkillTrees */ = {
 			isa = PBXGroup;
 			children = (
+				D1B3893D2C6C1A64008E9306 /* ContentView */,
 				D19AB9BD2C5D22EB00399662 /* Shared */,
 				D11080E62C5D1C4100C5E225 /* SkillTreesApp.swift */,
-				D11080E82C5D1C4100C5E225 /* ContentView.swift */,
 				D11080EA2C5D1C4400C5E225 /* Assets.xcassets */,
 				D11080EC2C5D1C4400C5E225 /* Preview Content */,
 				D19AB9C12C5D2E9600399662 /* DialoguePopUpView.swift */,
@@ -146,6 +148,15 @@
 				D1B389392C6BEA3A008E9306 /* TreeNodeView.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		D1B3893D2C6C1A64008E9306 /* ContentView */ = {
+			isa = PBXGroup;
+			children = (
+				D11080E82C5D1C4100C5E225 /* ContentView.swift */,
+				D1B3893B2C6C1A38008E9306 /* ContentViewVM.swift */,
+			);
+			path = ContentView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,6 +242,7 @@
 				D19AB9C02C5D230600399662 /* Colors.swift in Sources */,
 				D11080E72C5D1C4100C5E225 /* SkillTreesApp.swift in Sources */,
 				D19AB9C22C5D2E9600399662 /* DialoguePopUpView.swift in Sources */,
+				D1B3893C2C6C1A38008E9306 /* ContentViewVM.swift in Sources */,
 				D1B389382C6BE193008E9306 /* ProgressTreeView.swift in Sources */,
 				D1B389252C699B75008E9306 /* ProgressTree.swift in Sources */,
 				D1B389362C6BCC3F008E9306 /* ProgressTreeCardView.swift in Sources */,
