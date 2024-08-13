@@ -21,6 +21,10 @@
 		D1B3892B2C69A05E008E9306 /* SwiftDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B3892A2C69A05E008E9306 /* SwiftDataController.swift */; };
 		D1B3892E2C6AA748008E9306 /* MCEmojiPicker in Frameworks */ = {isa = PBXBuildFile; productRef = D1B3892D2C6AA748008E9306 /* MCEmojiPicker */; };
 		D1B389312C6AAB00008E9306 /* ProgressTreeTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389302C6AAB00008E9306 /* ProgressTreeTemplates.swift */; };
+		D1B389342C6BC903008E9306 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389332C6BC903008E9306 /* CircularProgressView.swift */; };
+		D1B389362C6BCC3F008E9306 /* ProgressTreeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389352C6BCC3F008E9306 /* ProgressTreeCardView.swift */; };
+		D1B389382C6BE193008E9306 /* ProgressTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389372C6BE193008E9306 /* ProgressTreeView.swift */; };
+		D1B3893A2C6BEA3A008E9306 /* TreeNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389392C6BEA3A008E9306 /* TreeNodeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +42,10 @@
 		D1B389282C699DFD008E9306 /* ItemCompletionRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCompletionRecord.swift; sourceTree = "<group>"; };
 		D1B3892A2C69A05E008E9306 /* SwiftDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataController.swift; sourceTree = "<group>"; };
 		D1B389302C6AAB00008E9306 /* ProgressTreeTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTreeTemplates.swift; sourceTree = "<group>"; };
+		D1B389332C6BC903008E9306 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
+		D1B389352C6BCC3F008E9306 /* ProgressTreeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTreeCardView.swift; sourceTree = "<group>"; };
+		D1B389372C6BE193008E9306 /* ProgressTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTreeView.swift; sourceTree = "<group>"; };
+		D1B389392C6BEA3A008E9306 /* TreeNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeNodeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +86,7 @@
 				D11080EC2C5D1C4400C5E225 /* Preview Content */,
 				D19AB9C12C5D2E9600399662 /* DialoguePopUpView.swift */,
 				D19AB9C52C5D882000399662 /* AddNewProgressTreeView.swift */,
+				D1B389372C6BE193008E9306 /* ProgressTreeView.swift */,
 			);
 			path = SkillTrees;
 			sourceTree = "<group>";
@@ -93,6 +102,7 @@
 		D19AB9BD2C5D22EB00399662 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				D1B389322C6BC8F5008E9306 /* Components */,
 				D1B3892F2C6AAAE9008E9306 /* Constants */,
 				D1B3891F2C697147008E9306 /* Extensions */,
 				D19AB9BE2C5D22F200399662 /* Entities */,
@@ -126,6 +136,16 @@
 				D1B389302C6AAB00008E9306 /* ProgressTreeTemplates.swift */,
 			);
 			path = Constants;
+			sourceTree = "<group>";
+		};
+		D1B389322C6BC8F5008E9306 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				D1B389332C6BC903008E9306 /* CircularProgressView.swift */,
+				D1B389352C6BCC3F008E9306 /* ProgressTreeCardView.swift */,
+				D1B389392C6BEA3A008E9306 /* TreeNodeView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,10 +231,14 @@
 				D19AB9C02C5D230600399662 /* Colors.swift in Sources */,
 				D11080E72C5D1C4100C5E225 /* SkillTreesApp.swift in Sources */,
 				D19AB9C22C5D2E9600399662 /* DialoguePopUpView.swift in Sources */,
+				D1B389382C6BE193008E9306 /* ProgressTreeView.swift in Sources */,
 				D1B389252C699B75008E9306 /* ProgressTree.swift in Sources */,
+				D1B389362C6BCC3F008E9306 /* ProgressTreeCardView.swift in Sources */,
 				D1B389312C6AAB00008E9306 /* ProgressTreeTemplates.swift in Sources */,
 				D1B389272C699DDD008E9306 /* TreeNode.swift in Sources */,
+				D1B389342C6BC903008E9306 /* CircularProgressView.swift in Sources */,
 				D1B3892B2C69A05E008E9306 /* SwiftDataController.swift in Sources */,
+				D1B3893A2C6BEA3A008E9306 /* TreeNodeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,17 +16,15 @@ struct AddNewProgressTreeView: View {
     @State private var title = ""
     @State private var selectedEmoji = "🌳"
     @State private var showingEmojiPicker = false
-    @State private var treeColor =
-        Color(.sRGB, red: 0.98, green: 0.9, blue: 0.2)
+    @State private var treeColor = Color.green
 
     func addProgressTree() {
-        
         let newProgressTree = ProgressTree(name: title, emojiIcon: selectedEmoji, color: treeColor, treeNodes: [])
-        
+
         modelContext.insert(newProgressTree)
 
-        let rootNode = TreeNode(progressTree: newProgressTree, unit: "", amount: 0.0, complete: false, progressiveQuest: false, name: title, lastComplete: nil, items: [], completionHistory: [])
-        
+        let rootNode = TreeNode(progressTree: newProgressTree, unit: "", amount: 0.0, complete: false, progressiveQuest: false, name: title, emojiIcon: selectedEmoji, items: [], completionHistory: [])
+
         newProgressTree.treeNodes.append(rootNode)
     }
 

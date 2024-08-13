@@ -16,6 +16,11 @@ class SwiftDataController {
             let schema = Schema([ProgressTree.self])
             let container = try ModelContainer(for: schema, configurations: config)
 
+            
+            let progressTree = ProgressTree(name: "Test Tree", emojiIcon: "🌳", color: .green, treeNodes: [])
+            
+            container.mainContext.insert(progressTree)
+            
             return container
         } catch {
             fatalError("Failed to create model container for previewing: \(error.localizedDescription)")

@@ -24,6 +24,8 @@ class AppDateFormatter {
 }
 
 struct ContentView: View {
+    @Environment(\.modelContext) var modelContext
+
     @Query var progressTrees: [ProgressTree]
 
     @State private var showingCollectionNotAvailablePopUp: Bool = false
@@ -156,13 +158,36 @@ struct ContentView: View {
                         ///
                         /// List of all Progress Trees
                         ///
-                        ForEach(progressTrees) {
-                            Text("\($0.treeNodes.count) \($0.name)")
+                        ForEach(progressTrees) { tree in
+                            ///
+                            /// Progress Tree Card With Navigation
+                            ///
+                            NavigationLink(destination: ProgressTreeView(tree: tree)) {}
+                                .opacity(0)
+                                .background(ProgressTreeCardView(tree: tree))
+                                .listRowInsets(EdgeInsets())
+                                .frame(height: 180)
+                                .listRowBackground(AppColors.semiDarkGray)
+                                .swipeActions {
+                                    Button("Delete", systemImage: "trash", role: .destructive) {
+                                        withAnimation {
+                                            modelContext.delete(tree)
+                                        }
+                                    }
+                                }
+                                .contextMenu {
+                                    Button("Delete", systemImage: "trash", role: .destructive) {
+                                        withAnimation {
+                                            modelContext.delete(tree)
+                                        }
+                                    }
+                                }
                         }
                     }
                     .scrollContentBackground(.hidden)
                     .listStyle(InsetGroupedListStyle())
                     .listRowSpacing(18)
+                    .environment(\.defaultMinListRowHeight, 10)
                     .scrollBounceBehavior(.basedOnSize)
                     .offset(y: -35)
                 }
@@ -170,13 +195,16 @@ struct ContentView: View {
                 .background(.black)
                 .allowsHitTesting(!showingCollectionNotAvailablePopUp)
 
-                #warning("SI EL USUARIO NO TIENEN NINGUN PROGRESS TREE EL POPUP ESTE TE DEBERIA REDIRIGIR, CAMBIAR MENSAJE BOTON Y ACTION")
                 if showingCollectionNotAvailablePopUp {
                     DialoguePopUpView(
                         title: "Get your first Fiber to unlock your Collection",
                         messages: [["Complete a milestone in any Progress Tree to get your first Fiber"]],
-                        buttonTitle: "Continue",
-                        action: { showingCollectionNotAvailablePopUp = false }
+                        buttonTitle: progressTrees.isEmpty ? "Create Your First Progress Tree" : "Continue",
+                        action: {
+                            showingCollectionNotAvailablePopUp = false
+
+                            if progressTrees.isEmpty { showingAddNewTreePopUp = true }
+                        }
                     )
                 }
             }
