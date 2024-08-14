@@ -11,22 +11,13 @@ import SwiftUI
 
 struct AddNewProgressTreeView: View {
     @Environment(\.dismiss) var dismiss
-    @Environment(\.modelContext) var modelContext
+
+    var addProgressTree: (ProgressTree) -> Void
 
     @State private var title = ""
     @State private var selectedEmoji = "🌳"
     @State private var showingEmojiPicker = false
     @State private var treeColor = Color.green
-
-    func addProgressTree() {
-        let newProgressTree = ProgressTree(name: title, emojiIcon: selectedEmoji, color: treeColor, treeNodes: [])
-
-        modelContext.insert(newProgressTree)
-
-        let rootNode = TreeNode(progressTree: newProgressTree, unit: "", amount: 0.0, complete: false, progressiveQuest: false, name: title, emojiIcon: selectedEmoji, items: [], completionHistory: [])
-
-        newProgressTree.treeNodes.append(rootNode)
-    }
 
     var body: some View {
         NavigationStack {
@@ -51,7 +42,7 @@ struct AddNewProgressTreeView: View {
                         .onTapGesture {
                             if title.isEmpty { return }
 
-                            addProgressTree()
+                            addProgressTree(ProgressTree(name: title, emojiIcon: selectedEmoji, color: treeColor, treeNodes: []))
 
                             dismiss()
                         }
@@ -125,6 +116,6 @@ struct AddNewProgressTreeView: View {
 }
 
 #Preview {
-    AddNewProgressTreeView()
+    AddNewProgressTreeView(addProgressTree: { _ in })
         .modelContainer(SwiftDataController.previewContainer)
 }

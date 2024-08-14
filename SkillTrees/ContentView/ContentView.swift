@@ -24,9 +24,7 @@ class AppDateFormatter {
 }
 
 struct ContentView: View {
-    @Environment(\.modelContext) var modelContext
-
-    @Query var progressTrees: [ProgressTree]
+    @State private var viewModel: ViewModel
 
     @State private var showingCollectionNotAvailablePopUp: Bool = false
     @State private var showingAddNewTreePopUp: Bool = false
@@ -158,11 +156,11 @@ struct ContentView: View {
                         ///
                         /// List of all Progress Trees
                         ///
-                        ForEach(progressTrees) { tree in
+                        ForEach(viewModel.progressTrees) { tree in
                             ///
                             /// Progress Tree Card With Navigation
                             ///
-                            NavigationLink(destination: ProgressTreeView(tree: tree)) {}
+                            NavigationLink(destination: ProgressTreeView(modelContext: viewModel.modelContext, tree: tree)) {}
                                 .opacity(0)
                                 .background(ProgressTreeCardView(tree: tree))
                                 .listRowInsets(EdgeInsets())
@@ -170,16 +168,12 @@ struct ContentView: View {
                                 .listRowBackground(AppColors.semiDarkGray)
                                 .swipeActions {
                                     Button("Delete", systemImage: "trash", role: .destructive) {
-                                        withAnimation {
-                                            modelContext.delete(tree)
-                                        }
+                                        withAnimation { viewModel.deleteTree(tree: tree) }
                                     }
                                 }
                                 .contextMenu {
                                     Button("Delete", systemImage: "trash", role: .destructive) {
-                                        withAnimation {
-                                            modelContext.delete(tree)
-                                        }
+                                        withAnimation { viewModel.deleteTree(tree: tree) }
                                     }
                                 }
                         }
@@ -199,17 +193,17 @@ struct ContentView: View {
                     DialoguePopUpView(
                         title: "Get your first Fiber to unlock your Collection",
                         messages: [["Complete a milestone in any Progress Tree to get your first Fiber"]],
-                        buttonTitle: progressTrees.isEmpty ? "Create Your First Progress Tree" : "Continue",
+                        buttonTitle: viewModel.progressTrees.isEmpty ? "Create Your First Progress Tree" : "Continue",
                         action: {
                             showingCollectionNotAvailablePopUp = false
 
-                            if progressTrees.isEmpty { showingAddNewTreePopUp = true }
+                            if viewModel.progressTrees.isEmpty { showingAddNewTreePopUp = true }
                         }
                     )
                 }
             }
             .sheet(isPresented: $showingAddNewTreePopUp) {
-                AddNewProgressTreeView()
+                AddNewProgressTreeView(addProgressTree: viewModel.addProgressTree)
             }
         }
         .environmentObject(settings)
@@ -218,9 +212,13 @@ struct ContentView: View {
             settings.updateStreak()
         }
     }
+
+    init(modelContext: ModelContext) {
+        _viewModel = State(initialValue: ViewModel(modelContext: modelContext))
+    }
 }
 
 #Preview {
-    ContentView()
+    ContentView(modelContext: SwiftDataController.previewContainer.mainContext)
         .modelContainer(SwiftDataController.previewContainer)
 }

@@ -9,18 +9,15 @@ import SwiftData
 import SwiftUI
 
 struct ProgressTreeView: View {
+    @State private var viewModel: ViewModel
+
     @Environment(\.dismiss) var dismiss
-    @Environment(\.modelContext) var modelContext
 
     @State private var positionDelta = CGSize.zero
     @State private var selectedNode: String?
 
-    var tree: ProgressTree
-
     var canvasWidth = UIScreen.main.bounds.width
     var canvasHeight = UIScreen.main.bounds.height
-
-    #warning("El problema es que cuando borro algo no se actualiza el query automaticamente, entonces lo deberia hacer a mano. Por lo tanto tengo que escribir un controlador")
 
     #warning("me quede viendo como meto las coordenadas de los nodos a la estructura de datos")
     #warning("tambien necesito una forma de ubicar a las labels por debajo de los nodos")
@@ -45,7 +42,7 @@ struct ProgressTreeView: View {
                     ///
                     /// Node Labels
                     ///
-                    ForEach(tree.treeNodes) {
+                    ForEach(viewModel.treeNodes) {
                         Text("\($0.name) - C \($0.successors.count)")
                             .font(.system(size: 14))
                             .multilineTextAlignment(.center)
@@ -60,7 +57,7 @@ struct ProgressTreeView: View {
                     ///
                     /// Node View
                     ///
-                    ForEach(tree.treeNodes) { node in
+                    ForEach(viewModel.treeNodes) { node in
                         TreeNodeView(icon: node.emojiIcon, size: selectedNode == "🔥" ? TreeNodeView.defaultSize * 2 : TreeNodeView.defaultSize, color: .yellow)
                             .zIndex(2)
                             .clipShape(Circle())
@@ -70,7 +67,7 @@ struct ProgressTreeView: View {
                                     ///
                                     /// Tap Gesture
                                     ///
-                                    TapGesture(count: 1).onEnded({ modelContext.delete(node) }),
+                                    TapGesture(count: 1).onEnded({ withAnimation { viewModel.deleteNode(node) } }),
                                     ///
                                     /// Drag Gesture
                                     ///
@@ -134,7 +131,7 @@ struct ProgressTreeView: View {
         /// Add Node Button
         ///
         .overlay(alignment: .topTrailing) {
-            Button(action: { print(tree.treeNodes) }) {
+            Button(action: { print(viewModel.treeNodes) }) {
                 Image(systemName: "plus")
                     .font(.system(size: 16).bold())
                     .frame(width: 30, height: 30)
@@ -146,6 +143,10 @@ struct ProgressTreeView: View {
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+    }
+
+    init(modelContext: ModelContext, tree: ProgressTree) {
+        _viewModel = State(initialValue: ViewModel(modelContext: modelContext, progressTree: tree))
     }
 }
 
@@ -170,6 +171,6 @@ struct ProgressTreeView: View {
     rootNode.successors.append(childNode1)
     childNode1.successors.append(childNode2)
 
-    return ProgressTreeView(tree: tree)
+    return ProgressTreeView(modelContext: container.mainContext, tree: tree)
         .modelContainer(container)
 }
