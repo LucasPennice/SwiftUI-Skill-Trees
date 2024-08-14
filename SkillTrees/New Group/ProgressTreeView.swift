@@ -16,12 +16,9 @@ struct ProgressTreeView: View {
     @State private var positionDelta = CGSize.zero
     @State private var selectedNode: String?
 
-    var canvasWidth = UIScreen.main.bounds.width
-    var canvasHeight = UIScreen.main.bounds.height
-
     #warning("me quede viendo como meto las coordenadas de los nodos a la estructura de datos")
-    #warning("tambien necesito una forma de ubicar a las labels por debajo de los nodos")
     #warning("tambien necesito una forma de hacer los edges. Pero que salgan desde el padre hasta los hijos. O sea que se rendericen desde node.successors")
+    #warning("no anda el delete ene cascada. habra que hacer una funcion a mano")
 
     var body: some View {
         ScrollViewReader { _ in
@@ -42,15 +39,17 @@ struct ProgressTreeView: View {
                     ///
                     /// Node Labels
                     ///
-                    ForEach(viewModel.treeNodes) {
-                        Text("\($0.name) - C \($0.successors.count)")
+                    ForEach(viewModel.treeNodes) { node in
+                        Text("\(node.name) - C \(node.successors.count) - p \(node.parent?.name ?? "")")
+                            .frame(maxWidth: 100)
                             .font(.system(size: 14))
                             .multilineTextAlignment(.center)
                             .padding(7)
                             .background(AppColors.darkGray)
                             .cornerRadius(7)
                             .foregroundColor(.white)
-                            .position(CGPoint(x: $0.coordinates.x, y: $0.coordinates.y + 30))
+                            .position(CGPoint(x: node.coordinates.x, y: node.coordinates.y))
+                            .offset(y: TreeNodeView.defaultSize / 2 + viewModel.getLabelVerticalOffset(text: node.name) + 10)
                             .zIndex(1)
                     }
 
@@ -99,7 +98,7 @@ struct ProgressTreeView: View {
                         //                        .id(nodeId)
                     }
                 }
-                .frame(width: canvasWidth, height: canvasHeight)
+                .frame(width: viewModel.canvasSize.width, height: viewModel.canvasSize.height)
                 .background(.black)
                 .defaultScrollAnchor(.center)
                 .onTapGesture {
@@ -109,9 +108,8 @@ struct ProgressTreeView: View {
                         }
                     }
                 }
-
-//                .drawingGroup()
             }
+            .defaultScrollAnchor(.center)
         }
         ///
         /// Back Button
@@ -158,18 +156,28 @@ struct ProgressTreeView: View {
 
     container.mainContext.insert(tree)
 
-    let rootNode = TreeNode(name: "Cooking", emojiIcon: "👨🏻‍🍳", coordinates: Coordinate(x: 100, y: 100), successors: [])
+    let rootNode = TreeNode(name: "Root", emojiIcon: "👨🏻‍🍳", successors: [])
 
-    let childNode1 = TreeNode(name: "level1", emojiIcon: "👨🏻‍🍳", coordinates: Coordinate(x: 100, y: 200), successors: [], parent: rootNode)
+    let childNode1 = TreeNode(name: "LEVEL 1", emojiIcon: "👨🏻‍🍳", successors: [], parent: rootNode)
+    let childNode12 = TreeNode(name: "LEVEL 12", emojiIcon: "👨🏻‍🍳", successors: [], parent: rootNode)
+    let childNode13 = TreeNode(name: "LEVEL 13", emojiIcon: "👨🏻‍🍳", successors: [], parent: rootNode)
 
-    let childNode2 = TreeNode(name: "level2", emojiIcon: "👨🏻‍🍳", coordinates: Coordinate(x: 100, y: 300), successors: [], parent: childNode1)
+    let childNode2 = TreeNode(name: "LEVEL 2", emojiIcon: "👨🏻‍🍳", successors: [], parent: childNode1)
 
     tree.treeNodes.append(rootNode)
     tree.treeNodes.append(childNode1)
-    tree.treeNodes.append(childNode2)
+    tree.treeNodes.append(childNode12)
+    tree.treeNodes.append(childNode13)
+//    tree.treeNodes.append(childNode2)
 
     rootNode.successors.append(childNode1)
-    childNode1.successors.append(childNode2)
+    rootNode.successors.append(childNode12)
+    rootNode.successors.append(childNode13)
+//    childNode1.successors.append(childNode2)
+
+    try? container.mainContext.save()
+
+    tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
     return ProgressTreeView(modelContext: container.mainContext, tree: tree)
         .modelContainer(container)

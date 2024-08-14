@@ -30,12 +30,12 @@ final class TreeNode {
     var coordinates: Coordinate = Coordinate()
 
     var progressTree: ProgressTree?
-    
+
     var parent: TreeNode?
-    
+
     @Relationship(deleteRule: .cascade, inverse: \TreeNode.parent)
     var successors: [TreeNode]
-    
+
     var additionalParents: [TreeNode]
 
     ///
@@ -87,24 +87,24 @@ final class TreeNode {
         items.append(newItem)
     }
 
-//    func getSuccessorsContour() -> LevelContour? {
-//        if successors.isEmpty { return nil }
-//
-//        var leftNode = successors.first!
-//        var rightNode = successors.first!
-//
-//        for node in successors {
-//            if node.coordinates.x < leftNode.coordinates.x {
-//                leftNode = node
-//            }
-//
-//            if node.coordinates.x > rightNode.coordinates.x {
-//                rightNode = node
-//            }
-//        }
-//
-//        return LevelContour(leftNode: leftNode, rightNode: rightNode)
-//    }
+    func getSuccessorsContour() -> LevelContour? {
+        if successors.isEmpty { return nil }
+
+        var leftNode = successors.first!
+        var rightNode = successors.first!
+
+        for node in successors {
+            if node.coordinates.x < leftNode.coordinates.x {
+                leftNode = node
+            }
+
+            if node.coordinates.x > rightNode.coordinates.x {
+                rightNode = node
+            }
+        }
+
+        return LevelContour(leftNode: leftNode, rightNode: rightNode)
+    }
 
     init(progressTree: ProgressTree? = nil, unit: String, amount: Double, complete: Bool, progressiveQuest: Bool, name: String, emojiIcon: String, items: [NodeListItem], completionHistory: [ItemCompletionRecord]) {
         self.progressTree = progressTree
@@ -123,7 +123,7 @@ final class TreeNode {
         additionalParents = []
     }
 
-    init(progressTree: ProgressTree? = nil, name: String, emojiIcon: String, coordinates: Coordinate, successors: [TreeNode], parent: TreeNode? = nil) {
+    init(progressTree: ProgressTree? = nil, name: String, emojiIcon: String, successors: [TreeNode], parent: TreeNode? = nil) {
         self.progressTree = progressTree
         unit = ""
         amount = 0.0
@@ -133,8 +133,8 @@ final class TreeNode {
         items = []
         completionHistory = []
         self.emojiIcon = emojiIcon
-        layer = -1
-        self.coordinates = coordinates
+        layer = parent != nil ? parent!.layer + 1 : 1
+        coordinates = Coordinate()
         self.successors = successors
         self.parent = parent
         additionalParents = []

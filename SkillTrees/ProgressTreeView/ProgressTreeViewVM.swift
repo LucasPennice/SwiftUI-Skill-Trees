@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import UIKit
 
 extension ProgressTreeView {
     @Observable
@@ -14,10 +15,13 @@ extension ProgressTreeView {
         var modelContext: ModelContext
         var progressTree: ProgressTree
         var treeNodes = [TreeNode]()
+        var canvasSize: CGSize
 
         init(modelContext: ModelContext, progressTree: ProgressTree) {
             self.modelContext = modelContext
             self.progressTree = progressTree
+            canvasSize = CanvasDimensions.getCanvasDimensions(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height), tree: progressTree)
+
             fetchData()
         }
 
@@ -28,7 +32,6 @@ extension ProgressTreeView {
                 let predicate = #Predicate<TreeNode> { node in node.progressTree?.persistentModelID == id }
 
                 let descriptor = FetchDescriptor<TreeNode>(predicate: predicate)
-//                let descriptor = FetchDescriptor<TreeNode>()
 
                 treeNodes = try modelContext.fetch(descriptor)
             } catch {
@@ -42,6 +45,34 @@ extension ProgressTreeView {
             try? modelContext.save()
 
             fetchData()
+        }
+
+        func getLabelVerticalOffset(text: String) -> Double {
+            let size = text.sizeOfString()
+            let verticalPadding = 7.0
+            let maxWidth = 100.0
+
+            if size.width < maxWidth { return size.height }
+
+            let words = text.split(separator: " ")
+            var result = ""
+            var currentLine = ""
+
+            for word in words {
+                let potentialLine = currentLine.isEmpty ? String(word) : "\(currentLine) \(word)"
+                let lineWidth = potentialLine.sizeOfString().width
+
+                if lineWidth <= maxWidth {
+                    currentLine = potentialLine
+                } else {
+                    result += currentLine + "\n"
+                    currentLine = String(word)
+                }
+            }
+
+            result += currentLine
+
+            return result.sizeOfString().height / 2 + verticalPadding
         }
 
 //        func addProgressTree(_ tree: ProgressTree) {
