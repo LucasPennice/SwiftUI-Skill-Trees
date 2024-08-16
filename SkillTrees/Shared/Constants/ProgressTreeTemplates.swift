@@ -8,10 +8,7 @@ import Foundation
 
 struct ProgressTreeTemplates {
     static var cookingTree: ProgressTree {
-        let tree = ProgressTree(name: "Cooking", emojiIcon: "👨🏻‍🍳", color: .blue, treeNodes: [
-//            TreeNode(unit: "", amount: 0.0, complete: false, progressiveQuest: false, name: "Cooking", lastComplete: nil, items: [], completionHistory: []),
-        ]
-        )
+        let tree = ProgressTree(name: "Cooking", emojiIcon: "👨🏻‍🍳", color: .blue)
 
         return tree
     }

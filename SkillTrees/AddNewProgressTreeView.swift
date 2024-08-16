@@ -42,7 +42,7 @@ struct AddNewProgressTreeView: View {
                         .onTapGesture {
                             if title.isEmpty { return }
 
-                            addProgressTree(ProgressTree(name: title, emojiIcon: selectedEmoji, color: treeColor, treeNodes: []))
+                            addProgressTree(ProgressTree(name: title, emojiIcon: selectedEmoji, color: treeColor))
 
                             dismiss()
                         }

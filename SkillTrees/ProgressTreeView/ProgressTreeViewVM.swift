@@ -20,11 +20,13 @@ extension ProgressTreeView {
         init(modelContext: ModelContext, progressTree: ProgressTree) {
             self.modelContext = modelContext
             self.progressTree = progressTree
-            canvasSize = CanvasDimensions.getCanvasDimensions(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height), tree: progressTree)
+            canvasSize = CanvasDimensions.getCanvasDimensions(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height), treeNodes: progressTree.treeNodes)
 
             fetchData()
         }
 
+        #warning("ok mas o menos anda esto, mi pregunta es, si lo que yo fetcheo a mano es el arbol de nuevo, andara mejor esto?")
+        
         func fetchData() {
             do {
                 let id = progressTree.persistentModelID
@@ -34,6 +36,10 @@ extension ProgressTreeView {
                 let descriptor = FetchDescriptor<TreeNode>(predicate: predicate)
 
                 treeNodes = try modelContext.fetch(descriptor)
+                
+                progressTree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+                canvasSize = CanvasDimensions.getCanvasDimensions(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height), treeNodes: treeNodes)
+
             } catch {
                 print("Fetch failed")
             }
@@ -73,6 +79,20 @@ extension ProgressTreeView {
             result += currentLine
 
             return result.sizeOfString().height / 2 + verticalPadding
+        }
+
+        func addTreeNode(parentNode: TreeNode) {
+            let newNode = TreeNode(name: "newNode", emojiIcon: "👨🏻‍🍳")
+            modelContext.insert(newNode)
+
+            newNode.progressTree = progressTree
+            newNode.parent = parentNode
+
+            parentNode.successors.append(newNode)
+
+            progressTree.treeNodes.append(newNode)
+
+            fetchData()
         }
 
 //        func addProgressTree(_ tree: ProgressTree) {

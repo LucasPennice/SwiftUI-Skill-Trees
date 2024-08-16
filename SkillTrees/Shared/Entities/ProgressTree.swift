@@ -37,7 +37,7 @@ final class ProgressTree {
     }
 
     @Relationship(deleteRule: .cascade, inverse: \TreeNode.progressTree)
-    var treeNodes: [TreeNode]
+    var treeNodes: [TreeNode] = []
 
     private func bfsPath(from start: TreeNode, to end: TreeNode) -> [TreeNode]? {
         var queue: [TreeNode] = [start]
@@ -72,33 +72,30 @@ final class ProgressTree {
     }
 
     func updateNodeCoordinates(screenDimension: CGSize) {
-        /// If the first node is not Root we rearrange the nodes array for the root node to be first
-        if treeNodes[0].parent != nil {
-            let rootNodeIdx = treeNodes.firstIndex(where: { $0.parent == nil })!
+        /// We use a copy because swift data doesn't let me sort the actual array
+        var treeNodesCopy = treeNodes
 
-            let rootNode = treeNodes[rootNodeIdx]
-
-            treeNodes.remove(at: rootNodeIdx)
-
-            treeNodes.insert(rootNode, at: 0)
-        }
+        /// Assure that root node is the first node
+        treeNodesCopy.sort(by: { n1, _ in n1.parent == nil })
 
         /// Sort nodes by layers, smaller layers first
-        treeNodes.sort(by: { $0.layer < $1.layer })
+        treeNodesCopy.sort(by: { $0.layer < $1.layer })
 
-        setNodesLayer()
+        setNodesLayer(&treeNodesCopy)
 
-        initialCoordinates(node: treeNodes[0])
+        initialCoordinates(node: treeNodesCopy[0])
 
-        handleOverlap()
+        handleOverlap(&treeNodesCopy)
 
-        scaleNodeCoord()
+        scaleNodeCoord(&treeNodesCopy)
 
-        centerInCanvas(screenDimension: screenDimension)
+        ProgressTree.centerInCanvas(treeNodes: &treeNodesCopy, screenDimension: screenDimension)
+
+        treeNodes = treeNodesCopy
     }
 
     /// Updates the layer value for each node
-    private func setNodesLayer() {
+    private func setNodesLayer(_ treeNodes: inout [TreeNode]) {
         treeNodes.forEach { node in
             let isRootNode = node.parent == nil
 
@@ -114,7 +111,7 @@ final class ProgressTree {
         }
     }
 
-    private func handleOverlap() {
+    private func handleOverlap(_ treeNodes: inout [TreeNode]) {
         var overlap = true
 
         var limiter = 0
@@ -309,7 +306,7 @@ final class ProgressTree {
     }
 
     /// Assigns coordinates based on their parent ignoring overlap
-    private func initialCoordinates(node: TreeNode) {
+    private func initialCoordinates(node:  TreeNode) {
         /// A node sets its successors's coordinates
         /// With itself aligned above them
 
@@ -328,7 +325,7 @@ final class ProgressTree {
         node.successors.forEach { initialCoordinates(node: $0) }
     }
 
-    private func scaleNodeCoord() {
+    private func scaleNodeCoord(_ treeNodes: inout [TreeNode]) {
         let horizontalDistanceBetweenNodes = 4 * TreeNodeView.defaultSize
         let distanceBetweenLayers = 4 * TreeNodeView.defaultSize
 
@@ -340,10 +337,12 @@ final class ProgressTree {
         }
     }
 
-    func centerInCanvas(screenDimension: CGSize) {
-        let canvasDimensions = CanvasDimensions.getCanvasDimensions(screenDimension: screenDimension, tree: self)
+    /// This function is static because using the nodes in memory (the instance of ProgressTree) causes issues because Swift Data
+    /// Does not save nodes in the order they were inserted
+    static func centerInCanvas(treeNodes: inout [TreeNode], screenDimension: CGSize) {
+        let canvasDimensions = CanvasDimensions.getCanvasDimensions(screenDimension: screenDimension, treeNodes: treeNodes)
 
-        let treeSize = getTreeSize()
+        let treeSize = ProgressTree.getTreeSize(treeNodes: treeNodes)
 
         let distanceToCenterHorizontally = (canvasDimensions.width - treeSize.width) / 2
 
@@ -355,7 +354,9 @@ final class ProgressTree {
         }
     }
 
-    func getTreeSize() -> CGSize {
+    /// This function is static because using the nodes in memory (the instance of ProgressTree) causes issues because Swift Data
+    /// Does not save nodes in the order they were inserted
+    static func getTreeSize(treeNodes: [TreeNode]) -> CGSize {
         var minX: Double?
         var maxX: Double?
         var minY: Double?
@@ -372,10 +373,8 @@ final class ProgressTree {
         return CGSize(width: abs(maxX! - minX!), height: abs(maxY! - minY!))
     }
 
-    init(name: String, emojiIcon: String, color: Color, treeNodes: [TreeNode]) {
+    init(name: String, emojiIcon: String, color: Color) {
         self.name = name
-
-        self.treeNodes = treeNodes
 
         self.emojiIcon = emojiIcon
 
@@ -415,11 +414,11 @@ func firstCommonElement(array1: [TreeNode], array2: [TreeNode]) -> (TreeNode)? {
 }
 
 struct CanvasDimensions {
-    static func getCanvasDimensions(screenDimension: CGSize, tree: ProgressTree) -> CGSize {
+    static func getCanvasDimensions(screenDimension: CGSize, treeNodes: [TreeNode]) -> CGSize {
         let screenHeight = screenDimension.height
         let screenWidth = screenDimension.width
 
-        let treeSize: CGSize = tree.getTreeSize()
+        let treeSize: CGSize = ProgressTree.getTreeSize(treeNodes: treeNodes)
 
         let canvasWidth = getCanvasWidth(treeWidth: treeSize.width, padding: screenDimension.width)
 

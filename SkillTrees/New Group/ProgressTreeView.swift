@@ -66,7 +66,10 @@ struct ProgressTreeView: View {
                                     ///
                                     /// Tap Gesture
                                     ///
-                                    TapGesture(count: 1).onEnded({ withAnimation { viewModel.deleteNode(node) } }),
+                                    TapGesture(count: 1).onEnded({ withAnimation {
+//                                        viewModel.deleteNode(node)
+                                        viewModel.addTreeNode(parentNode: node)
+                                    } }),
                                     ///
                                     /// Drag Gesture
                                     ///
@@ -152,30 +155,27 @@ struct ProgressTreeView: View {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: ProgressTree.self, configurations: config)
 
-    let tree = ProgressTree(name: "Cooking", emojiIcon: "👨🏻‍🍳", color: .blue, treeNodes: [])
+    let tree = ProgressTree(name: "Cooking", emojiIcon: "👨🏻‍🍳", color: .blue)
 
-    container.mainContext.insert(tree)
-
-    let rootNode = TreeNode(name: "Root", emojiIcon: "👨🏻‍🍳", successors: [])
-
-    let childNode1 = TreeNode(name: "LEVEL 1", emojiIcon: "👨🏻‍🍳", successors: [], parent: rootNode)
-    let childNode12 = TreeNode(name: "LEVEL 12", emojiIcon: "👨🏻‍🍳", successors: [], parent: rootNode)
-    let childNode13 = TreeNode(name: "LEVEL 13", emojiIcon: "👨🏻‍🍳", successors: [], parent: rootNode)
-
-    let childNode2 = TreeNode(name: "LEVEL 2", emojiIcon: "👨🏻‍🍳", successors: [], parent: childNode1)
-
+    let rootNode = TreeNode(name: "Root", emojiIcon: "👨🏻‍🍳")
+    container.mainContext.insert(rootNode)
+    rootNode.progressTree = tree
     tree.treeNodes.append(rootNode)
-    tree.treeNodes.append(childNode1)
-    tree.treeNodes.append(childNode12)
-    tree.treeNodes.append(childNode13)
-//    tree.treeNodes.append(childNode2)
-
-    rootNode.successors.append(childNode1)
-    rootNode.successors.append(childNode12)
-    rootNode.successors.append(childNode13)
-//    childNode1.successors.append(childNode2)
-
     try? container.mainContext.save()
+
+    let childNode1 = TreeNode(name: "LEVEL 1", emojiIcon: "👨🏻‍🍳")
+    container.mainContext.insert(childNode1)
+    childNode1.progressTree = tree
+    childNode1.parent = rootNode
+    rootNode.successors.append(childNode1)
+    tree.treeNodes.append(childNode1)
+
+    let childNode12 = TreeNode(name: "LEVEL 1.2", emojiIcon: "👨🏻‍🍳")
+    container.mainContext.insert(childNode12)
+    childNode12.progressTree = tree
+    childNode12.parent = rootNode
+    rootNode.successors.append(childNode12)
+    tree.treeNodes.append(childNode12)
 
     tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 

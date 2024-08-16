@@ -90,7 +90,7 @@ struct ProgressTreeCardView: View {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: ProgressTree.self, configurations: config)
 
-    return ProgressTreeCardView(tree: ProgressTree(name: "Test Tree", emojiIcon: "🌳", color: .green, treeNodes: []))
+    return ProgressTreeCardView(tree: ProgressTree(name: "Test Tree", emojiIcon: "🌳", color: .green))
 
         .modelContainer(container)
 }

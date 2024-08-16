@@ -33,8 +33,8 @@ final class TreeNode {
 
     var parent: TreeNode?
 
-    @Relationship(deleteRule: .cascade, inverse: \TreeNode.parent)
-    var successors: [TreeNode]
+    @Relationship(deleteRule: .cascade, inverse: \TreeNode.parent) 
+    var successors: [TreeNode] = []
 
     var additionalParents: [TreeNode]
 
@@ -123,7 +123,7 @@ final class TreeNode {
         additionalParents = []
     }
 
-    init(progressTree: ProgressTree? = nil, name: String, emojiIcon: String, successors: [TreeNode], parent: TreeNode? = nil) {
+    init(progressTree: ProgressTree? = nil, name: String, emojiIcon: String,parent: TreeNode? = nil) {
         self.progressTree = progressTree
         unit = ""
         amount = 0.0
@@ -135,7 +135,6 @@ final class TreeNode {
         self.emojiIcon = emojiIcon
         layer = parent != nil ? parent!.layer + 1 : 1
         coordinates = Coordinate()
-        self.successors = successors
         self.parent = parent
         additionalParents = []
     }

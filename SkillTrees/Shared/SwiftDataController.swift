@@ -16,15 +16,15 @@ class SwiftDataController {
             let schema = Schema([ProgressTree.self])
             let container = try ModelContainer(for: schema, configurations: config)
 
-            let tree = ProgressTree(name: "Cooking", emojiIcon: "👨🏻‍🍳", color: .blue, treeNodes: [])
+            let tree = ProgressTree(name: "Cooking", emojiIcon: "👨🏻‍🍳", color: .blue)
 
             container.mainContext.insert(tree)
 
-            let rootNode = TreeNode(name: "Cooking", emojiIcon: "👨🏻‍🍳", successors: [])
+            let rootNode = TreeNode(name: "Cooking", emojiIcon: "👨🏻‍🍳")
 
-            let childNode1 = TreeNode(name: "level1", emojiIcon: "👨🏻‍🍳", successors: [], parent: rootNode)
+            let childNode1 = TreeNode(name: "level1", emojiIcon: "👨🏻‍🍳", parent: rootNode)
 
-            let childNode2 = TreeNode(name: "level2", emojiIcon: "👨🏻‍🍳", successors: [], parent: childNode1)
+            let childNode2 = TreeNode(name: "level2", emojiIcon: "👨🏻‍🍳", parent: childNode1)
 
             tree.treeNodes.append(rootNode)
             tree.treeNodes.append(childNode1)
