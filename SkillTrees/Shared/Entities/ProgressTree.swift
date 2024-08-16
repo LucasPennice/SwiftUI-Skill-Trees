@@ -59,7 +59,7 @@ final class ProgressTree {
                 return path
             }
 
-            for neighbor in current.successors {
+            for neighbor in current.sortedSuccessors {
                 if !visited.contains(neighbor.id) {
                     queue.append(neighbor)
                     visited.insert(neighbor.id)
@@ -71,7 +71,8 @@ final class ProgressTree {
         return nil
     }
 
-    func updateNodeCoordinates(screenDimension: CGSize) {
+    /// RETURNS CanvasSize : CGSize
+    func updateNodeCoordinates(screenDimension: CGSize) -> CGSize {
         /// We use a copy because swift data doesn't let me sort the actual array
         var treeNodesCopy = treeNodes
 
@@ -85,13 +86,18 @@ final class ProgressTree {
 
         initialCoordinates(node: treeNodesCopy[0])
 
+        #warning("CONFIRMADO EL PROBLEMA DEL ORDEN ESTA ACA")
         handleOverlap(&treeNodesCopy)
+
+        normalizeCoordinates(&treeNodesCopy)
 
         scaleNodeCoord(&treeNodesCopy)
 
-        ProgressTree.centerInCanvas(treeNodes: &treeNodesCopy, screenDimension: screenDimension)
+        let newCanvasSize = centerInCanvas(treeNodes: &treeNodesCopy, screenDimension: screenDimension)
 
         treeNodes = treeNodesCopy
+
+        return newCanvasSize
     }
 
     /// Updates the layer value for each node
@@ -199,9 +205,9 @@ final class ProgressTree {
                 }
 
                 /// If the current node has successors, get their layer's contour
-                if !node.successors.isEmpty { contour[node.layer + 1]!.insert(node.getSuccessorsContour()!, at: 0) }
+                if !node.sortedSuccessors.isEmpty { contour[node.layer + 1]!.insert(node.getSuccessorsContour()!, at: 0) }
 
-                node.successors.forEach { recursiveBuildContour($0) }
+                node.sortedSuccessors.forEach { recursiveBuildContour($0) }
             }
 
             return contour
@@ -223,16 +229,16 @@ final class ProgressTree {
 
             if lastCommonNode == nil { return [] }
 
-            let lastChildrenToGetShifted = firstCommonElement(array1: pathToRightNodeInConflict!, array2: lastCommonNode!.successors)
+            let lastChildrenToGetShifted = firstCommonElement(array1: pathToRightNodeInConflict!, array2: lastCommonNode!.sortedSuccessors)
 
             if lastChildrenToGetShifted == nil { return [] }
 
-            let n = lastCommonNode!.successors.firstIndex(where: { $0.id == lastChildrenToGetShifted!.id })
+            let n = lastCommonNode!.sortedSuccessors.firstIndex(where: { $0.id == lastChildrenToGetShifted!.id })
 
             if n == nil { return [] }
 
             for i in 0 ... n! {
-                let item = lastCommonNode!.successors[i]
+                let item = lastCommonNode!.sortedSuccessors[i]
 
                 appendGraphToArray(item, &result)
             }
@@ -243,7 +249,7 @@ final class ProgressTree {
         func appendGraphToArray(_ node: TreeNode, _ arr: inout [TreeNode]) {
             arr.append(node)
 
-            node.successors.forEach {
+            node.sortedSuccessors.forEach {
                 appendGraphToArray($0, &arr)
             }
         }
@@ -264,13 +270,13 @@ final class ProgressTree {
 
             if lastCommonNode == nil { return [] }
 
-            let lowerBoundNode = firstCommonElement(array1: pathToLeftNodeInConflict!, array2: lastCommonNode!.successors)
-            let upperBoundNode = firstCommonElement(array1: pathToRightNodeInConflict!, array2: lastCommonNode!.successors)
+            let lowerBoundNode = firstCommonElement(array1: pathToLeftNodeInConflict!, array2: lastCommonNode!.sortedSuccessors)
+            let upperBoundNode = firstCommonElement(array1: pathToRightNodeInConflict!, array2: lastCommonNode!.sortedSuccessors)
 
             if lowerBoundNode == nil && upperBoundNode == nil { return [] }
 
-            let lowerBound = lastCommonNode!.successors.firstIndex(where: { $0.id == lowerBoundNode!.id })
-            let upperBound = lastCommonNode!.successors.firstIndex(where: { $0.id == upperBoundNode!.id })
+            let lowerBound = lastCommonNode!.sortedSuccessors.firstIndex(where: { $0.id == lowerBoundNode!.id })
+            let upperBound = lastCommonNode!.sortedSuccessors.firstIndex(where: { $0.id == upperBoundNode!.id })
 
             if lowerBound == nil && upperBound == nil { return [] }
 
@@ -281,7 +287,7 @@ final class ProgressTree {
 
             if (upperBound! - lowerBound!) > 1 {
                 for index in lowerBound! + 1 ... upperBound! - 1 {
-                    appendGraphToArray(lastCommonNode!.successors[index], &result)
+                    appendGraphToArray(lastCommonNode!.sortedSuccessors[index], &result)
                 }
             }
 
@@ -306,7 +312,7 @@ final class ProgressTree {
     }
 
     /// Assigns coordinates based on their parent ignoring overlap
-    private func initialCoordinates(node:  TreeNode) {
+    private func initialCoordinates(node: TreeNode) {
         /// A node sets its successors's coordinates
         /// With itself aligned above them
 
@@ -318,11 +324,32 @@ final class ProgressTree {
         /// The width of the successor layer
         let successorsWidth = Double(ProgressTree.SPACE_BETWEEN_NODES * (node.successors.count - 1))
 
-        for (index, successor) in node.successors.enumerated() {
+        for (index, successor) in node.sortedSuccessors.enumerated() {
             successor.coordinates.x = node.coordinates.x + Double(index * ProgressTree.SPACE_BETWEEN_NODES) - successorsWidth / 2
         }
 
-        node.successors.forEach { initialCoordinates(node: $0) }
+        node.sortedSuccessors.forEach { initialCoordinates(node: $0) }
+    }
+
+    /// Makes sure all coordinates are positive
+    private func normalizeCoordinates(_ treeNodes: inout [TreeNode]) {
+        var minX: Double?
+        var minY: Double?
+
+        for node in treeNodes {
+            if minX == nil || node.coordinates.x < minX! { minX = node.coordinates.x }
+            if minY == nil || node.coordinates.y < minY! { minY = node.coordinates.y }
+        }
+
+        for node in treeNodes {
+            if minX! < 0 {
+                node.coordinates.x = node.coordinates.x + abs(minX!)
+            }
+
+            if minY! < 0 {
+                node.coordinates.y = node.coordinates.y + abs(minY!)
+            }
+        }
     }
 
     private func scaleNodeCoord(_ treeNodes: inout [TreeNode]) {
@@ -337,9 +364,7 @@ final class ProgressTree {
         }
     }
 
-    /// This function is static because using the nodes in memory (the instance of ProgressTree) causes issues because Swift Data
-    /// Does not save nodes in the order they were inserted
-    static func centerInCanvas(treeNodes: inout [TreeNode], screenDimension: CGSize) {
+    private func centerInCanvas(treeNodes: inout [TreeNode], screenDimension: CGSize) -> CGSize {
         let canvasDimensions = CanvasDimensions.getCanvasDimensions(screenDimension: screenDimension, treeNodes: treeNodes)
 
         let treeSize = ProgressTree.getTreeSize(treeNodes: treeNodes)
@@ -352,6 +377,8 @@ final class ProgressTree {
             node.coordinates.x = node.coordinates.x + distanceToCenterHorizontally
             node.coordinates.y = node.coordinates.y + distanceToCenterVertically
         }
+
+        return canvasDimensions
     }
 
     /// This function is static because using the nodes in memory (the instance of ProgressTree) causes issues because Swift Data

@@ -14,40 +14,29 @@ extension ProgressTreeView {
     class ViewModel {
         var modelContext: ModelContext
         var progressTree = ProgressTree(name: "Loading", emojiIcon: "⏳", color: .accentColor)
-//        var treeNodes = [TreeNode]()
         var canvasSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
 
-        private var progressTreeId : PersistentIdentifier
+        private var progressTreeId: PersistentIdentifier
 
         init(modelContext: ModelContext, progressTreeId: PersistentIdentifier) {
             self.modelContext = modelContext
-            
+
             self.progressTreeId = progressTreeId
-            
+
             fetchData()
         }
 
-        #warning("ok mas o menos anda esto, mi pregunta es, si lo que yo fetcheo a mano es el arbol de nuevo, andara mejor esto?")
-        
         func fetchData() {
             do {
-//                let fetchTreeNodesPredicate = #Predicate<TreeNode> { node in node.progressTree?.persistentModelID == progressTreeId }
-//
-//                let fetchTreeNodesDescriptor = FetchDescriptor<TreeNode>(predicate: fetchTreeNodesPredicate)
-//
-//                treeNodes = try modelContext.fetch(fetchTreeNodesDescriptor)
-                
                 let fetchProgressTreePredicate = #Predicate<ProgressTree> { tree in tree.persistentModelID == progressTreeId }
 
                 let fetchProgressTreeDescriptor = FetchDescriptor<ProgressTree>(predicate: fetchProgressTreePredicate)
 
                 progressTree = try modelContext.fetch(fetchProgressTreeDescriptor)[0]
+
+                let updatedCanvasSize = progressTree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
                 
-                print(progressTree.treeNodes.count)
-                
-                progressTree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-                
-                canvasSize = CanvasDimensions.getCanvasDimensions(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height), treeNodes: progressTree.treeNodes)
+                canvasSize = updatedCanvasSize
 
             } catch {
                 print("Fetch failed")
@@ -103,21 +92,5 @@ extension ProgressTreeView {
 
             fetchData()
         }
-
-//        func addProgressTree(_ tree: ProgressTree) {
-//            modelContext.insert(tree)
-//
-//            let rootNode = TreeNode(progressTree: tree, unit: "", amount: 0.0, complete: false, progressiveQuest: false, name: tree.name, emojiIcon: tree.emojiIcon, items: [], completionHistory: [])
-//
-//            tree.treeNodes.append(rootNode)
-//
-//            fetchData()
-//        }
-//
-//        func deleteTree(tree: ProgressTree) {
-//            modelContext.delete(tree)
-//
-//            fetchData()
-//        }
     }
 }

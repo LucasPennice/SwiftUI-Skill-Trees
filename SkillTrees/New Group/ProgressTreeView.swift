@@ -16,9 +16,9 @@ struct ProgressTreeView: View {
     @State private var positionDelta = CGSize.zero
     @State private var selectedNode: String?
 
-    #warning("me quede viendo como meto las coordenadas de los nodos a la estructura de datos")
     #warning("tambien necesito una forma de hacer los edges. Pero que salgan desde el padre hasta los hijos. O sea que se rendericen desde node.successors")
     #warning("no anda el delete ene cascada. habra que hacer una funcion a mano")
+    #warning("scroll to parent node despues de crear nodo")
 
     var body: some View {
         ScrollViewReader { _ in
@@ -26,7 +26,7 @@ struct ProgressTreeView: View {
                 ZStack {
                     ///
                     /// Node Edge
-                    ///
+                    /// p
 //                    Text("EDGE")
 //                        .multilineTextAlignment(.center)
 //                        .padding(10)
@@ -102,7 +102,7 @@ struct ProgressTreeView: View {
                     }
                 }
                 .frame(width: viewModel.canvasSize.width, height: viewModel.canvasSize.height)
-                .background(.black)
+                .background(.gray)
                 .defaultScrollAnchor(.center)
                 .onTapGesture {
                     if selectedNode != nil {
@@ -158,12 +158,14 @@ struct ProgressTreeView: View {
     let tree = ProgressTree(name: "Cooking", emojiIcon: "👨🏻‍🍳", color: .blue)
 
     let rootNode = TreeNode(name: "Root", emojiIcon: "👨🏻‍🍳")
+    rootNode.orderKey = 1
     container.mainContext.insert(rootNode)
     rootNode.progressTree = tree
     tree.treeNodes.append(rootNode)
     try? container.mainContext.save()
 
     let childNode1 = TreeNode(name: "LEVEL 1", emojiIcon: "👨🏻‍🍳")
+    childNode1.orderKey = 2
     container.mainContext.insert(childNode1)
     childNode1.progressTree = tree
     childNode1.parent = rootNode
@@ -171,13 +173,14 @@ struct ProgressTreeView: View {
     tree.treeNodes.append(childNode1)
 
     let childNode12 = TreeNode(name: "LEVEL 1.2", emojiIcon: "👨🏻‍🍳")
+    childNode12.orderKey = 3
     container.mainContext.insert(childNode12)
     childNode12.progressTree = tree
     childNode12.parent = rootNode
     rootNode.successors.append(childNode12)
     tree.treeNodes.append(childNode12)
 
-    tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+    _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
     return ProgressTreeView(modelContext: container.mainContext, tree: tree)
         .modelContainer(container)

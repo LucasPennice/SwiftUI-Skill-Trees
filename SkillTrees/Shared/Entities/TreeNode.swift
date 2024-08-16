@@ -33,8 +33,15 @@ final class TreeNode {
 
     var parent: TreeNode?
 
-    @Relationship(deleteRule: .cascade, inverse: \TreeNode.parent) 
+    /// Only used to force a specific order (because append order is not reliable on Swift Data)
+    var orderKey: Int
+
+    @Relationship(deleteRule: .cascade, inverse: \TreeNode.parent)
     var successors: [TreeNode] = []
+    
+    var sortedSuccessors : [TreeNode] {
+        self.successors.sorted(by: { $0.orderKey < $1.orderKey })
+    }
 
     var additionalParents: [TreeNode]
 
@@ -88,12 +95,12 @@ final class TreeNode {
     }
 
     func getSuccessorsContour() -> LevelContour? {
-        if successors.isEmpty { return nil }
+        if sortedSuccessors.isEmpty { return nil }
 
-        var leftNode = successors.first!
-        var rightNode = successors.first!
+        var leftNode = sortedSuccessors.first!
+        var rightNode = sortedSuccessors.first!
 
-        for node in successors {
+        for node in sortedSuccessors {
             if node.coordinates.x < leftNode.coordinates.x {
                 leftNode = node
             }
@@ -121,9 +128,11 @@ final class TreeNode {
         successors = []
         parent = nil
         additionalParents = []
+
+        orderKey = Int(Date().timeIntervalSince1970)
     }
 
-    init(progressTree: ProgressTree? = nil, name: String, emojiIcon: String,parent: TreeNode? = nil) {
+    init(progressTree: ProgressTree? = nil, name: String, emojiIcon: String, parent: TreeNode? = nil) {
         self.progressTree = progressTree
         unit = ""
         amount = 0.0
@@ -137,6 +146,8 @@ final class TreeNode {
         coordinates = Coordinate()
         self.parent = parent
         additionalParents = []
+
+        orderKey = Int(Date().timeIntervalSince1970)
     }
 }
 
