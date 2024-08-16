@@ -13,15 +13,17 @@ extension ProgressTreeView {
     @Observable
     class ViewModel {
         var modelContext: ModelContext
-        var progressTree: ProgressTree
-        var treeNodes = [TreeNode]()
-        var canvasSize: CGSize
+        var progressTree = ProgressTree(name: "Loading", emojiIcon: "⏳", color: .accentColor)
+//        var treeNodes = [TreeNode]()
+        var canvasSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
 
-        init(modelContext: ModelContext, progressTree: ProgressTree) {
+        private var progressTreeId : PersistentIdentifier
+
+        init(modelContext: ModelContext, progressTreeId: PersistentIdentifier) {
             self.modelContext = modelContext
-            self.progressTree = progressTree
-            canvasSize = CanvasDimensions.getCanvasDimensions(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height), treeNodes: progressTree.treeNodes)
-
+            
+            self.progressTreeId = progressTreeId
+            
             fetchData()
         }
 
@@ -29,16 +31,23 @@ extension ProgressTreeView {
         
         func fetchData() {
             do {
-                let id = progressTree.persistentModelID
+//                let fetchTreeNodesPredicate = #Predicate<TreeNode> { node in node.progressTree?.persistentModelID == progressTreeId }
+//
+//                let fetchTreeNodesDescriptor = FetchDescriptor<TreeNode>(predicate: fetchTreeNodesPredicate)
+//
+//                treeNodes = try modelContext.fetch(fetchTreeNodesDescriptor)
+                
+                let fetchProgressTreePredicate = #Predicate<ProgressTree> { tree in tree.persistentModelID == progressTreeId }
 
-                let predicate = #Predicate<TreeNode> { node in node.progressTree?.persistentModelID == id }
+                let fetchProgressTreeDescriptor = FetchDescriptor<ProgressTree>(predicate: fetchProgressTreePredicate)
 
-                let descriptor = FetchDescriptor<TreeNode>(predicate: predicate)
-
-                treeNodes = try modelContext.fetch(descriptor)
+                progressTree = try modelContext.fetch(fetchProgressTreeDescriptor)[0]
+                
+                print(progressTree.treeNodes.count)
                 
                 progressTree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-                canvasSize = CanvasDimensions.getCanvasDimensions(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height), treeNodes: treeNodes)
+                
+                canvasSize = CanvasDimensions.getCanvasDimensions(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height), treeNodes: progressTree.treeNodes)
 
             } catch {
                 print("Fetch failed")

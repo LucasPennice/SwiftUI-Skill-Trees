@@ -39,7 +39,7 @@ struct ProgressTreeView: View {
                     ///
                     /// Node Labels
                     ///
-                    ForEach(viewModel.treeNodes) { node in
+                    ForEach(viewModel.progressTree.treeNodes) { node in
                         Text("\(node.name) - C \(node.successors.count) - p \(node.parent?.name ?? "")")
                             .frame(maxWidth: 100)
                             .font(.system(size: 14))
@@ -56,7 +56,7 @@ struct ProgressTreeView: View {
                     ///
                     /// Node View
                     ///
-                    ForEach(viewModel.treeNodes) { node in
+                    ForEach(viewModel.progressTree.treeNodes) { node in
                         TreeNodeView(icon: node.emojiIcon, size: selectedNode == "🔥" ? TreeNodeView.defaultSize * 2 : TreeNodeView.defaultSize, color: .yellow)
                             .zIndex(2)
                             .clipShape(Circle())
@@ -132,7 +132,7 @@ struct ProgressTreeView: View {
         /// Add Node Button
         ///
         .overlay(alignment: .topTrailing) {
-            Button(action: { print(viewModel.treeNodes) }) {
+            Button(action: { print(viewModel.progressTree.treeNodes) }) {
                 Image(systemName: "plus")
                     .font(.system(size: 16).bold())
                     .frame(width: 30, height: 30)
@@ -147,7 +147,7 @@ struct ProgressTreeView: View {
     }
 
     init(modelContext: ModelContext, tree: ProgressTree) {
-        _viewModel = State(initialValue: ViewModel(modelContext: modelContext, progressTree: tree))
+        _viewModel = State(initialValue: ViewModel(modelContext: modelContext, progressTreeId: tree.persistentModelID))
     }
 }
 
