@@ -16,7 +16,6 @@ struct ProgressTreeView: View {
     @State private var positionDelta = CGSize.zero
     @State private var selectedNode: String?
 
-    #warning("tambien necesito una forma de hacer los edges. Pero que salgan desde el padre hasta los hijos. O sea que se rendericen desde node.successors")
     #warning("no anda el delete ene cascada. habra que hacer una funcion a mano")
     #warning("scroll to parent node despues de crear nodo")
 
@@ -25,16 +24,23 @@ struct ProgressTreeView: View {
             ScrollView([.horizontal, .vertical], showsIndicators: false) {
                 ZStack {
                     ///
-                    /// Node Edge
-                    /// p
-//                    Text("EDGE")
-//                        .multilineTextAlignment(.center)
-//                        .padding(10)
-//                        .background(AppColors.darkGray)
-//                        .cornerRadius(10)
-//                        .foregroundColor(AppColors.textGray)
-//                        .position(CGPoint(x: $0.coordinates.x - 40, y: $0.coordinates.y))
-//                        .zIndex(0)
+                    /// Node Edges
+                    ///
+                    ForEach(viewModel.progressTree.treeNodes) { node in
+                        ForEach(node.successors) { successor in
+                            Path { path in
+                                // Top left
+                                path.move(to: CGPoint(x: node.coordinates.x, y: node.coordinates.y + TreeNodeView.defaultSize / 2))
+                                // Curve
+                                path.addCurve(
+                                    to: CGPoint(x: successor.coordinates.x, y: successor.coordinates.y - TreeNodeView.defaultSize / 2),
+                                    control1: CGPoint(x: node.coordinates.x, y: node.coordinates.y - 0.75 * (node.coordinates.y - successor.coordinates.y)),
+                                    control2: CGPoint(x: successor.coordinates.x, y: successor.coordinates.y - 0.38 * (successor.coordinates.y - node.coordinates.y))
+                                )
+                            }
+                            .stroke(viewModel.progressTree.color, lineWidth: 2)
+                        }
+                    }
 
                     ///
                     /// Node Labels
@@ -57,7 +63,7 @@ struct ProgressTreeView: View {
                     /// Node View
                     ///
                     ForEach(viewModel.progressTree.treeNodes) { node in
-                        TreeNodeView(icon: node.emojiIcon, size: selectedNode == "🔥" ? TreeNodeView.defaultSize * 2 : TreeNodeView.defaultSize, color: .yellow)
+                        TreeNodeView(icon: node.emojiIcon, size: selectedNode == "🔥" ? TreeNodeView.defaultSize * 2 : TreeNodeView.defaultSize, color: viewModel.progressTree.color)
                             .zIndex(2)
                             .clipShape(Circle())
                             .contentShape(ContentShapeKinds.contextMenuPreview, Circle())
@@ -102,7 +108,7 @@ struct ProgressTreeView: View {
                     }
                 }
                 .frame(width: viewModel.canvasSize.width, height: viewModel.canvasSize.height)
-                .background(.gray)
+                .background(.black)
                 .defaultScrollAnchor(.center)
                 .onTapGesture {
                     if selectedNode != nil {

@@ -86,7 +86,6 @@ final class ProgressTree {
 
         initialCoordinates(node: treeNodesCopy[0])
 
-        #warning("CONFIRMADO EL PROBLEMA DEL ORDEN ESTA ACA")
         handleOverlap(&treeNodesCopy)
 
         normalizeCoordinates(&treeNodesCopy)
@@ -358,8 +357,8 @@ final class ProgressTree {
     }
 
     private func scaleNodeCoord(_ treeNodes: inout [TreeNode]) {
-        let horizontalDistanceBetweenNodes = 4 * TreeNodeView.defaultSize
-        let distanceBetweenLayers = 4 * TreeNodeView.defaultSize
+        let horizontalDistanceBetweenNodes = 150.0
+        let distanceBetweenLayers = 150.0
 
         for node in treeNodes {
             node.coordinates.x = node.coordinates.x * horizontalDistanceBetweenNodes
