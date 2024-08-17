@@ -15,7 +15,7 @@ extension ProgressTreeView {
         var modelContext: ModelContext
         var progressTree = ProgressTree(name: "Loading", emojiIcon: "⏳", color: .accentColor)
 
-        var selectedNode: PersistentIdentifier?
+        var selectedNode: TreeNode?
 
         var canvasSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
 
@@ -104,11 +104,11 @@ extension ProgressTreeView {
             fetchData()
         }
 
-        func selectNode(nodeId: PersistentIdentifier) {
-            if selectedNode == nodeId {
+        func selectNode(_ node: TreeNode) {
+            if selectedNode != nil && selectedNode!.persistentModelID == node.persistentModelID {
                 selectedNode = nil
             } else {
-                selectedNode = nodeId
+                selectedNode = node
             }
         }
     }

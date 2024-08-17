@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 struct Coordinate: Codable {
     var x: Double
@@ -31,11 +32,43 @@ struct Coordinate: Codable {
 
 @Model
 final class TreeNode {
+    private var colorR: Double
+    private var colorG: Double
+    private var colorB: Double
+
+    func updateColor(_ newColor: Color) {
+        let colorArray = UIColor(newColor).cgColor.components!
+
+        let red = colorArray[0]
+        let green = colorArray[1]
+        let blue = colorArray[2]
+
+        colorR = Double(red)
+        colorG = Double(green)
+        colorB = Double(blue)
+    }
+
+    var color: Color {
+        return Color(red: colorR, green: colorG, blue: colorB)
+    }
+
     var layer: Int = 0
 
     var coordinates: Coordinate = Coordinate.zero
 
-    var progressTree: ProgressTree?
+    var progressTree: ProgressTree? {
+        didSet {
+            let colorArray = UIColor(progressTree.color).cgColor.components!
+
+            let red = colorArray[0]
+            let green = colorArray[1]
+            let blue = colorArray[2]
+
+            colorR = Double(red)
+            colorG = Double(green)
+            colorB = Double(blue)
+        }
+    }
 
     var parent: TreeNode?
 
@@ -134,8 +167,18 @@ final class TreeNode {
         successors = []
         parent = nil
         additionalParents = []
-
         orderKey = Int(Date().timeIntervalSince1970)
+
+        let color: Color = progressTree == nil ? .green : progressTree!.color
+        let colorArray = UIColor(color).cgColor.components!
+
+        let red = colorArray[0]
+        let green = colorArray[1]
+        let blue = colorArray[2]
+
+        colorR = Double(red)
+        colorG = Double(green)
+        colorB = Double(blue)
     }
 
     init(progressTree: ProgressTree? = nil, name: String, emojiIcon: String, parent: TreeNode? = nil) {
@@ -154,10 +197,27 @@ final class TreeNode {
         additionalParents = []
 
         orderKey = Int(Date().timeIntervalSince1970)
+
+        let color: Color = progressTree == nil ? .green : progressTree!.color
+        let colorArray = UIColor(color).cgColor.components!
+
+        let red = colorArray[0]
+        let green = colorArray[1]
+        let blue = colorArray[2]
+
+        colorR = Double(red)
+        colorG = Double(green)
+        colorB = Double(blue)
     }
 }
 
 struct NodeListItem: Codable, Hashable {
     var name: String
     var complete: Bool
+}
+
+extension TreeNode: Equatable {
+    static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
+        return lhs.persistentModelID == rhs.persistentModelID
+    }
 }

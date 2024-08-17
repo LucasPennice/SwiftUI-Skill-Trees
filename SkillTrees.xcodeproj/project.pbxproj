@@ -12,6 +12,7 @@
 		D11080EB2C5D1C4400C5E225 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D11080EA2C5D1C4400C5E225 /* Assets.xcassets */; };
 		D11080EE2C5D1C4400C5E225 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D11080ED2C5D1C4400C5E225 /* Preview Assets.xcassets */; };
 		D151F8E92C71327E00E721C2 /* EdgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8E82C71327E00E721C2 /* EdgeView.swift */; };
+		D151F8EB2C714C0700E721C2 /* SelectedNodeSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8EA2C714C0700E721C2 /* SelectedNodeSheetView.swift */; };
 		D19AB9C02C5D230600399662 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AB9BF2C5D230600399662 /* Colors.swift */; };
 		D19AB9C22C5D2E9600399662 /* DialoguePopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AB9C12C5D2E9600399662 /* DialoguePopUpView.swift */; };
 		D19AB9C62C5D882000399662 /* AddNewProgressTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AB9C52C5D882000399662 /* AddNewProgressTreeView.swift */; };
@@ -38,6 +39,7 @@
 		D11080EA2C5D1C4400C5E225 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D11080ED2C5D1C4400C5E225 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D151F8E82C71327E00E721C2 /* EdgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeView.swift; sourceTree = "<group>"; };
+		D151F8EA2C714C0700E721C2 /* SelectedNodeSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedNodeSheetView.swift; sourceTree = "<group>"; };
 		D19AB9BF2C5D230600399662 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		D19AB9C12C5D2E9600399662 /* DialoguePopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialoguePopUpView.swift; sourceTree = "<group>"; };
 		D19AB9C52C5D882000399662 /* AddNewProgressTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewProgressTreeView.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				D1B3893F2C6C3BB2008E9306 /* ProgressTreeViewVM.swift */,
 				D1B389372C6BE193008E9306 /* ProgressTreeView.swift */,
 				D151F8E82C71327E00E721C2 /* EdgeView.swift */,
+				D151F8EA2C714C0700E721C2 /* SelectedNodeSheetView.swift */,
 			);
 			path = ProgressTreeView;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 				D1B389292C699DFD008E9306 /* ItemCompletionRecord.swift in Sources */,
 				D11080E92C5D1C4100C5E225 /* ContentView.swift in Sources */,
 				D19AB9C02C5D230600399662 /* Colors.swift in Sources */,
+				D151F8EB2C714C0700E721C2 /* SelectedNodeSheetView.swift in Sources */,
 				D151F8E92C71327E00E721C2 /* EdgeView.swift in Sources */,
 				D1B389402C6C3BB2008E9306 /* ProgressTreeViewVM.swift in Sources */,
 				D11080E72C5D1C4100C5E225 /* SkillTreesApp.swift in Sources */,

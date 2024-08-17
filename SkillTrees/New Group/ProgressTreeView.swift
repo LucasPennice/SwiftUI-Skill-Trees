@@ -52,7 +52,7 @@ struct ProgressTreeView: View {
                     /// Node View
                     ///
                     ForEach(viewModel.progressTree.treeNodes) { node in
-                        TreeNodeView(icon: node.emojiIcon, size: viewModel.selectedNode == node.persistentModelID ? TreeNodeView.defaultSize * 2 : TreeNodeView.defaultSize, color: viewModel.progressTree.color)
+                        TreeNodeView(icon: node.emojiIcon, size: viewModel.selectedNode?.persistentModelID == node.persistentModelID ? TreeNodeView.defaultSize * 2 : TreeNodeView.defaultSize, color: viewModel.progressTree.color)
                             .id(node.persistentModelID)
                             .zIndex(2)
                             .clipShape(Circle())
@@ -63,9 +63,9 @@ struct ProgressTreeView: View {
                                     /// Tap Gesture
                                     ///
                                     TapGesture(count: 1).onEnded({ withAnimation {
-//                                        viewModel.selectNode(nodeId: node.persistentModelID)
+                                        viewModel.selectNode(node)
 //                                        viewModel.addTreeNode(parentNode: node)
-                                        viewModel.deleteNode(node)
+//                                        viewModel.deleteNode(node)
                                     } }),
                                     ///
                                     /// Drag Gesture
@@ -117,6 +117,7 @@ struct ProgressTreeView: View {
                     .cornerRadius(50)
             }
             .padding(12)
+            .opacity(viewModel.selectedNode == nil ? 1 : 0)
         }
         ///
         /// Add Node Button
@@ -131,9 +132,11 @@ struct ProgressTreeView: View {
                     .cornerRadius(50)
             }
             .padding(12)
+            .opacity(viewModel.selectedNode == nil ? 1 : 0)
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+        .sheet(item: $viewModel.selectedNode, content: { SelectedNodeSheetView(node: $0) })
     }
 
     init(modelContext: ModelContext, tree: ProgressTree) {
@@ -169,14 +172,6 @@ struct ProgressTreeView: View {
     childNode12.parent = rootNode
     rootNode.successors.append(childNode12)
     tree.treeNodes.append(childNode12)
-    
-    let childNode21 = TreeNode(name: "LEVEL 2.1", emojiIcon: "👨🏻‍🍳")
-    childNode12.orderKey = 4
-    container.mainContext.insert(childNode21)
-    childNode21.progressTree = tree
-    childNode21.parent = childNode12
-    childNode12.successors.append(childNode21)
-    tree.treeNodes.append(childNode21)
 
     _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
