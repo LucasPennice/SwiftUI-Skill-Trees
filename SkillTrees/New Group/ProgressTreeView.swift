@@ -14,12 +14,11 @@ struct ProgressTreeView: View {
     @Environment(\.dismiss) var dismiss
 
     @State private var positionDelta = CGSize.zero
-    @State private var selectedNode: String?
 
-    #warning("no anda el delete ene cascada. habra que hacer una funcion a mano")
+    #warning("no anda el scroll on tap")
 
     var body: some View {
-        ScrollViewReader { scrollReader in
+        ScrollViewReader { _ in
             ScrollView([.horizontal, .vertical], showsIndicators: false) {
                 ZStack {
                     ///
@@ -53,7 +52,8 @@ struct ProgressTreeView: View {
                     /// Node View
                     ///
                     ForEach(viewModel.progressTree.treeNodes) { node in
-                        TreeNodeView(icon: node.emojiIcon, size: selectedNode == "🔥" ? TreeNodeView.defaultSize * 2 : TreeNodeView.defaultSize, color: viewModel.progressTree.color)
+                        TreeNodeView(icon: node.emojiIcon, size: viewModel.selectedNode == node.persistentModelID ? TreeNodeView.defaultSize * 2 : TreeNodeView.defaultSize, color: viewModel.progressTree.color)
+                            .id(node.persistentModelID)
                             .zIndex(2)
                             .clipShape(Circle())
                             .contentShape(ContentShapeKinds.contextMenuPreview, Circle())
@@ -63,7 +63,9 @@ struct ProgressTreeView: View {
                                     /// Tap Gesture
                                     ///
                                     TapGesture(count: 1).onEnded({ withAnimation {
-                                        viewModel.addTreeNode(parentNode: node)
+//                                        viewModel.selectNode(nodeId: node.persistentModelID)
+//                                        viewModel.addTreeNode(parentNode: node)
+                                        viewModel.deleteNode(node)
                                     } }),
                                     ///
                                     /// Drag Gesture
@@ -93,19 +95,12 @@ struct ProgressTreeView: View {
                             /// Node Position State, updates on drag
                             ///
                             .position(CGPoint(x: node.coordinates.x + positionDelta.width, y: node.coordinates.y + positionDelta.height))
-                        //                        .id(nodeId)
                     }
                 }
                 .frame(width: viewModel.canvasSize.width, height: viewModel.canvasSize.height)
                 .background(.black)
                 .defaultScrollAnchor(.center)
-                .onTapGesture {
-                    if selectedNode != nil {
-                        withAnimation {
-                            selectedNode = nil
-                        }
-                    }
-                }
+                .onTapGesture { if viewModel.selectedNode != nil { withAnimation { viewModel.selectedNode = nil }} }
             }
             .defaultScrollAnchor(.center)
         }
@@ -174,6 +169,14 @@ struct ProgressTreeView: View {
     childNode12.parent = rootNode
     rootNode.successors.append(childNode12)
     tree.treeNodes.append(childNode12)
+    
+    let childNode21 = TreeNode(name: "LEVEL 2.1", emojiIcon: "👨🏻‍🍳")
+    childNode12.orderKey = 4
+    container.mainContext.insert(childNode21)
+    childNode21.progressTree = tree
+    childNode21.parent = childNode12
+    childNode12.successors.append(childNode21)
+    tree.treeNodes.append(childNode21)
 
     _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 

@@ -14,6 +14,9 @@ extension ProgressTreeView {
     class ViewModel {
         var modelContext: ModelContext
         var progressTree = ProgressTree(name: "Loading", emojiIcon: "⏳", color: .accentColor)
+
+        var selectedNode: PersistentIdentifier?
+
         var canvasSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
 
         private var progressTreeId: PersistentIdentifier
@@ -35,7 +38,7 @@ extension ProgressTreeView {
                 progressTree = try modelContext.fetch(fetchProgressTreeDescriptor)[0]
 
                 let updatedCanvasSize = progressTree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-                
+
                 canvasSize = updatedCanvasSize
 
             } catch {
@@ -44,7 +47,15 @@ extension ProgressTreeView {
         }
 
         func deleteNode(_ node: TreeNode) {
-            modelContext.delete(node)
+            if node.parent == nil { return }
+
+            var nodesToDelete: [TreeNode] = []
+
+            progressTree.appendSubTreeToArray(node, &nodesToDelete)
+
+            for node in nodesToDelete {
+                modelContext.delete(node)
+            }
 
             try? modelContext.save()
 
@@ -80,7 +91,7 @@ extension ProgressTreeView {
         }
 
         func addTreeNode(parentNode: TreeNode) {
-            let newNode = TreeNode(name: "\(Int.random(in: 0...100))", emojiIcon: "👨🏻‍🍳")
+            let newNode = TreeNode(name: "\(Int.random(in: 0 ... 100))", emojiIcon: "👨🏻‍🍳")
             modelContext.insert(newNode)
 
             newNode.progressTree = progressTree
@@ -91,6 +102,14 @@ extension ProgressTreeView {
             progressTree.treeNodes.append(newNode)
 
             fetchData()
+        }
+
+        func selectNode(nodeId: PersistentIdentifier) {
+            if selectedNode == nodeId {
+                selectedNode = nil
+            } else {
+                selectedNode = nodeId
+            }
         }
     }
 }

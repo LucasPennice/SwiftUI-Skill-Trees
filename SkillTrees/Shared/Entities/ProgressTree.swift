@@ -115,6 +115,14 @@ final class ProgressTree {
             }
         }
     }
+    
+    func appendSubTreeToArray(_ node: TreeNode, _ arr: inout [TreeNode]) {
+        arr.append(node)
+
+        node.sortedSuccessors.forEach {
+            appendSubTreeToArray($0, &arr)
+        }
+    }
 
     private func handleOverlap(_ treeNodes: inout [TreeNode]) {
         var overlap = true
@@ -244,19 +252,13 @@ final class ProgressTree {
             for i in n! ... lastCommonNode!.sortedSuccessors.count - 1 {
                 let item = lastCommonNode!.sortedSuccessors[i]
 
-                appendGraphToArray(item, &result)
+                appendSubTreeToArray(item, &result)
             }
 
             return result
         }
 
-        func appendGraphToArray(_ node: TreeNode, _ arr: inout [TreeNode]) {
-            arr.append(node)
-
-            node.sortedSuccessors.forEach {
-                appendGraphToArray($0, &arr)
-            }
-        }
+      
 
         func getNodesToShiftByHalfOverlapAmount(_ checkResult: (PersistentIdentifier, PersistentIdentifier, Double), treeNodes: [TreeNode]) -> [TreeNode] {
             var result: [TreeNode] = []
@@ -291,7 +293,7 @@ final class ProgressTree {
 
             if (upperBound! - lowerBound!) > 1 {
                 for index in lowerBound! + 1 ... upperBound! - 1 {
-                    appendGraphToArray(lastCommonNode!.sortedSuccessors[index], &result)
+                    appendSubTreeToArray(lastCommonNode!.sortedSuccessors[index], &result)
                 }
             }
 
@@ -453,7 +455,7 @@ struct CanvasDimensions {
 
         let canvasWidth = getCanvasWidth(treeWidth: treeSize.width, padding: screenDimension.width)
 
-        let canvasHeight = getCanvasHeight(treeHeight: treeSize.height, padding: screenDimension.width)
+        let canvasHeight = getCanvasHeight(treeHeight: treeSize.height, padding: screenDimension.height)
 
         return CGSize(width: canvasWidth, height: canvasHeight)
 
