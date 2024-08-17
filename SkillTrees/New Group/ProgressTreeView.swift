@@ -17,10 +17,9 @@ struct ProgressTreeView: View {
     @State private var selectedNode: String?
 
     #warning("no anda el delete ene cascada. habra que hacer una funcion a mano")
-    #warning("scroll to parent node despues de crear nodo")
 
     var body: some View {
-        ScrollViewReader { _ in
+        ScrollViewReader { scrollReader in
             ScrollView([.horizontal, .vertical], showsIndicators: false) {
                 ZStack {
                     ///
@@ -28,17 +27,8 @@ struct ProgressTreeView: View {
                     ///
                     ForEach(viewModel.progressTree.treeNodes) { node in
                         ForEach(node.successors) { successor in
-                            Path { path in
-                                // Top left
-                                path.move(to: CGPoint(x: node.coordinates.x, y: node.coordinates.y + TreeNodeView.defaultSize / 2))
-                                // Curve
-                                path.addCurve(
-                                    to: CGPoint(x: successor.coordinates.x, y: successor.coordinates.y - TreeNodeView.defaultSize / 2),
-                                    control1: CGPoint(x: node.coordinates.x, y: node.coordinates.y - 0.75 * (node.coordinates.y - successor.coordinates.y)),
-                                    control2: CGPoint(x: successor.coordinates.x, y: successor.coordinates.y - 0.38 * (successor.coordinates.y - node.coordinates.y))
-                                )
-                            }
-                            .stroke(viewModel.progressTree.color, lineWidth: 2)
+                            EdgeView(startX: node.coordinates.x, startY: node.coordinates.y, endX: successor.coordinates.x, endY: successor.coordinates.y)
+                                .stroke(viewModel.progressTree.color, lineWidth: 2)
                         }
                     }
 
@@ -73,7 +63,6 @@ struct ProgressTreeView: View {
                                     /// Tap Gesture
                                     ///
                                     TapGesture(count: 1).onEnded({ withAnimation {
-//                                        viewModel.deleteNode(node)
                                         viewModel.addTreeNode(parentNode: node)
                                     } }),
                                     ///

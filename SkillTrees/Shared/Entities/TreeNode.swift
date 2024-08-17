@@ -12,6 +12,12 @@ struct Coordinate: Codable {
     var x: Double
     var y: Double
 
+    static var zero = Coordinate()
+
+    func toCGPoint() -> CGPoint {
+        return CGPoint(x: x, y: y)
+    }
+
     init(x: Double, y: Double) {
         self.x = x
         self.y = y
@@ -27,7 +33,7 @@ struct Coordinate: Codable {
 final class TreeNode {
     var layer: Int = 0
 
-    var coordinates: Coordinate = Coordinate()
+    var coordinates: Coordinate = Coordinate.zero
 
     var progressTree: ProgressTree?
 
@@ -38,9 +44,9 @@ final class TreeNode {
 
     @Relationship(deleteRule: .cascade, inverse: \TreeNode.parent)
     var successors: [TreeNode] = []
-    
-    var sortedSuccessors : [TreeNode] {
-        self.successors.sorted(by: { $0.orderKey < $1.orderKey })
+
+    var sortedSuccessors: [TreeNode] {
+        successors.sorted(by: { $0.orderKey < $1.orderKey })
     }
 
     var additionalParents: [TreeNode]
@@ -124,7 +130,7 @@ final class TreeNode {
         self.completionHistory = completionHistory
         self.emojiIcon = emojiIcon
         layer = -1
-        coordinates = Coordinate()
+        coordinates = .zero
         successors = []
         parent = nil
         additionalParents = []
@@ -143,7 +149,7 @@ final class TreeNode {
         completionHistory = []
         self.emojiIcon = emojiIcon
         layer = parent != nil ? parent!.layer + 1 : 1
-        coordinates = Coordinate()
+        coordinates = .zero
         self.parent = parent
         additionalParents = []
 
