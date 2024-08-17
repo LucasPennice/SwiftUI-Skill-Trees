@@ -124,16 +124,16 @@ final class ProgressTree {
         let limiterBound = treeNodes.last!.layer * 2
 
         repeat {
-            let checkResult = checkOverlap()
+            let checkResult = checkOverlap(treeNodes)
             overlap = checkResult != nil
 
             if overlap == false { return }
 
             let overlapAmount: Double = checkResult!.2
 
-            let nodesToShiftByOverlapAmount = getNodesToShiftByOverlapAmount(checkResult!)
+            let nodesToShiftByOverlapAmount = getNodesToShiftByOverlapAmount(checkResult!, treeNodes: treeNodes)
 
-            let nodesToShiftByHalfOverlapAmount = getNodesToShiftByHalfOverlapAmount(checkResult!)
+            let nodesToShiftByHalfOverlapAmount = getNodesToShiftByHalfOverlapAmount(checkResult!, treeNodes: treeNodes)
 
             nodesToShiftByOverlapAmount.forEach { $0.coordinates.x += overlapAmount }
 
@@ -142,13 +142,13 @@ final class ProgressTree {
             limiter += 1
         } while overlap == true && limiter < limiterBound
 
-        func checkOverlap() -> (PersistentIdentifier, PersistentIdentifier, Double)? {
-            let contour = getTreeContour()
+        func checkOverlap(_ treeNodes: [TreeNode]) -> (PersistentIdentifier, PersistentIdentifier, Double)? {
+            let contour = getTreeContour(treeNodes)
 
             var result: (PersistentIdentifier, PersistentIdentifier, Double)?
 
-            for item in contour {
-                let levelContours = item.value
+            for key in contour.keys.sorted(by: <) {
+                let levelContours = contour[key]!
 
                 let levelBiggestOverlap = getLevelBiggestOverlap(levelContours)
 
@@ -188,7 +188,7 @@ final class ProgressTree {
             }
         }
 
-        func getTreeContour() -> [Int: [LevelContour]] {
+        func getTreeContour(_ treeNodes: [TreeNode]) -> [Int: [LevelContour]] {
             /// The Int represents the layer
             /// There are multiple contours because many subtrees might be present in the same layer
             var contour: [Int: [LevelContour]] = [:]
@@ -210,10 +210,15 @@ final class ProgressTree {
                 node.sortedSuccessors.forEach { recursiveBuildContour($0) }
             }
 
+            /// We reverse the order of each level's contours because...it's backwards
+            for levelContours in contour {
+                contour[levelContours.key] = levelContours.value.reversed()
+            }
+
             return contour
         }
 
-        func getNodesToShiftByOverlapAmount(_ checkResult: (PersistentIdentifier, PersistentIdentifier, Double)) -> [TreeNode] {
+        func getNodesToShiftByOverlapAmount(_ checkResult: (PersistentIdentifier, PersistentIdentifier, Double), treeNodes: [TreeNode]) -> [TreeNode] {
             var result: [TreeNode] = []
 
             let leftNodeInConflict = treeNodes.first(where: { $0.id == checkResult.0 })
@@ -229,15 +234,15 @@ final class ProgressTree {
 
             if lastCommonNode == nil { return [] }
 
-            let lastChildrenToGetShifted = firstCommonElement(array1: pathToRightNodeInConflict!, array2: lastCommonNode!.sortedSuccessors)
+            let firstChildrenToGetShifted = firstCommonElement(array1: pathToRightNodeInConflict!, array2: lastCommonNode!.sortedSuccessors)
+            
+            if firstChildrenToGetShifted == nil { return [] }
 
-            if lastChildrenToGetShifted == nil { return [] }
-
-            let n = lastCommonNode!.sortedSuccessors.firstIndex(where: { $0.id == lastChildrenToGetShifted!.id })
+            let n = lastCommonNode!.sortedSuccessors.firstIndex(where: { $0.id == firstChildrenToGetShifted!.id })
 
             if n == nil { return [] }
 
-            for i in 0 ... n! {
+            for i in n! ... lastCommonNode!.sortedSuccessors.count - 1 {
                 let item = lastCommonNode!.sortedSuccessors[i]
 
                 appendGraphToArray(item, &result)
@@ -254,7 +259,7 @@ final class ProgressTree {
             }
         }
 
-        func getNodesToShiftByHalfOverlapAmount(_ checkResult: (PersistentIdentifier, PersistentIdentifier, Double)) -> [TreeNode] {
+        func getNodesToShiftByHalfOverlapAmount(_ checkResult: (PersistentIdentifier, PersistentIdentifier, Double), treeNodes: [TreeNode]) -> [TreeNode] {
             var result: [TreeNode] = []
 
             let leftNodeInConflict = treeNodes.first(where: { $0.id == checkResult.0 })

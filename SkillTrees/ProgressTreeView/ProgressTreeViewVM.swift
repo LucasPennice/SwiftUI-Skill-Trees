@@ -80,7 +80,7 @@ extension ProgressTreeView {
         }
 
         func addTreeNode(parentNode: TreeNode) {
-            let newNode = TreeNode(name: "newNode", emojiIcon: "👨🏻‍🍳")
+            let newNode = TreeNode(name: "\(Int.random(in: 0...100))", emojiIcon: "👨🏻‍🍳")
             modelContext.insert(newNode)
 
             newNode.progressTree = progressTree
