@@ -105,11 +105,15 @@ final class TreeNode {
 
     var items: [NodeListItem] = []
 
+    
+    /// Number of times the action has to be performed to complete the node
+    var repeatTimesToComplete : Int
+    
     func undoCompletion(_ date: Date = .now) {
         //
     }
 
-    func calculateProgress(forDate: Date = .now) -> Double {
+    func calculateProgress() -> Double {
         /// Returns progress percentage (range of 0.0 to 1.0)
         ///
         if items.isEmpty { return 0.0 }
@@ -162,6 +166,7 @@ final class TreeNode {
         self.items = items
         self.completionHistory = completionHistory
         self.emojiIcon = emojiIcon
+        self.repeatTimesToComplete = 1
         layer = -1
         coordinates = .zero
         successors = []
@@ -195,6 +200,7 @@ final class TreeNode {
         coordinates = .zero
         self.parent = parent
         additionalParents = []
+        self.repeatTimesToComplete = 1
 
         orderKey = Int(Date().timeIntervalSince1970)
 

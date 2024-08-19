@@ -44,7 +44,7 @@ struct ProgressTreeView: View {
                             .cornerRadius(7)
                             .foregroundColor(.white)
                             .position(CGPoint(x: node.coordinates.x, y: node.coordinates.y))
-                            .offset(y: TreeNodeView.defaultSize / 2 + viewModel.getLabelVerticalOffset(text: node.name) + 10)
+                            .offset(y: TreeNodeView.defaultSize / 2 + viewModel.getLabelVerticalOffset(text: node.name) + 20)
                             .zIndex(1)
                     }
 
@@ -52,10 +52,10 @@ struct ProgressTreeView: View {
                     /// Node View
                     ///
                     ForEach(viewModel.progressTree.treeNodes) { node in
-                        TreeNodeView(icon: node.emojiIcon, size: viewModel.selectedNode?.persistentModelID == node.persistentModelID ? TreeNodeView.defaultSize * 2 : TreeNodeView.defaultSize, color: viewModel.progressTree.color)
+                        TreeNodeView(node: node, selected: viewModel.selectedNode?.persistentModelID == node.persistentModelID)
                             .id(node.persistentModelID)
                             .zIndex(2)
-                            .clipShape(Circle())
+
                             .contentShape(ContentShapeKinds.contextMenuPreview, Circle())
                             .gesture(
                                 SimultaneousGesture(
@@ -82,15 +82,17 @@ struct ProgressTreeView: View {
                             ///
                             /// Node Context Menu
                             ///
-                            .contextMenu(menuItems: {
-                                Text("Menu Item 1")
-                                Text("Menu Item 2")
-                                Button(role: .destructive) {
-                                } label: {
-                                    Label("Delete", systemImage: "trash.fill")
+                            .if(node.parent != nil) {
+                                $0.clipShape(Circle()).contextMenu(menuItems: {
+                                    Text("Menu Item 1")
+                                    Text("Menu Item 2")
+                                    Button(role: .destructive) {
+                                    } label: {
+                                        Label("Delete", systemImage: "trash.fill")
+                                    }
                                 }
+                                )
                             }
-                            )
                             ///
                             /// Node Position State, updates on drag
                             ///
