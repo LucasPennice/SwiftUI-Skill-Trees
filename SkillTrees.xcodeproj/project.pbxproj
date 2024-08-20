@@ -14,6 +14,14 @@
 		D151F8E92C71327E00E721C2 /* EdgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8E82C71327E00E721C2 /* EdgeView.swift */; };
 		D151F8EB2C714C0700E721C2 /* SelectedNodeSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8EA2C714C0700E721C2 /* SelectedNodeSheetView.swift */; };
 		D151F8EF2C73AF4B00E721C2 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8EE2C73AF4B00E721C2 /* ViewExtension.swift */; };
+		D151F8F22C73B5D600E721C2 /* CompleteNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8F12C73B5D600E721C2 /* CompleteNodeView.swift */; };
+		D151F8F42C73E9CF00E721C2 /* DrawCheckmarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8F32C73E9CF00E721C2 /* DrawCheckmarkView.swift */; };
+		D151F8F62C73F12900E721C2 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8F52C73F12900E721C2 /* ChartView.swift */; };
+		D151F8F82C73F19E00E721C2 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8F72C73F19E00E721C2 /* DateExtension.swift */; };
+		D151F8FA2C73F3E100E721C2 /* CompleteProgressiveNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8F92C73F3E100E721C2 /* CompleteProgressiveNodeView.swift */; };
+		D151F8FC2C7402A700E721C2 /* CompleteDefaultNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8FB2C7402A700E721C2 /* CompleteDefaultNodeView.swift */; };
+		D151F8FE2C740A4800E721C2 /* CompleteRepeatingNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8FD2C740A4800E721C2 /* CompleteRepeatingNodeView.swift */; };
+		D151F9002C74158D00E721C2 /* CompleteListNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8FF2C74158C00E721C2 /* CompleteListNodeView.swift */; };
 		D19AB9C02C5D230600399662 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AB9BF2C5D230600399662 /* Colors.swift */; };
 		D19AB9C22C5D2E9600399662 /* DialoguePopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AB9C12C5D2E9600399662 /* DialoguePopUpView.swift */; };
 		D19AB9C62C5D882000399662 /* AddNewProgressTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AB9C52C5D882000399662 /* AddNewProgressTreeView.swift */; };
@@ -42,6 +50,14 @@
 		D151F8E82C71327E00E721C2 /* EdgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeView.swift; sourceTree = "<group>"; };
 		D151F8EA2C714C0700E721C2 /* SelectedNodeSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedNodeSheetView.swift; sourceTree = "<group>"; };
 		D151F8EE2C73AF4B00E721C2 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		D151F8F12C73B5D600E721C2 /* CompleteNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteNodeView.swift; sourceTree = "<group>"; };
+		D151F8F32C73E9CF00E721C2 /* DrawCheckmarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawCheckmarkView.swift; sourceTree = "<group>"; };
+		D151F8F52C73F12900E721C2 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
+		D151F8F72C73F19E00E721C2 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
+		D151F8F92C73F3E100E721C2 /* CompleteProgressiveNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteProgressiveNodeView.swift; sourceTree = "<group>"; };
+		D151F8FB2C7402A700E721C2 /* CompleteDefaultNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteDefaultNodeView.swift; sourceTree = "<group>"; };
+		D151F8FD2C740A4800E721C2 /* CompleteRepeatingNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteRepeatingNodeView.swift; sourceTree = "<group>"; };
+		D151F8FF2C74158C00E721C2 /* CompleteListNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteListNodeView.swift; sourceTree = "<group>"; };
 		D19AB9BF2C5D230600399662 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		D19AB9C12C5D2E9600399662 /* DialoguePopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialoguePopUpView.swift; sourceTree = "<group>"; };
 		D19AB9C52C5D882000399662 /* AddNewProgressTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewProgressTreeView.swift; sourceTree = "<group>"; };
@@ -111,6 +127,20 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		D151F8F02C73B52900E721C2 /* SelectedNodeSheetView */ = {
+			isa = PBXGroup;
+			children = (
+				D151F8EA2C714C0700E721C2 /* SelectedNodeSheetView.swift */,
+				D151F8F12C73B5D600E721C2 /* CompleteNodeView.swift */,
+				D151F8F52C73F12900E721C2 /* ChartView.swift */,
+				D151F8F92C73F3E100E721C2 /* CompleteProgressiveNodeView.swift */,
+				D151F8FB2C7402A700E721C2 /* CompleteDefaultNodeView.swift */,
+				D151F8FD2C740A4800E721C2 /* CompleteRepeatingNodeView.swift */,
+				D151F8FF2C74158C00E721C2 /* CompleteListNodeView.swift */,
+			);
+			path = SelectedNodeSheetView;
+			sourceTree = "<group>";
+		};
 		D19AB9BD2C5D22EB00399662 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -140,6 +170,7 @@
 			children = (
 				D1B389412C6C48AF008E9306 /* StringExtension.swift */,
 				D151F8EE2C73AF4B00E721C2 /* ViewExtension.swift */,
+				D151F8F72C73F19E00E721C2 /* DateExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -158,6 +189,7 @@
 				D1B389332C6BC903008E9306 /* CircularProgressView.swift */,
 				D1B389352C6BCC3F008E9306 /* ProgressTreeCardView.swift */,
 				D1B389392C6BEA3A008E9306 /* TreeNodeView.swift */,
+				D151F8F32C73E9CF00E721C2 /* DrawCheckmarkView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -174,10 +206,10 @@
 		D1B3893E2C6C3B91008E9306 /* ProgressTreeView */ = {
 			isa = PBXGroup;
 			children = (
+				D151F8F02C73B52900E721C2 /* SelectedNodeSheetView */,
 				D1B3893F2C6C3BB2008E9306 /* ProgressTreeViewVM.swift */,
 				D1B389372C6BE193008E9306 /* ProgressTreeView.swift */,
 				D151F8E82C71327E00E721C2 /* EdgeView.swift */,
-				D151F8EA2C714C0700E721C2 /* SelectedNodeSheetView.swift */,
 			);
 			path = ProgressTreeView;
 			sourceTree = "<group>";
@@ -261,24 +293,32 @@
 				D1B389232C699A56008E9306 /* Settings.swift in Sources */,
 				D19AB9C62C5D882000399662 /* AddNewProgressTreeView.swift in Sources */,
 				D1B389292C699DFD008E9306 /* ItemCompletionRecord.swift in Sources */,
+				D151F8FE2C740A4800E721C2 /* CompleteRepeatingNodeView.swift in Sources */,
+				D151F8F42C73E9CF00E721C2 /* DrawCheckmarkView.swift in Sources */,
 				D151F8EF2C73AF4B00E721C2 /* ViewExtension.swift in Sources */,
 				D11080E92C5D1C4100C5E225 /* ContentView.swift in Sources */,
+				D151F9002C74158D00E721C2 /* CompleteListNodeView.swift in Sources */,
 				D19AB9C02C5D230600399662 /* Colors.swift in Sources */,
 				D151F8EB2C714C0700E721C2 /* SelectedNodeSheetView.swift in Sources */,
 				D151F8E92C71327E00E721C2 /* EdgeView.swift in Sources */,
+				D151F8FA2C73F3E100E721C2 /* CompleteProgressiveNodeView.swift in Sources */,
 				D1B389402C6C3BB2008E9306 /* ProgressTreeViewVM.swift in Sources */,
 				D11080E72C5D1C4100C5E225 /* SkillTreesApp.swift in Sources */,
+				D151F8F82C73F19E00E721C2 /* DateExtension.swift in Sources */,
 				D19AB9C22C5D2E9600399662 /* DialoguePopUpView.swift in Sources */,
+				D151F8F22C73B5D600E721C2 /* CompleteNodeView.swift in Sources */,
 				D1B3893C2C6C1A38008E9306 /* ContentViewVM.swift in Sources */,
 				D1B389382C6BE193008E9306 /* ProgressTreeView.swift in Sources */,
 				D1B389252C699B75008E9306 /* ProgressTree.swift in Sources */,
 				D1B389362C6BCC3F008E9306 /* ProgressTreeCardView.swift in Sources */,
 				D1B389312C6AAB00008E9306 /* ProgressTreeTemplates.swift in Sources */,
 				D1B389272C699DDD008E9306 /* TreeNode.swift in Sources */,
+				D151F8FC2C7402A700E721C2 /* CompleteDefaultNodeView.swift in Sources */,
 				D1B389422C6C48AF008E9306 /* StringExtension.swift in Sources */,
 				D1B389342C6BC903008E9306 /* CircularProgressView.swift in Sources */,
 				D1B3892B2C69A05E008E9306 /* SwiftDataController.swift in Sources */,
 				D1B3893A2C6BEA3A008E9306 /* TreeNodeView.swift in Sources */,
+				D151F8F62C73F12900E721C2 /* ChartView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

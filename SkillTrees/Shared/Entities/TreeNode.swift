@@ -97,20 +97,23 @@ final class TreeNode {
     private(set) var progressiveQuest: Bool = false
     var unit: String = ""
     var amount: Double = 0.0
+    var targetAmount: Double = 0.0
     @Relationship(deleteRule: .cascade, inverse: \ItemCompletionRecord.treeNode)
-    private(set) var completionHistory: [ItemCompletionRecord] = []
+    var completionHistory: [ItemCompletionRecord] = []
     ///
 
     func enableProgressiveQuest() { progressiveQuest = true }
 
     var items: [NodeListItem] = []
 
-    
     /// Number of times the action has to be performed to complete the node
-    var repeatTimesToComplete : Int
-    
+    var repeatTimesToComplete: Int
+
     func undoCompletion(_ date: Date = .now) {
         //
+    }
+
+    func completeMilestone() {
     }
 
     func calculateProgress() -> Double {
@@ -166,7 +169,7 @@ final class TreeNode {
         self.items = items
         self.completionHistory = completionHistory
         self.emojiIcon = emojiIcon
-        self.repeatTimesToComplete = 1
+        repeatTimesToComplete = 1
         layer = -1
         coordinates = .zero
         successors = []
@@ -200,7 +203,7 @@ final class TreeNode {
         coordinates = .zero
         self.parent = parent
         additionalParents = []
-        self.repeatTimesToComplete = 1
+        repeatTimesToComplete = 1
 
         orderKey = Int(Date().timeIntervalSince1970)
 
@@ -217,13 +220,9 @@ final class TreeNode {
     }
 }
 
-struct NodeListItem: Codable, Hashable {
+struct NodeListItem: Codable, Hashable, Identifiable {
+    var id = UUID()
     var name: String
     var complete: Bool
-}
-
-extension TreeNode: Equatable {
-    static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
-        return lhs.persistentModelID == rhs.persistentModelID
-    }
+    var createdAt: Date = Date.now
 }
