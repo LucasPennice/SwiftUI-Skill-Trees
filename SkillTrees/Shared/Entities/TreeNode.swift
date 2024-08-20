@@ -9,6 +9,13 @@ import Foundation
 import SwiftData
 import SwiftUI
 
+enum TreeNodeType {
+    case List
+    case Default
+    case Repeat
+    case Progressive
+}
+
 struct Coordinate: Codable {
     var x: Double
     var y: Double
@@ -94,7 +101,7 @@ final class TreeNode {
     ///
     /// Progress Tree Related Attributes
     ///
-    private(set) var progressiveQuest: Bool = false
+    private(set) var progressive: Bool = false
     var unit: String = ""
     var amount: Double = 0.0
     var targetAmount: Double = 0.0
@@ -102,7 +109,7 @@ final class TreeNode {
     var completionHistory: [ItemCompletionRecord] = []
     ///
 
-    func enableProgressiveQuest() { progressiveQuest = true }
+    func enableProgressiveQuest() { progressive = true }
 
     var items: [NodeListItem] = []
 
@@ -113,23 +120,57 @@ final class TreeNode {
         //
     }
 
-    func completeMilestone() {
+    func progressMilestone() {
+        let nodeType = getNodeType()
+
+        /// Record the completion event regardless of the node type
+        completionHistory.append(ItemCompletionRecord(date: .now, unit: unit, amount: amount, treeNode: self))
+
+        if nodeType == .Default { return complete = true }
+
+        if nodeType == .List && !items.contains(where: { $0.complete == false }) { return complete = true }
+
+        if nodeType == .Progressive && amount >= targetAmount { return complete = true }
+
+        if nodeType == .Repeat && completionHistory.count > repeatTimesToComplete { return complete = true }
     }
 
     func calculateProgress() -> Double {
+        ///
         /// Returns progress percentage (range of 0.0 to 1.0)
         ///
-        if items.isEmpty { return 0.0 }
 
-        let quantity = items.count
+        let nodeType = getNodeType()
 
-        let completed = items.reduce(0, { accumulator, value in
-            if value.complete { return accumulator + 1 }
+        if nodeType == .Default { return complete == true ? 1.0 : 0.0 }
 
-            return accumulator
-        })
+        var progress: Double = 0.0
 
-        let progress = Double(completed) / Double(quantity)
+        if nodeType == .List {
+            let completed = items.reduce(0, { accumulator, value in
+                if value.complete { return accumulator + 1 }
+
+                return accumulator
+            })
+
+            let quantity = items.count
+
+            progress = Double(completed) / Double(quantity)
+        }
+
+        if nodeType == .Progressive {
+            if amount > targetAmount { return 1.0 }
+
+            progress = amount / targetAmount
+        }
+
+        if nodeType == .Repeat {
+            let repeatedTimes = completionHistory.count
+
+            if repeatedTimes > repeatTimesToComplete { return 1.0 }
+
+            progress = Double(repeatedTimes) / Double(repeatTimesToComplete)
+        }
 
         let progressRounded3Decimals = Double(round(1000 * progress) / 1000)
 
@@ -138,6 +179,13 @@ final class TreeNode {
 
     func addItem(_ newItem: NodeListItem) {
         items.append(newItem)
+    }
+
+    func getNodeType() -> TreeNodeType {
+        if progressive { return .Progressive }
+        if !items.isEmpty { return .List }
+        if repeatTimesToComplete > 1 { return .Repeat }
+        return .Default
     }
 
     func getSuccessorsContour() -> LevelContour? {
@@ -164,7 +212,7 @@ final class TreeNode {
         self.unit = unit
         self.amount = amount
         self.complete = complete
-        self.progressiveQuest = progressiveQuest
+        self.progressive = progressiveQuest
         self.name = name
         self.items = items
         self.completionHistory = completionHistory
@@ -194,7 +242,7 @@ final class TreeNode {
         unit = ""
         amount = 0.0
         complete = false
-        progressiveQuest = false
+        progressive = false
         self.name = name
         items = []
         completionHistory = []

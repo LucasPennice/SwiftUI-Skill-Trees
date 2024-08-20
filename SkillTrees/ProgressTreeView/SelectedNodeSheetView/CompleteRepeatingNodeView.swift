@@ -22,7 +22,7 @@ struct CompleteRepeatingNodeView: View {
 
                     Spacer()
 
-                    DrawCheckmarkView(runOnFingerLifted: { withAnimation { node.completeMilestone() } })
+                    DrawCheckmarkView(runOnFingerLifted: { withAnimation { node.progressMilestone() } })
                 }
 
                 Divider()

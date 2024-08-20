@@ -25,8 +25,14 @@ struct CompleteListNodeView: View {
                                 .cornerRadius(6)
                                 .transition(.blurReplace)
                         } else {
-                            DrawCheckmarkView(runOnFingerLifted: { withAnimation { node.items[idx].complete = true } })
-                                .transition(.scale(scale: 0.3, anchor: .center))
+                            DrawCheckmarkView(runOnFingerLifted: {
+                                withAnimation {
+                                    node.items[idx].complete = true
+                                    
+                                    node.progressMilestone()
+                                }
+                            })
+                            .transition(.scale(scale: 0.3, anchor: .center))
                         }
                     }
                     .frame(width: 80)

@@ -26,7 +26,7 @@ struct CompleteDefaultNodeView: View {
                         self.addNewPoint(value)
                     })
                     .onEnded({ _ in
-                        node.completeMilestone()
+                        node.progressMilestone()
 
                         withAnimation { showPath = false }
 

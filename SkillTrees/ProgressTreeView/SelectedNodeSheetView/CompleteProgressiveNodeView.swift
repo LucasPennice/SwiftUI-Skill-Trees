@@ -48,7 +48,11 @@ struct CompleteProgressiveNodeView: View {
 
                     Spacer()
 
-                    DrawCheckmarkView(runOnFingerLifted: { node.completeMilestone() })
+                    DrawCheckmarkView(runOnFingerLifted: {
+                        node.amount = Double(unitInteger) + unitDecimal
+                        
+                        node.progressMilestone()
+                    })
                 }
             }
 

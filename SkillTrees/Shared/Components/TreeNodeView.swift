@@ -113,22 +113,27 @@ struct TreeNodeView: View {
         if node.complete == true { return false }
         /// Root nodes don't show a badge
         if node.parent == nil { return false }
-        /// Incomplete progress nodes show a badge
-        if node.progressiveQuest == true { return true }
-        /// Incomplete list nodes show a badge
-        if !node.items.isEmpty { return true }
-        /// Repeatable nodes where repeat time is greater than 1 show a badge
-        if node.repeatTimesToComplete > 1 { return true }
+
+        let nodeType = node.getNodeType()
+
+        if nodeType == .Progressive || nodeType == .List || nodeType == .Repeat { return true }
 
         return false
     }
 
     var nodeTypeIcon: String {
-        if node.progressiveQuest == true { return "chart.line.uptrend.xyaxis.circle.fill" }
-
-        if !node.items.isEmpty { return "list.bullet.circle.fill" }
-
-        return "repeat.circle.fill"
+        switch node.getNodeType() {
+        case .List:
+            return "list.bullet.circle.fill"
+        case .Default:
+            return ""
+        case .Repeat:
+            return "repeat.circle.fill"
+        case .Progressive:
+            return "chart.line.uptrend.xyaxis.circle.fill"
+        default:
+            return ""
+        }
     }
 
     @ViewBuilder var body: some View {

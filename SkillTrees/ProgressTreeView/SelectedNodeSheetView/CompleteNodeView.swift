@@ -11,14 +11,16 @@ import SwiftUI
 struct CompleteNodeView: View {
     var node: TreeNode
 
+    var nodeType: TreeNodeType { node.getNodeType() }
+
     var body: some View {
-        if node.progressiveQuest {
+        if nodeType == .Progressive {
             CompleteProgressiveNodeView(node: node)
-        } else if node.repeatTimesToComplete > 1 {
+        } else if nodeType == .List {
             CompleteListNodeView(node: node)
-        } else if node.repeatTimesToComplete == 1 {
+        } else if nodeType == .Default {
             CompleteDefaultNodeView(node: node)
-        } else if !node.items.isEmpty {
+        } else if nodeType == .Repeat {
             CompleteRepeatingNodeView(node: node)
         }
     }
