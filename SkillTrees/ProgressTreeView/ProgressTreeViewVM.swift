@@ -13,13 +13,16 @@ extension ProgressTreeView {
     @Observable
     class ViewModel {
         var modelContext: ModelContext
+        /// Data State
         var progressTree = ProgressTree(name: "Loading", emojiIcon: "⏳", color: .accentColor)
-
-        var selectedNode: TreeNode?
-
-        var canvasSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-
         private var progressTreeId: PersistentIdentifier
+        var insertNodePositions: [InsertNodePosition] = []
+
+        /// UI State
+        var selectedNode: TreeNode?
+        var canvasSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        private(set) var showingInsertNodePositions = false
+        var selectedInsertNodePosition: InsertNodePosition?
 
         init(modelContext: ModelContext, progressTreeId: PersistentIdentifier) {
             self.modelContext = modelContext
@@ -88,6 +91,20 @@ extension ProgressTreeView {
             result += currentLine
 
             return result.sizeOfString().height / 2 + verticalPadding
+        }
+
+        func showInsertNodePositions() {
+            showingInsertNodePositions = true
+
+            insertNodePositions = InsertNodePosition.getTreeInsertPositions(treeNodes: progressTree.treeNodes)
+        }
+
+        func tapInsertNodePosition(_ insertNodePosition: InsertNodePosition) {
+            selectedInsertNodePosition = insertNodePosition
+        }
+
+        func hideInsertNodePositions() {
+            showingInsertNodePositions = false
         }
 
         func addTreeNode(parentNode: TreeNode) {

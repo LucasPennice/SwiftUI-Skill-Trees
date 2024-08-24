@@ -26,9 +26,6 @@ class AppDateFormatter {
 struct ContentView: View {
     @State private var viewModel: ViewModel
 
-    @State private var showingCollectionNotAvailablePopUp: Bool = false
-    @State private var showingAddNewTreePopUp: Bool = false
-
     @StateObject var settings = Settings()
 
     var body: some View {
@@ -66,7 +63,7 @@ struct ContentView: View {
 
                         Spacer()
 
-                        Button(action: { showingAddNewTreePopUp = true }) {
+                        Button(action: { viewModel.showingAddNewTreePopUp = true }) {
                             Text("Add")
                                 .font(.system(size: 18))
                                 .padding(.horizontal)
@@ -135,7 +132,7 @@ struct ContentView: View {
                                 )
                                 .listRowBackground(AppColors.semiDarkGray)
                         } else {
-                            Button(action: { showingCollectionNotAvailablePopUp = true }) {
+                            Button(action: { viewModel.showingCollectionNotAvailablePopUp = true }) {
                                 HStack {
                                     Image(systemName: "lock.fill")
                                         .foregroundColor(AppColors.textGray)
@@ -160,7 +157,7 @@ struct ContentView: View {
                             ///
                             /// Progress Tree Card With Navigation
                             ///
-                            NavigationLink(destination: ProgressTreeView(modelContext: viewModel.modelContext, tree: tree)) {}
+                            NavigationLink(value: tree) {}
                                 .opacity(0)
                                 .background(ProgressTreeCardView(tree: tree))
                                 .listRowInsets(EdgeInsets())
@@ -178,6 +175,7 @@ struct ContentView: View {
                                 }
                         }
                     }
+                    .navigationDestination(for: ProgressTree.self) { tree in ProgressTreeView(modelContext: viewModel.modelContext, progressTreeId: tree.persistentModelID) }
                     .scrollContentBackground(.hidden)
                     .listStyle(InsetGroupedListStyle())
                     .listRowSpacing(18)
@@ -187,22 +185,22 @@ struct ContentView: View {
                 }
                 .padding(.vertical)
                 .background(.black)
-                .allowsHitTesting(!showingCollectionNotAvailablePopUp)
+                .allowsHitTesting(!viewModel.showingCollectionNotAvailablePopUp)
 
-                if showingCollectionNotAvailablePopUp {
+                if viewModel.showingCollectionNotAvailablePopUp {
                     DialoguePopUpView(
                         title: "Get your first Fiber to unlock your Collection",
                         messages: [["Complete a milestone in any Progress Tree to get your first Fiber"]],
                         buttonTitle: viewModel.progressTrees.isEmpty ? "Create Your First Progress Tree" : "Continue",
                         action: {
-                            showingCollectionNotAvailablePopUp = false
+                            viewModel.showingCollectionNotAvailablePopUp = false
 
-                            if viewModel.progressTrees.isEmpty { showingAddNewTreePopUp = true }
+                            if viewModel.progressTrees.isEmpty { viewModel.showingAddNewTreePopUp = true }
                         }
                     )
                 }
             }
-            .sheet(isPresented: $showingAddNewTreePopUp) {
+            .sheet(isPresented: $viewModel.showingAddNewTreePopUp) {
                 AddNewProgressTreeView(addProgressTree: viewModel.addProgressTree)
             }
         }

@@ -21,123 +21,130 @@ struct SelectedNodeSheetView: View {
     @State private var showingDeleteAdditionalConnectionsConfirmation = false
 
     var body: some View {
-        VStack {
-            HStack {
-                Button(action: { showingEmojiPicker.toggle() }) {
-                    Text(node.emojiIcon)
-                        .font(.system(size: 18))
-                        .frame(width: 45, height: 45)
+        ScrollView {
+            VStack {
+                CompleteNodeView(node: node)
+                    .padding(.bottom, 5)
+
+                HStack {
+                    Button(action: { showingEmojiPicker.toggle() }) {
+                        Text(node.emojiIcon)
+                            .font(.system(size: 18))
+                            .frame(width: 45, height: 45)
+                            .background(AppColors.midGray)
+                            .cornerRadius(10)
+                    }
+
+                    .padding(.bottom, 5)
+                    .emojiPicker(
+                        isPresented: $showingEmojiPicker,
+                        selectedEmoji: $node.emojiIcon)
+
+                    TextField("Title", text: $node.name)
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .frame(height: 45)
+                        .padding(.horizontal)
                         .background(AppColors.midGray)
                         .cornerRadius(10)
+                        .padding(.bottom, 5)
                 }
 
-                .padding(.bottom, 5)
-                .emojiPicker(
-                    isPresented: $showingEmojiPicker,
-                    selectedEmoji: $node.emojiIcon)
-
-                TextField("Title", text: $node.name)
-                    .frame(minWidth: 0, maxWidth: .infinity)
+                ColorPicker("Color", selection: $nodeColor, supportsOpacity: false)
                     .frame(height: 45)
                     .padding(.horizontal)
                     .background(AppColors.midGray)
                     .cornerRadius(10)
                     .padding(.bottom, 5)
-            }
 
-            ColorPicker("Color", selection: $nodeColor, supportsOpacity: false)
-                .frame(height: 45)
-                .padding(.horizontal)
-                .background(AppColors.midGray)
-                .cornerRadius(10)
-                .padding(.bottom, 5)
+                /// NOT IMPLEMENTED 🚨
+                Button(action: { }) {
+                    HStack {
+                        Text("Move Milestone\(node.successors.isEmpty ? "" : " & Descendants")")
+                            .font(.system(size: 18))
+                            .foregroundColor(.white)
 
-            /// NOT IMPLEMENTED 🚨
-            Button(action: { }) {
-                HStack {
-                    Text("Move Milestone\(node.successors.isEmpty ? "" : " & Descendants")")
-                        .font(.system(size: 18))
-                        .foregroundColor(.white)
+                        Spacer()
 
-                    Spacer()
-
-                    Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
-                        .foregroundColor(.white)
+                        Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
+                            .foregroundColor(.white)
+                    }
+                    .padding(.horizontal)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .frame(height: 45)
+                    .background(AppColors.midGray)
+                    .cornerRadius(10)
+                    .padding(.bottom, 5)
                 }
-                .padding(.horizontal)
-                .frame(minWidth: 0, maxWidth: .infinity)
-                .frame(height: 45)
-                .background(AppColors.midGray)
-                .cornerRadius(10)
-                .padding(.bottom, 5)
-            }
 
-            /// NOT IMPLEMENTED 🚨
-            Button(action: { }) {
-                HStack {
-                    Text("Connect to Additional Milestone")
-                        .font(.system(size: 18))
-                        .foregroundColor(.white)
+                /// NOT IMPLEMENTED 🚨
+                Button(action: { }) {
+                    HStack {
+                        Text("Connect to Additional Milestone")
+                            .font(.system(size: 18))
+                            .foregroundColor(.white)
 
-                    Spacer()
+                        Spacer()
 
-                    Image(systemName: "point.3.connected.trianglepath.dotted")
-                        .foregroundColor(.white)
+                        Image(systemName: "point.3.connected.trianglepath.dotted")
+                            .foregroundColor(.white)
+                    }
+                    .padding(.horizontal)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .frame(height: 45)
+                    .background(AppColors.midGray)
+                    .cornerRadius(10)
+                    .padding(.bottom, 5)
                 }
-                .padding(.horizontal)
-                .frame(minWidth: 0, maxWidth: .infinity)
-                .frame(height: 45)
-                .background(AppColors.midGray)
-                .cornerRadius(10)
-                .padding(.bottom, 5)
-            }
 
-            Button(action: { showingDeleteAdditionalConnectionsConfirmation = true }) {
-                HStack {
-                    Text("Delete Additional Milestone Connections")
-                        .font(.system(size: 16))
-                        .foregroundColor(.red)
+                Button(action: { showingDeleteAdditionalConnectionsConfirmation = true }) {
+                    HStack {
+                        Text("Delete Additional Milestone Connections")
+                            .font(.system(size: 16))
+                            .foregroundColor(.red)
 
-                    Spacer()
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .frame(height: 45)
+                    .background(AppColors.midGray)
+                    .cornerRadius(10)
+                    .padding(.bottom, 5)
                 }
-                .padding(.horizontal)
-                .frame(minWidth: 0, maxWidth: .infinity)
-                .frame(height: 45)
-                .background(AppColors.midGray)
-                .cornerRadius(10)
-                .padding(.bottom, 5)
-            }
 
-            Button(action: { showingDeleteMilestoneConfirmation = true }) {
-                HStack {
-                    Text("Delete Milestone")
-                        .font(.system(size: 16))
-                        .foregroundColor(.red)
+                Button(action: { showingDeleteMilestoneConfirmation = true }) {
+                    HStack {
+                        Text("Delete Milestone")
+                            .font(.system(size: 16))
+                            .foregroundColor(.red)
 
-                    Spacer()
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .frame(height: 45)
+                    .background(AppColors.midGray)
+                    .cornerRadius(10)
+                    .padding(.bottom, 5)
                 }
-                .padding(.horizontal)
-                .frame(minWidth: 0, maxWidth: .infinity)
-                .frame(height: 45)
-                .background(AppColors.midGray)
-                .cornerRadius(10)
-                .padding(.bottom, 5)
+            }
+            .padding()
+            .presentationDetents([.height(UIScreen.main.bounds.height - 250)])
+            .presentationDragIndicator(.visible)
+            .presentationBackgroundInteraction(.enabled)
+            .confirmationDialog("Delete Additional Connections?", isPresented: $showingDeleteAdditionalConnectionsConfirmation) {
+                /// NOT IMPLEMENTED 🚨
+                Button("Delete Additional Connections", role: .destructive) {}
+                Button("Cancel", role: .cancel) { }
+            }
+            .confirmationDialog("Delete this Milestone\(node.successors.isEmpty ? "" : " & All Descendants")", isPresented: $showingDeleteMilestoneConfirmation) {
+                /// NOT IMPLEMENTED 🚨
+                Button("Delete", role: .destructive) {}
+                Button("Cancel", role: .cancel) { }
             }
         }
-        .padding()
-        .presentationDetents([.height(UIScreen.main.bounds.height - 250)])
-        .presentationDragIndicator(.visible)
-        .presentationBackgroundInteraction(.enabled)
-        .confirmationDialog("Delete Additional Connections?", isPresented: $showingDeleteAdditionalConnectionsConfirmation) {
-            /// NOT IMPLEMENTED 🚨
-            Button("Delete Additional Connections", role: .destructive) {}
-            Button("Cancel", role: .cancel) { }
-        }
-        .confirmationDialog("Delete this Milestone\(node.successors.isEmpty ? "" : " & All Descendants")", isPresented: $showingDeleteMilestoneConfirmation) {
-            /// NOT IMPLEMENTED 🚨
-            Button("Delete", role: .destructive) {}
-            Button("Cancel", role: .cancel) { }
-        }
+        .scrollIndicators(.hidden)
+        .scrollBounceBehavior(.basedOnSize)
     }
 
     init(node: TreeNode) {

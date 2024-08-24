@@ -85,6 +85,7 @@ struct NodeShape: Shape {
 
 struct TreeNodeView: View {
     static let defaultSize = 45.0
+    static let defaultRootNodeSize = 55.0
     static let defaultIcon = "😄"
     static let defaultColor = Color.green
 
@@ -145,7 +146,7 @@ struct TreeNodeView: View {
                     .frame(width: rootNodeSize, height: rootNodeSize)
                     .rotationEffect(.init(degrees: 45))
 
-                RootNodeProgressShape(rectSize: rootNodeSize, progress: node.calculateProgress())
+                RootNodeProgressShape(rectSize: rootNodeSize, progress: node.progressTree!.progress)
                     .stroke(node.color, style: StrokeStyle(lineWidth: regularNodeSize * 0.07, lineCap: .round))
                     .frame(width: rootNodeSize, height: rootNodeSize)
                     .rotationEffect(.init(degrees: 45))

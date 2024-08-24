@@ -18,7 +18,7 @@ struct CompleteNodeView: View {
             CompleteProgressiveNodeView(node: node)
         } else if nodeType == .List {
             CompleteListNodeView(node: node)
-        } else if nodeType == .Default {
+        } else if nodeType == .Default && !node.complete {
             CompleteDefaultNodeView(node: node)
         } else if nodeType == .Repeat {
             CompleteRepeatingNodeView(node: node)

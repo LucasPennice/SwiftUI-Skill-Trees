@@ -15,6 +15,16 @@ struct ProgressTreeView: View {
 
     @State private var positionDelta = CGSize.zero
 
+    let lowOpacity = 0.4
+
+    var rootEdgeStartDelta: Double {
+        /// This is so the edge will start precisely at the rhombus edge, so when the opacity is != 1 it looks right
+        /// First part is the distance from the center to the edge of the rhombus
+        /// Second part is the distance from the center to the edge of a regular node
+        /// Third part is a corrector factor to be more precise
+        return TreeNodeView.defaultRootNodeSize / sqrt(2) - TreeNodeView.defaultSize / 2 - 2
+    }
+
     #warning("no anda el scroll on tap")
 
     var body: some View {
@@ -26,8 +36,14 @@ struct ProgressTreeView: View {
                     ///
                     ForEach(viewModel.progressTree.treeNodes) { node in
                         ForEach(node.successors) { successor in
-                            EdgeView(startX: node.coordinates.x, startY: node.coordinates.y, endX: successor.coordinates.x, endY: successor.coordinates.y)
-                                .stroke(viewModel.progressTree.color, lineWidth: 2)
+                            EdgeView(
+                                startX: node.coordinates.x,
+                                startY: node.parent == nil ? node.coordinates.y + rootEdgeStartDelta : node.coordinates.y,
+                                endX: successor.coordinates.x,
+                                endY: successor.coordinates.y
+                            )
+                            .stroke(viewModel.progressTree.color, lineWidth: 2)
+                            .opacity(viewModel.showingInsertNodePositions ? lowOpacity : 1)
                         }
                     }
 
@@ -36,8 +52,10 @@ struct ProgressTreeView: View {
                     ///
                     ForEach(viewModel.progressTree.treeNodes) { node in
                         Text("\(node.name) - C \(node.successors.count) - p \(node.parent?.name ?? "")")
+                            .id(node.persistentModelID)
                             .frame(maxWidth: 100)
                             .font(.system(size: 14))
+                            .opacity(viewModel.showingInsertNodePositions ? lowOpacity : 1)
                             .multilineTextAlignment(.center)
                             .padding(7)
                             .background(AppColors.darkGray)
@@ -53,10 +71,9 @@ struct ProgressTreeView: View {
                     ///
                     ForEach(viewModel.progressTree.treeNodes) { node in
                         TreeNodeView(node: node, selected: viewModel.selectedNode?.persistentModelID == node.persistentModelID)
-                            .id(node.persistentModelID)
                             .zIndex(2)
-
-                            .contentShape(ContentShapeKinds.contextMenuPreview, Circle())
+                            .opacity(viewModel.showingInsertNodePositions ? lowOpacity : 1)
+                            .allowsHitTesting(!viewModel.showingInsertNodePositions)
                             .gesture(
                                 SimultaneousGesture(
                                     ///
@@ -80,23 +97,28 @@ struct ProgressTreeView: View {
                                 )
                             )
                             ///
-                            /// Node Context Menu
-                            ///
-                            .if(node.parent != nil) {
-                                $0.clipShape(Circle()).contextMenu(menuItems: {
-                                    Text("Menu Item 1")
-                                    Text("Menu Item 2")
-                                    Button(role: .destructive) {
-                                    } label: {
-                                        Label("Delete", systemImage: "trash.fill")
-                                    }
-                                }
-                                )
-                            }
-                            ///
                             /// Node Position State, updates on drag
                             ///
                             .position(CGPoint(x: node.coordinates.x + positionDelta.width, y: node.coordinates.y + positionDelta.height))
+                    }
+
+                    ///
+                    /// Insert Node Position
+                    ///
+                    if viewModel.showingInsertNodePositions {
+                        ForEach(viewModel.insertNodePositions) { insertNodePosition in
+                            RoundedRectangle(cornerSize: CGSize(width: 10, height: 10))
+                                .stroke(AppColors.textGray, style: StrokeStyle(lineWidth: 1, dash: [3]))
+                                .fill(
+                                    viewModel.selectedInsertNodePosition?.id == insertNodePosition.id
+                                        ? Color.accentColor.opacity(0.4)
+                                        : AppColors.textGray.opacity(0.4))
+                                .frame(width: insertNodePosition.size.width, height: insertNodePosition.size.height)
+                                .position(CGPoint(x: insertNodePosition.coordinates.x, y: insertNodePosition.coordinates.y))
+                                .transition(.blurReplace)
+                                .zIndex(3)
+                                .onTapGesture { viewModel.tapInsertNodePosition(insertNodePosition) }
+                        }
                     }
                 }
                 .frame(width: viewModel.canvasSize.width, height: viewModel.canvasSize.height)
@@ -110,13 +132,28 @@ struct ProgressTreeView: View {
         /// Back Button
         ///
         .overlay(alignment: .topLeading) {
-            Button(action: { dismiss() }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 16).bold())
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(AppColors.textGray)
-                    .background(AppColors.midGray)
-                    .cornerRadius(50)
+            Button(action: {
+                if viewModel.showingInsertNodePositions { return withAnimation { viewModel.hideInsertNodePositions() }}
+
+                dismiss()
+            }) {
+                ZStack {
+                    if viewModel.showingInsertNodePositions {
+                        Text("Cancel")
+                            .foregroundColor(.red)
+                            .transition(.blurReplace)
+                            .zIndex(1)
+                    } else {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 16).bold())
+                            .foregroundColor(AppColors.textGray)
+                            .transition(.blurReplace)
+                            .zIndex(2)
+                    }
+                }
+                .frame(width: viewModel.showingInsertNodePositions ? 80 : 30, height: 30)
+                .background(AppColors.midGray)
+                .cornerRadius(50)
             }
             .padding(12)
             .opacity(viewModel.selectedNode == nil ? 1 : 0)
@@ -125,13 +162,25 @@ struct ProgressTreeView: View {
         /// Add Node Button
         ///
         .overlay(alignment: .topTrailing) {
-            Button(action: { print(viewModel.progressTree.treeNodes) }) {
-                Image(systemName: "plus")
-                    .font(.system(size: 16).bold())
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(AppColors.textGray)
-                    .background(AppColors.midGray)
-                    .cornerRadius(50)
+            Button(action: { withAnimation { viewModel.showInsertNodePositions() } }) {
+                ZStack {
+                    if viewModel.showingInsertNodePositions {
+                        Text("Choose where to add your milestone")
+                            .font(.system(size: 14))
+                            .foregroundColor(.white)
+                            .transition(.blurReplace)
+                            .zIndex(1)
+                    } else {
+                        Image(systemName: "plus")
+                            .font(.system(size: 16).bold())
+                            .foregroundColor(AppColors.textGray)
+                            .transition(.blurReplace)
+                            .zIndex(2)
+                    }
+                }
+                .frame(width: viewModel.showingInsertNodePositions ? 170 : 30, height: viewModel.showingInsertNodePositions ? 50 : 30)
+                .background(AppColors.midGray)
+                .cornerRadius(viewModel.showingInsertNodePositions ? 10 : 50)
             }
             .padding(12)
             .opacity(viewModel.selectedNode == nil ? 1 : 0)
@@ -139,10 +188,11 @@ struct ProgressTreeView: View {
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .sheet(item: $viewModel.selectedNode, content: { SelectedNodeSheetView(node: $0) })
+        .sheet(item: $viewModel.selectedInsertNodePosition, content: { NewMilestoneSheetView(insertNodePosition: $0, treeColor: viewModel.progressTree.color) })
     }
 
-    init(modelContext: ModelContext, tree: ProgressTree) {
-        _viewModel = State(initialValue: ViewModel(modelContext: modelContext, progressTreeId: tree.persistentModelID))
+    init(modelContext: ModelContext, progressTreeId: PersistentIdentifier) {
+        _viewModel = State(initialValue: ViewModel(modelContext: modelContext, progressTreeId: progressTreeId))
     }
 }
 
@@ -177,6 +227,6 @@ struct ProgressTreeView: View {
 
     _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
-    return ProgressTreeView(modelContext: container.mainContext, tree: tree)
+    return ProgressTreeView(modelContext: container.mainContext, progressTreeId: tree.persistentModelID)
         .modelContainer(container)
 }

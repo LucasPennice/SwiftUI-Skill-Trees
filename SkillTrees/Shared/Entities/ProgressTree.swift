@@ -36,6 +36,24 @@ final class ProgressTree {
         return Color(red: colorR, green: colorG, blue: colorB)
     }
 
+    var progress: Double {
+        if treeNodes.isEmpty { return 0.0 }
+
+        let treeNodesMinusRoot = treeNodes.filter({ $0.parent != nil })
+
+        let completed = treeNodesMinusRoot.reduce(0, { accumulator, value in
+            accumulator + value.calculateProgress()
+        })
+
+        let quantity = treeNodesMinusRoot.count
+
+        let progress = Double(completed) / Double(quantity)
+
+        let progressRounded3Decimals = Double(round(1000 * progress) / 1000)
+
+        return progressRounded3Decimals
+    }
+
     @Relationship(deleteRule: .cascade, inverse: \TreeNode.progressTree)
     var treeNodes: [TreeNode] = []
 
@@ -115,7 +133,7 @@ final class ProgressTree {
             }
         }
     }
-    
+
     func appendSubTreeToArray(_ node: TreeNode, _ arr: inout [TreeNode]) {
         arr.append(node)
 
@@ -242,7 +260,7 @@ final class ProgressTree {
             if lastCommonNode == nil { return [] }
 
             let firstChildrenToGetShifted = firstCommonElement(array1: pathToRightNodeInConflict!, array2: lastCommonNode!.sortedSuccessors)
-            
+
             if firstChildrenToGetShifted == nil { return [] }
 
             let n = lastCommonNode!.sortedSuccessors.firstIndex(where: { $0.id == firstChildrenToGetShifted!.id })
@@ -257,8 +275,6 @@ final class ProgressTree {
 
             return result
         }
-
-      
 
         func getNodesToShiftByHalfOverlapAmount(_ checkResult: (PersistentIdentifier, PersistentIdentifier, Double), treeNodes: [TreeNode]) -> [TreeNode] {
             var result: [TreeNode] = []

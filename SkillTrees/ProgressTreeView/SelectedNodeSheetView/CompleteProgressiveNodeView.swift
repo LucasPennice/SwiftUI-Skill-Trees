@@ -50,8 +50,10 @@ struct CompleteProgressiveNodeView: View {
 
                     DrawCheckmarkView(runOnFingerLifted: {
                         node.amount = Double(unitInteger) + unitDecimal
-                        
-                        node.progressMilestone()
+
+                        withAnimation {
+                            node.progressMilestone()
+                        }
                     })
                 }
             }
