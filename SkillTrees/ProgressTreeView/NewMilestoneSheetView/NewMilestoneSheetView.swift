@@ -14,130 +14,132 @@ struct NewMilestoneSheetView: View {
     @State private var viewModel: ViewModel
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                HStack {
-                    Button(action: { viewModel.showingEmojiPicker.toggle() }) {
-                        Text(viewModel.emojiIcon)
-                            .font(.system(size: 18))
-                            .frame(width: 45, height: 45)
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Button(action: { viewModel.showingEmojiPicker.toggle() }) {
+                            Text(viewModel.emojiIcon)
+                                .font(.system(size: 18))
+                                .frame(width: 45, height: 45)
+                                .background(AppColors.midGray)
+                                .cornerRadius(10)
+                        }
+
+                        .padding(.bottom, 5)
+                        .emojiPicker(
+                            isPresented: $viewModel.showingEmojiPicker,
+                            selectedEmoji: $viewModel.emojiIcon)
+
+                        TextField("Title", text: $viewModel.name)
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .frame(height: 45)
+                            .padding(.horizontal)
                             .background(AppColors.midGray)
                             .cornerRadius(10)
+                            .padding(.bottom, 5)
                     }
 
-                    .padding(.bottom, 5)
-                    .emojiPicker(
-                        isPresented: $viewModel.showingEmojiPicker,
-                        selectedEmoji: $viewModel.emojiIcon)
-
-                    TextField("Title", text: $viewModel.name)
-                        .frame(minWidth: 0, maxWidth: .infinity)
+                    ColorPicker("Color", selection: $viewModel.color, supportsOpacity: false)
                         .frame(height: 45)
                         .padding(.horizontal)
                         .background(AppColors.midGray)
                         .cornerRadius(10)
-                        .padding(.bottom, 5)
-                }
+                        .padding(.bottom, 15)
 
-                ColorPicker("Color", selection: $viewModel.color, supportsOpacity: false)
-                    .frame(height: 45)
-                    .padding(.horizontal)
+                    Text("WHEN DO I COMPLETE THIS MILESTONE?")
+                        .font(.system(size: 12))
+                        .foregroundColor(AppColors.textGray)
+
+                    VStack(alignment: .leading, spacing: 0) {
+                        Button(action: { withAnimation { viewModel.selectedCompletionType = .List }}) {
+                            HStack {
+                                Text("When I finish every item on a list")
+                                    .multilineTextAlignment(.leading)
+                                    .foregroundStyle(.white)
+
+                                Spacer()
+
+                                Image(systemName: "checkmark")
+                                    .fontWeight(.medium)
+                                    .opacity(viewModel.selectedCompletionType == .List ? 1 : 0)
+                            }
+                            .padding(.horizontal)
+                            .padding(.vertical, 10)
+                        }
+
+                        Divider()
+
+                        Button(action: { withAnimation { viewModel.selectedCompletionType = .Repeat }}) {
+                            HStack {
+                                Text("When I do a task a certain number of times")
+                                    .multilineTextAlignment(.leading)
+                                    .foregroundStyle(.white)
+
+                                Spacer()
+
+                                Image(systemName: "checkmark")
+                                    .fontWeight(.medium)
+                                    .opacity(viewModel.selectedCompletionType == .Repeat ? 1 : 0)
+                            }
+                            .padding(.horizontal)
+                            .padding(.vertical, 10)
+                        }
+
+                        Divider()
+
+                        Button(action: { withAnimation { viewModel.selectedCompletionType = .Progressive }}) {
+                            HStack {
+                                Text("When I hit a target amount")
+                                    .multilineTextAlignment(.leading)
+                                    .foregroundStyle(.white)
+
+                                Spacer()
+
+                                Image(systemName: "checkmark")
+                                    .fontWeight(.medium)
+                                    .opacity(viewModel.selectedCompletionType == .Progressive ? 1 : 0)
+                            }
+                            .padding(.horizontal)
+                            .padding(.vertical, 10)
+                        }
+                    }
                     .background(AppColors.midGray)
                     .cornerRadius(10)
                     .padding(.bottom, 15)
 
-                Text("WHEN DO I COMPLETE THIS MILESTONE?")
-                    .font(.system(size: 12))
-                    .foregroundColor(AppColors.textGray)
-
-                VStack(alignment: .leading, spacing: 0) {
-                    Button(action: { withAnimation { viewModel.selectedCompletionType = .List }}) {
-                        HStack {
-                            Text("When I finish every item on a list")
-                                .multilineTextAlignment(.leading)
-                                .foregroundStyle(.white)
-
-                            Spacer()
-
-                            Image(systemName: "checkmark")
-                                .fontWeight(.medium)
-                                .opacity(viewModel.selectedCompletionType == .List ? 1 : 0)
-                        }
-                        .padding(.horizontal)
-                        .padding(.vertical, 10)
-                    }
-
-                    Divider()
-
-                    Button(action: { withAnimation { viewModel.selectedCompletionType = .Repeat }}) {
-                        HStack {
-                            Text("When I do a task a certain number of times")
-                                .multilineTextAlignment(.leading)
-                                .foregroundStyle(.white)
-
-                            Spacer()
-
-                            Image(systemName: "checkmark")
-                                .fontWeight(.medium)
-                                .opacity(viewModel.selectedCompletionType == .Repeat ? 1 : 0)
-                        }
-                        .padding(.horizontal)
-                        .padding(.vertical, 10)
-                    }
-
-                    Divider()
-
-                    Button(action: { withAnimation { viewModel.selectedCompletionType = .Progressive }}) {
-                        HStack {
-                            Text("When I hit a target amount")
-                                .multilineTextAlignment(.leading)
-                                .foregroundStyle(.white)
-
-                            Spacer()
-
-                            Image(systemName: "checkmark")
-                                .fontWeight(.medium)
-                                .opacity(viewModel.selectedCompletionType == .Progressive ? 1 : 0)
-                        }
-                        .padding(.horizontal)
-                        .padding(.vertical, 10)
+                    if viewModel.selectedCompletionType == .List {
+                        ListNodeInputView(items: $viewModel.items)
+                    } else if viewModel.selectedCompletionType == .Progressive {
+                        ProgressiveNodeInputView(unitInteger: $viewModel.unitInteger, unitDecimal: $viewModel.unitDecimal, unit: $viewModel.unit)
+                    } else if viewModel.selectedCompletionType == .Repeat {
+                        RepeatingNodeInputView(repeatTimesToComplete: $viewModel.repeatTimesToComplete)
                     }
                 }
-                .background(AppColors.midGray)
-                .cornerRadius(10)
-                .padding(.bottom, 15)
+                .navigationTitle("New Milestone")
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Cancel") { dismiss() }
+                    }
 
-                if viewModel.selectedCompletionType == .List {
-                    ListNodeInputView(items: $viewModel.items)
-                } else if viewModel.selectedCompletionType == .Progressive {
-                    ProgressiveNodeInputView(unitInteger: $viewModel.unitInteger, unitDecimal: $viewModel.unitDecimal, unit: $viewModel.unit)
-                } else if viewModel.selectedCompletionType == .Repeat {
-                    RepeatingNodeInputView(repeatTimesToComplete: $viewModel.repeatTimesToComplete)
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Add") { viewModel.addNodeAndClose(dismiss: dismiss) }
+                            .disabled(viewModel.addDisabled)
+                    }
                 }
+                .navigationBarTitleDisplayMode(.inline)
+                .padding()
+                .presentationDetents([.height(UIScreen.main.bounds.height - 250)])
+                .presentationDragIndicator(.visible)
+                .presentationBackgroundInteraction(.enabled)
             }
-            .navigationTitle("New Milestone")
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") { dismiss() }
-                }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Add") { viewModel.addMilestone() }
-                        .disabled(viewModel.addDisabled)
-                }
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .padding()
-            .presentationDetents([.height(UIScreen.main.bounds.height - 250)])
-            .presentationDragIndicator(.visible)
-            .presentationBackgroundInteraction(.enabled)
+            .scrollIndicators(.hidden)
+            .scrollBounceBehavior(.basedOnSize)
         }
-        .scrollIndicators(.hidden)
-        .scrollBounceBehavior(.basedOnSize)
     }
 
-    init(insertNodePosition: InsertNodePosition, treeColor: Color) {
-        _viewModel = State(initialValue: ViewModel(insertNodePosition: insertNodePosition, treeColor: treeColor))
+    init(insertNodePosition: InsertNodePosition, treeColor: Color, addTreeNode: @escaping (TreeNode, PersistentIdentifier) -> Void) {
+        _viewModel = State(initialValue: ViewModel(addTreeNode: addTreeNode, insertNodePosition: insertNodePosition, treeColor: treeColor))
     }
 }
 
@@ -172,6 +174,6 @@ struct NewMilestoneSheetView: View {
 
     _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
-    return NewMilestoneSheetView(insertNodePosition: InsertNodePosition(id: UUID(), parentId: childNode1.persistentModelID, orderKey: 123, coordinates: CGPoint(x: 0, y: 0), size: CGSize(width: 0, height: 0)), treeColor: tree.color)
+    return NewMilestoneSheetView(insertNodePosition: InsertNodePosition(id: UUID(), parentId: childNode1.persistentModelID, orderKey: 123, coordinates: CGPoint(x: 0, y: 0), size: CGSize(width: 0, height: 0)), treeColor: tree.color, addTreeNode: { _, _ in })
         .modelContainer(container)
 }

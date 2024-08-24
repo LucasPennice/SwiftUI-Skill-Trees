@@ -80,7 +80,7 @@ final class TreeNode {
     var parent: TreeNode?
 
     /// Only used to force a specific order (because append order is not reliable on Swift Data)
-    var orderKey: Int
+    var orderKey: Double
 
     @Relationship(deleteRule: .cascade, inverse: \TreeNode.parent)
     var successors: [TreeNode] = []
@@ -212,7 +212,7 @@ final class TreeNode {
         self.unit = unit
         self.amount = amount
         self.complete = complete
-        self.progressive = progressiveQuest
+        progressive = progressiveQuest
         self.name = name
         self.items = items
         self.completionHistory = completionHistory
@@ -223,7 +223,7 @@ final class TreeNode {
         successors = []
         parent = nil
         additionalParents = []
-        orderKey = Int(Date().timeIntervalSince1970)
+        orderKey = TreeNode.generateOrderKey()
 
         let color: Color = progressTree == nil ? .green : progressTree!.color
         let colorArray = UIColor(color).cgColor.components!
@@ -253,7 +253,7 @@ final class TreeNode {
         additionalParents = []
         repeatTimesToComplete = 1
 
-        orderKey = Int(Date().timeIntervalSince1970)
+        orderKey = TreeNode.generateOrderKey()
 
         let color: Color = progressTree == nil ? .green : progressTree!.color
         let colorArray = UIColor(color).cgColor.components!
@@ -265,6 +265,10 @@ final class TreeNode {
         colorR = Double(red)
         colorG = Double(green)
         colorB = Double(blue)
+    }
+
+    static func generateOrderKey() -> Double {
+        return Double(Date().timeIntervalSince1970)
     }
 }
 

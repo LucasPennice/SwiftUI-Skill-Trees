@@ -24,6 +24,7 @@ struct SelectedNodeSheetView: View {
         ScrollView {
             VStack {
                 CompleteNodeView(node: node)
+                    .cornerRadius(10)
                     .padding(.bottom, 5)
 
                 HStack {

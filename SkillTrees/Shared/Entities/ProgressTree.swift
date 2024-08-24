@@ -94,6 +94,7 @@ final class ProgressTree {
         /// We use a copy because swift data doesn't let me sort the actual array
         var treeNodesCopy = treeNodes
 
+        #warning("probar si estos sorts realmente hacen algo")
         /// Assure that root node is the first node
         treeNodesCopy.sort(by: { n1, _ in n1.parent == nil })
 
@@ -102,7 +103,7 @@ final class ProgressTree {
 
         setNodesLayer(&treeNodesCopy)
 
-        initialCoordinates(node: treeNodesCopy[0])
+        initialCoordinates(node: treeNodesCopy.first(where: { $0.parent == nil })!)
 
         handleOverlap(&treeNodesCopy)
 

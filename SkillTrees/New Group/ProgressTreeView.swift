@@ -188,7 +188,11 @@ struct ProgressTreeView: View {
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .sheet(item: $viewModel.selectedNode, content: { SelectedNodeSheetView(node: $0) })
-        .sheet(item: $viewModel.selectedInsertNodePosition, content: { NewMilestoneSheetView(insertNodePosition: $0, treeColor: viewModel.progressTree.color) })
+        .sheet(item: $viewModel.selectedInsertNodePosition, content: { NewMilestoneSheetView(
+            insertNodePosition: $0,
+            treeColor: viewModel.progressTree.color,
+            addTreeNode: viewModel.addTreeNode
+        ) })
     }
 
     init(modelContext: ModelContext, progressTreeId: PersistentIdentifier) {
@@ -203,14 +207,14 @@ struct ProgressTreeView: View {
     let tree = ProgressTree(name: "Cooking", emojiIcon: "👨🏻‍🍳", color: .blue)
 
     let rootNode = TreeNode(name: "Root", emojiIcon: "👨🏻‍🍳")
-    rootNode.orderKey = 1
+    rootNode.orderKey = 1000
     container.mainContext.insert(rootNode)
     rootNode.progressTree = tree
     tree.treeNodes.append(rootNode)
     try? container.mainContext.save()
 
     let childNode1 = TreeNode(name: "LEVEL 1", emojiIcon: "👨🏻‍🍳")
-    childNode1.orderKey = 2
+    childNode1.orderKey = 2000
     container.mainContext.insert(childNode1)
     childNode1.progressTree = tree
     childNode1.parent = rootNode
@@ -218,7 +222,7 @@ struct ProgressTreeView: View {
     tree.treeNodes.append(childNode1)
 
     let childNode12 = TreeNode(name: "LEVEL 1.2", emojiIcon: "👨🏻‍🍳")
-    childNode12.orderKey = 3
+    childNode12.orderKey = 3000
     container.mainContext.insert(childNode12)
     childNode12.progressTree = tree
     childNode12.parent = rootNode

@@ -110,8 +110,6 @@ struct TreeNodeView: View {
     }
 
     var showNodeType: Bool {
-        /// Complete nodes don't show a badge
-        if node.complete == true { return false }
         /// Root nodes don't show a badge
         if node.parent == nil { return false }
 

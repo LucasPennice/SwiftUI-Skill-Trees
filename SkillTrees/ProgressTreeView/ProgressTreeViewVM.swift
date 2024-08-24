@@ -41,7 +41,7 @@ extension ProgressTreeView {
                 progressTree = try modelContext.fetch(fetchProgressTreeDescriptor)[0]
 
                 let updatedCanvasSize = progressTree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-
+                
                 canvasSize = updatedCanvasSize
 
             } catch {
@@ -107,18 +107,24 @@ extension ProgressTreeView {
             showingInsertNodePositions = false
         }
 
-        func addTreeNode(parentNode: TreeNode) {
-            let newNode = TreeNode(name: "\(Int.random(in: 0 ... 100))", emojiIcon: "👨🏻‍🍳")
-            modelContext.insert(newNode)
+        func addTreeNode(newNode: TreeNode, parentNodeId: PersistentIdentifier) {
+            if let parentNode = modelContext.model(for: parentNodeId) as? TreeNode {
+                showingInsertNodePositions = false
+                selectedInsertNodePosition = nil
 
-            newNode.progressTree = progressTree
-            newNode.parent = parentNode
+                newNode.coordinates = parentNode.coordinates
 
-            parentNode.successors.append(newNode)
+                modelContext.insert(newNode)
 
-            progressTree.treeNodes.append(newNode)
+                newNode.progressTree = progressTree
+                newNode.parent = parentNode
 
-            fetchData()
+                parentNode.successors.append(newNode)
+
+                progressTree.treeNodes.append(newNode)
+
+                fetchData()
+            }
         }
 
         func selectNode(_ node: TreeNode) {
