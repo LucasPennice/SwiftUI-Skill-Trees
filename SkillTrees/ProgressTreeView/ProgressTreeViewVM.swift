@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 import UIKit
 
 extension ProgressTreeView {
@@ -17,7 +18,10 @@ extension ProgressTreeView {
         var progressTree = ProgressTree(name: "Loading", emojiIcon: "⏳", color: .accentColor)
         private var progressTreeId: PersistentIdentifier
         var insertNodePositions: [InsertNodePosition] = []
-
+        /// New node related
+        /// Only needed because we call the add node function once the new node sheet closes, loosing it's internal state
+        var tempNewNode: TreeNode?
+        var tempNewNodeParentId: PersistentIdentifier?
         /// UI State
         var selectedNode: TreeNode?
         var canvasSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
@@ -41,8 +45,10 @@ extension ProgressTreeView {
                 progressTree = try modelContext.fetch(fetchProgressTreeDescriptor)[0]
 
                 let updatedCanvasSize = progressTree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-                
-                canvasSize = updatedCanvasSize
+
+                withAnimation {
+                    canvasSize = updatedCanvasSize
+                }
 
             } catch {
                 print("Fetch failed")
@@ -107,23 +113,34 @@ extension ProgressTreeView {
             showingInsertNodePositions = false
         }
 
-        func addTreeNode(newNode: TreeNode, parentNodeId: PersistentIdentifier) {
-            if let parentNode = modelContext.model(for: parentNodeId) as? TreeNode {
-                showingInsertNodePositions = false
-                selectedInsertNodePosition = nil
+        func updateNewNodeTempValues(newNode: TreeNode, parentNodeId: PersistentIdentifier) {
+            tempNewNode = newNode
+            tempNewNodeParentId = parentNodeId
+            showingInsertNodePositions = false
+            selectedInsertNodePosition = nil
+        }
 
-                newNode.coordinates = parentNode.coordinates
+        func addTreeNode() {
+            if let newNode = tempNewNode {
+                if let parentNodeId = tempNewNodeParentId {
+                    if let parentNode = modelContext.model(for: parentNodeId) as? TreeNode {
+                        newNode.coordinates = parentNode.coordinates
 
-                modelContext.insert(newNode)
+                        modelContext.insert(newNode)
 
-                newNode.progressTree = progressTree
-                newNode.parent = parentNode
+                        newNode.progressTree = progressTree
+                        newNode.parent = parentNode
 
-                parentNode.successors.append(newNode)
+                        parentNode.successors.append(newNode)
 
-                progressTree.treeNodes.append(newNode)
+                        progressTree.treeNodes.append(newNode)
 
-                fetchData()
+                        tempNewNode = nil
+                        tempNewNodeParentId = nil
+
+                        fetchData()
+                    }
+                }
             }
         }
 

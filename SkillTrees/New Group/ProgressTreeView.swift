@@ -44,6 +44,7 @@ struct ProgressTreeView: View {
                             )
                             .stroke(viewModel.progressTree.color, lineWidth: 2)
                             .opacity(viewModel.showingInsertNodePositions ? lowOpacity : 1)
+                            .transition(.blurReplace.animation(.default.delay(0.3)))
                         }
                     }
 
@@ -64,6 +65,7 @@ struct ProgressTreeView: View {
                             .position(CGPoint(x: node.coordinates.x, y: node.coordinates.y))
                             .offset(y: TreeNodeView.defaultSize / 2 + viewModel.getLabelVerticalOffset(text: node.name) + 20)
                             .zIndex(1)
+                            .transition(.blurReplace.animation(.default.delay(0.3)))
                     }
 
                     ///
@@ -187,12 +189,17 @@ struct ProgressTreeView: View {
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
-        .sheet(item: $viewModel.selectedNode, content: { SelectedNodeSheetView(node: $0) })
-        .sheet(item: $viewModel.selectedInsertNodePosition, content: { NewMilestoneSheetView(
-            insertNodePosition: $0,
-            treeColor: viewModel.progressTree.color,
-            addTreeNode: viewModel.addTreeNode
+        .sheet(item: $viewModel.selectedNode, content: { SelectedNodeSheetView(
+            node: $0,
+            deleteMilestone: viewModel.deleteNode
         ) })
+        .sheet(item: $viewModel.selectedInsertNodePosition,
+               onDismiss: { withAnimation { viewModel.addTreeNode() } },
+               content: { NewMilestoneSheetView(
+                   insertNodePosition: $0,
+                   treeColor: viewModel.progressTree.color,
+                   addTreeNode: viewModel.updateNewNodeTempValues
+               ) })
     }
 
     init(modelContext: ModelContext, progressTreeId: PersistentIdentifier) {

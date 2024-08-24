@@ -10,7 +10,11 @@ import SwiftData
 import SwiftUI
 
 struct SelectedNodeSheetView: View {
+    @Environment(\.dismiss) var dismiss
+
     @Bindable var node: TreeNode
+
+    var deleteMilestone: (TreeNode) -> Void
 
     @State private var showingEmojiPicker: Bool
     @State private var nodeColor: Color {
@@ -139,8 +143,10 @@ struct SelectedNodeSheetView: View {
                 Button("Cancel", role: .cancel) { }
             }
             .confirmationDialog("Delete this Milestone\(node.successors.isEmpty ? "" : " & All Descendants")", isPresented: $showingDeleteMilestoneConfirmation) {
-                /// NOT IMPLEMENTED 🚨
-                Button("Delete", role: .destructive) {}
+                Button("Delete", role: .destructive) {
+                    deleteMilestone(node)
+                    dismiss()
+                }
                 Button("Cancel", role: .cancel) { }
             }
         }
@@ -148,10 +154,11 @@ struct SelectedNodeSheetView: View {
         .scrollBounceBehavior(.basedOnSize)
     }
 
-    init(node: TreeNode) {
+    init(node: TreeNode, deleteMilestone: @escaping (TreeNode) -> Void) {
         _node = Bindable(node)
         _showingEmojiPicker = State(initialValue: false)
         _nodeColor = State(initialValue: node.color)
+        self.deleteMilestone = deleteMilestone
     }
 }
 
@@ -177,6 +184,6 @@ struct SelectedNodeSheetView: View {
     tree.treeNodes.append(childNode1)
     childNode1.updateColor(.red)
 
-    return SelectedNodeSheetView(node: rootNode)
+    return SelectedNodeSheetView(node: rootNode, deleteMilestone: { _ in })
         .modelContainer(container)
 }

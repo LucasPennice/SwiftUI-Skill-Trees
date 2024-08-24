@@ -174,6 +174,7 @@ struct TreeNodeView: View {
             }
         }
         .padding(1)
+        .transition(.blurReplace.animation(.default.delay(0.3)))
     }
 }
 

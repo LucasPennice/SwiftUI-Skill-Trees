@@ -45,6 +45,7 @@
 		D1B3893C2C6C1A38008E9306 /* ContentViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B3893B2C6C1A38008E9306 /* ContentViewVM.swift */; };
 		D1B389402C6C3BB2008E9306 /* ProgressTreeViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B3893F2C6C3BB2008E9306 /* ProgressTreeViewVM.swift */; };
 		D1B389422C6C48AF008E9306 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389412C6C48AF008E9306 /* StringExtension.swift */; };
+		D1CEECB72C7AA4DD00C3605D /* AnyTransitionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CEECB62C7AA4DD00C3605D /* AnyTransitionExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +87,7 @@
 		D1B3893B2C6C1A38008E9306 /* ContentViewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewVM.swift; sourceTree = "<group>"; };
 		D1B3893F2C6C3BB2008E9306 /* ProgressTreeViewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTreeViewVM.swift; sourceTree = "<group>"; };
 		D1B389412C6C48AF008E9306 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		D1CEECB62C7AA4DD00C3605D /* AnyTransitionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTransitionExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +198,7 @@
 				D1B389412C6C48AF008E9306 /* StringExtension.swift */,
 				D151F8EE2C73AF4B00E721C2 /* ViewExtension.swift */,
 				D151F8F72C73F19E00E721C2 /* DateExtension.swift */,
+				D1CEECB62C7AA4DD00C3605D /* AnyTransitionExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 				D1B389312C6AAB00008E9306 /* ProgressTreeTemplates.swift in Sources */,
 				D1B389272C699DDD008E9306 /* TreeNode.swift in Sources */,
 				D151F8FC2C7402A700E721C2 /* CompleteDefaultNodeView.swift in Sources */,
+				D1CEECB72C7AA4DD00C3605D /* AnyTransitionExtension.swift in Sources */,
 				D151F90D2C75F3B400E721C2 /* ListNodeInputView.swift in Sources */,
 				D1B389422C6C48AF008E9306 /* StringExtension.swift in Sources */,
 				D1B389342C6BC903008E9306 /* CircularProgressView.swift in Sources */,
