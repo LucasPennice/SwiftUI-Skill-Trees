@@ -27,6 +27,11 @@ extension ProgressTreeView {
         var canvasSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         private(set) var showingInsertNodePositions = false
         var selectedInsertNodePosition: InsertNodePosition?
+        private(set) var showingConnectingMode = false
+        let lowOpacity = 0.4
+        /// Connecting milestone state
+        var connectingMilestoneChild: TreeNode?
+        var connectingMilestoneParent: TreeNode?
 
         init(modelContext: ModelContext, progressTreeId: PersistentIdentifier) {
             self.modelContext = modelContext
@@ -144,6 +149,55 @@ extension ProgressTreeView {
             }
         }
 
+        func showConnectingMode(_ selectedNode: TreeNode) {
+            connectingMilestoneChild = selectedNode
+            showingConnectingMode = true
+        }
+
+        ///
+        /// Node Related Functions
+        ///
+        func tapNode(_ node: TreeNode) {
+            if showingConnectingMode && connectingMilestoneChild != nil {
+                if node.layer >= connectingMilestoneChild!.layer
+                    || connectingMilestoneChild!.parent!.persistentModelID == node.persistentModelID
+                    || connectingMilestoneChild!.additionalParents.contains(where: { $0.persistentModelID == node.persistentModelID }) { return }
+
+                return selectConnectMilestoneParent(node)
+            }
+
+            return selectNode(node)
+        }
+
+        func nodeOpacity(_ node: TreeNode) -> Double {
+            if showingInsertNodePositions == true { return lowOpacity }
+
+            if showingConnectingMode == true {
+                if node.persistentModelID == connectingMilestoneChild!.persistentModelID { return 1 }
+
+                if node.layer >= connectingMilestoneChild!.layer
+                    || connectingMilestoneChild!.parent!.persistentModelID == node.persistentModelID
+                    || connectingMilestoneChild!.additionalParents.contains(where: { $0.persistentModelID == node.persistentModelID }) { return 0.2 }
+
+                return 1
+            }
+
+            return 1
+        }
+
+        func nodeScale(_ node: TreeNode) -> Double {
+            if showingConnectingMode == true {
+                if node.persistentModelID == connectingMilestoneChild!.persistentModelID
+                    || node.persistentModelID == connectingMilestoneParent?.persistentModelID {
+                    return 1.5
+                } else {
+                    return 1
+                }
+            }
+
+            return 1
+        }
+
         func selectNode(_ node: TreeNode) {
             if selectedNode != nil && selectedNode!.persistentModelID == node.persistentModelID {
                 selectedNode = nil
@@ -151,5 +205,97 @@ extension ProgressTreeView {
                 selectedNode = node
             }
         }
+
+        func selectConnectMilestoneParent(_ node: TreeNode) {
+            if node.persistentModelID == connectingMilestoneChild?.persistentModelID { return }
+
+            connectingMilestoneParent = node
+        }
+
+        ///
+        /// Opacity, Scaling Related Functions
+        ///
+
+        func labelOpacity(_ node: TreeNode) -> Double {
+            if showingInsertNodePositions == true { return lowOpacity }
+
+            if showingConnectingMode == true {
+                if node.persistentModelID == connectingMilestoneChild?.persistentModelID
+                    || node.persistentModelID == connectingMilestoneParent?.persistentModelID {
+                    return 1
+                } else {
+                    return lowOpacity
+                }
+            }
+
+            return 1
+        }
+
+        func edgeOpacity(_ node: TreeNode) -> Double {
+            if showingInsertNodePositions == true { return lowOpacity }
+
+            if showingConnectingMode == true { return lowOpacity }
+
+            return 1
+        }
+
+        ///
+        /// Top Leading Button Related Functions
+        ///
+        func cancelConnectAdditionalMilestone() {
+            showingConnectingMode = false
+            connectingMilestoneChild = nil
+            connectingMilestoneParent = nil
+        }
+
+        func topLeadingButtonDimensions() -> CGSize {
+            if showingInsertNodePositions { return CGSize(width: 80, height: 30) }
+
+            if showingConnectingMode { return CGSize(width: 80, height: 30) }
+
+            return CGSize(width: 30, height: 30)
+        }
+
+        ///
+        /// Top Trailing Button Related Functions
+        ///
+        func topTrailingButtonDimensions() -> CGSize {
+            if showingInsertNodePositions { return CGSize(width: 170, height: 50) }
+
+            if showingConnectingMode { return CGSize(width: 90, height: 30) }
+
+            return CGSize(width: 30, height: 30)
+        }
+
+        func disableTopTrailingButton() -> Bool {
+            if showingInsertNodePositions { return true }
+
+            if showingConnectingMode && (connectingMilestoneChild == nil || connectingMilestoneParent == nil) { return true }
+
+            return false
+        }
+
+        func topTrailingButtonOpacity() -> Double {
+            if selectedNode != nil { return 0 }
+
+            if disableTopTrailingButton() == true { return 0.4 }
+
+            return 1
+        }
+
+        func connectAdditionalMilestone() {
+            if let node = connectingMilestoneChild {
+                if let additionalParent = connectingMilestoneParent {
+                    node.additionalParents.append(additionalParent)
+
+                    showingConnectingMode = false
+                    connectingMilestoneChild = nil
+                    connectingMilestoneParent = nil
+                }
+            }
+        }
+        ///
+        ///
+        ///
     }
 }

@@ -15,6 +15,7 @@ struct SelectedNodeSheetView: View {
     @Bindable var node: TreeNode
 
     var deleteMilestone: (TreeNode) -> Void
+    var showConnectingMode: (TreeNode) -> Void
 
     @State private var showingEmojiPicker: Bool
     @State private var nodeColor: Color {
@@ -81,8 +82,13 @@ struct SelectedNodeSheetView: View {
                     .padding(.bottom, 5)
                 }
 
-                /// NOT IMPLEMENTED 🚨
-                Button(action: { }) {
+                Button(action: {
+                    withAnimation {
+                        showConnectingMode(node)
+                    }
+
+                    dismiss()
+                }) {
                     HStack {
                         Text("Connect to Additional Milestone")
                             .font(.system(size: 18))
@@ -138,8 +144,10 @@ struct SelectedNodeSheetView: View {
             .presentationDragIndicator(.visible)
             .presentationBackgroundInteraction(.enabled)
             .confirmationDialog("Delete Additional Connections?", isPresented: $showingDeleteAdditionalConnectionsConfirmation) {
-                /// NOT IMPLEMENTED 🚨
-                Button("Delete Additional Connections", role: .destructive) {}
+                Button("Delete Additional Connections", role: .destructive) {
+                    node.additionalParents = []
+                    dismiss()
+                }
                 Button("Cancel", role: .cancel) { }
             }
             .confirmationDialog("Delete this Milestone\(node.successors.isEmpty ? "" : " & All Descendants")", isPresented: $showingDeleteMilestoneConfirmation) {
@@ -154,11 +162,12 @@ struct SelectedNodeSheetView: View {
         .scrollBounceBehavior(.basedOnSize)
     }
 
-    init(node: TreeNode, deleteMilestone: @escaping (TreeNode) -> Void) {
+    init(node: TreeNode, deleteMilestone: @escaping (TreeNode) -> Void, showConnectingMode: @escaping (TreeNode) -> Void) {
         _node = Bindable(node)
         _showingEmojiPicker = State(initialValue: false)
         _nodeColor = State(initialValue: node.color)
         self.deleteMilestone = deleteMilestone
+        self.showConnectingMode = showConnectingMode
     }
 }
 
@@ -184,6 +193,6 @@ struct SelectedNodeSheetView: View {
     tree.treeNodes.append(childNode1)
     childNode1.updateColor(.red)
 
-    return SelectedNodeSheetView(node: rootNode, deleteMilestone: { _ in })
+    return SelectedNodeSheetView(node: rootNode, deleteMilestone: { _ in }, showConnectingMode: { _ in })
         .modelContainer(container)
 }

@@ -15,8 +15,6 @@ struct ProgressTreeView: View {
 
     @State private var positionDelta = CGSize.zero
 
-    let lowOpacity = 0.4
-
     var rootEdgeStartDelta: Double {
         /// This is so the edge will start precisely at the rhombus edge, so when the opacity is != 1 it looks right
         /// First part is the distance from the center to the edge of the rhombus
@@ -35,6 +33,10 @@ struct ProgressTreeView: View {
                     /// Node Edges
                     ///
                     ForEach(viewModel.progressTree.treeNodes) { node in
+
+                        ///
+                        /// Successor to Parent Edges
+                        ///
                         ForEach(node.successors) { successor in
                             EdgeView(
                                 startX: node.coordinates.x,
@@ -46,9 +48,44 @@ struct ProgressTreeView: View {
                             .if(successor.complete) {
                                 $0.stroke(successor.color, style: StrokeStyle(lineWidth: 2, dash: [5]))
                             }
-                            .opacity(viewModel.showingInsertNodePositions ? lowOpacity : 1)
+                            .opacity(viewModel.edgeOpacity(node))
                             .transition(.blurReplace.animation(.default.delay(0.3)))
                         }
+
+                        ///
+                        /// Node to Additional Parent Edge
+                        ///
+                        ForEach(node.additionalParents) { additionalParent in
+                            EdgeView(
+                                startX: additionalParent.coordinates.x,
+                                startY: additionalParent.parent == nil ? additionalParent.coordinates.y + rootEdgeStartDelta : additionalParent.coordinates.y,
+                                endX: node.coordinates.x,
+                                endY: node.coordinates.y
+                            )
+                            .stroke(AppColors.midGray, lineWidth: 2)
+                            .if(node.complete) {
+                                $0.stroke(node.color, style: StrokeStyle(lineWidth: 2, dash: [5]))
+                            }
+                            .opacity(viewModel.edgeOpacity(node))
+                            .transition(.blurReplace.animation(.default.delay(0.3)))
+                        }
+                    }
+                    ///
+                    /// Temp Connecting Additional Edge
+                    ///
+                    if viewModel.connectingMilestoneChild != nil
+                        && viewModel.connectingMilestoneParent != nil {
+                        EdgeView(
+                            startX: viewModel.connectingMilestoneParent!.coordinates.x,
+                            startY: viewModel.connectingMilestoneParent!.parent == nil
+                                ? viewModel.connectingMilestoneParent!.coordinates.y + rootEdgeStartDelta
+                                : viewModel.connectingMilestoneParent!.coordinates.y,
+                            endX: viewModel.connectingMilestoneChild!.coordinates.x,
+                            endY: viewModel.connectingMilestoneChild!.coordinates.y
+                        )
+                        .stroke(AppColors.midGray, lineWidth: 2)
+                        .stroke(viewModel.connectingMilestoneChild!.color, style: StrokeStyle(lineWidth: 2, dash: [5]))
+                        .transition(.blurReplace.animation(.default.delay(0.3)))
                     }
 
                     ///
@@ -59,7 +96,7 @@ struct ProgressTreeView: View {
                             .id(node.persistentModelID)
                             .frame(maxWidth: 100)
                             .font(.system(size: 14))
-                            .opacity(viewModel.showingInsertNodePositions ? lowOpacity : 1)
+                            .opacity(viewModel.labelOpacity(node))
                             .multilineTextAlignment(.center)
                             .padding(7)
                             .background(AppColors.darkGray)
@@ -77,18 +114,17 @@ struct ProgressTreeView: View {
                     ForEach(viewModel.progressTree.treeNodes) { node in
                         TreeNodeView(node: node, selected: viewModel.selectedNode?.persistentModelID == node.persistentModelID)
                             .zIndex(2)
-                            .opacity(viewModel.showingInsertNodePositions ? lowOpacity : 1)
+                            .opacity(viewModel.nodeOpacity(node))
+                            .scaleEffect(viewModel.nodeScale(node))
                             .allowsHitTesting(!viewModel.showingInsertNodePositions)
                             .gesture(
                                 SimultaneousGesture(
                                     ///
                                     /// Tap Gesture
                                     ///
-                                    TapGesture(count: 1).onEnded({ withAnimation {
-                                        viewModel.selectNode(node)
-//                                        viewModel.addTreeNode(parentNode: node)
-//                                        viewModel.deleteNode(node)
-                                    } }),
+                                    TapGesture(count: 1).onEnded({
+                                        withAnimation { viewModel.tapNode(node) }
+                                    }),
                                     ///
                                     /// Drag Gesture
                                     ///
@@ -140,10 +176,12 @@ struct ProgressTreeView: View {
             Button(action: {
                 if viewModel.showingInsertNodePositions { return withAnimation { viewModel.hideInsertNodePositions() }}
 
+                if viewModel.showingConnectingMode { return withAnimation { viewModel.cancelConnectAdditionalMilestone() }}
+
                 dismiss()
             }) {
                 ZStack {
-                    if viewModel.showingInsertNodePositions {
+                    if viewModel.showingInsertNodePositions || viewModel.showingConnectingMode {
                         Text("Cancel")
                             .foregroundColor(.red)
                             .transition(.blurReplace)
@@ -156,7 +194,7 @@ struct ProgressTreeView: View {
                             .zIndex(2)
                     }
                 }
-                .frame(width: viewModel.showingInsertNodePositions ? 80 : 30, height: 30)
+                .frame(width: viewModel.topLeadingButtonDimensions().width, height: viewModel.topLeadingButtonDimensions().height)
                 .background(AppColors.midGray)
                 .cornerRadius(50)
             }
@@ -167,12 +205,21 @@ struct ProgressTreeView: View {
         /// Add Node Button
         ///
         .overlay(alignment: .topTrailing) {
-            Button(action: { withAnimation { viewModel.showInsertNodePositions() } }) {
+            Button(action: {
+                if viewModel.showingConnectingMode { return viewModel.connectAdditionalMilestone() }
+
+                withAnimation { viewModel.showInsertNodePositions() }
+            }) {
                 ZStack {
                     if viewModel.showingInsertNodePositions {
                         Text("Choose where to add your milestone")
                             .font(.system(size: 14))
                             .foregroundColor(.white)
+                            .transition(.blurReplace)
+                            .zIndex(1)
+                    } else if viewModel.showingConnectingMode {
+                        Text("Confirm")
+                            .foregroundColor(.accentColor)
                             .transition(.blurReplace)
                             .zIndex(1)
                     } else {
@@ -183,18 +230,20 @@ struct ProgressTreeView: View {
                             .zIndex(2)
                     }
                 }
-                .frame(width: viewModel.showingInsertNodePositions ? 170 : 30, height: viewModel.showingInsertNodePositions ? 50 : 30)
+                .frame(width: viewModel.topTrailingButtonDimensions().width, height: viewModel.topTrailingButtonDimensions().height)
                 .background(AppColors.midGray)
                 .cornerRadius(viewModel.showingInsertNodePositions ? 10 : 50)
             }
+            .disabled(viewModel.disableTopTrailingButton())
             .padding(12)
-            .opacity(viewModel.selectedNode == nil ? 1 : 0)
+            .opacity(viewModel.topTrailingButtonOpacity())
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .sheet(item: $viewModel.selectedNode, content: { SelectedNodeSheetView(
             node: $0,
-            deleteMilestone: viewModel.deleteNode
+            deleteMilestone: viewModel.deleteNode,
+            showConnectingMode: viewModel.showConnectingMode
         ) })
         .sheet(item: $viewModel.selectedInsertNodePosition,
                onDismiss: { withAnimation { viewModel.addTreeNode() } },
