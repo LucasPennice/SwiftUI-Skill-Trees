@@ -42,7 +42,10 @@ struct ProgressTreeView: View {
                                 endX: successor.coordinates.x,
                                 endY: successor.coordinates.y
                             )
-                            .stroke(viewModel.progressTree.color, lineWidth: 2)
+                            .stroke(AppColors.midGray, lineWidth: 2)
+                            .if(successor.complete) {
+                                $0.stroke(successor.color, style: StrokeStyle(lineWidth: 2, dash: [5]))
+                            }
                             .opacity(viewModel.showingInsertNodePositions ? lowOpacity : 1)
                             .transition(.blurReplace.animation(.default.delay(0.3)))
                         }
@@ -211,7 +214,7 @@ struct ProgressTreeView: View {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: ProgressTree.self, configurations: config)
 
-    let tree = ProgressTree(name: "Cooking", emojiIcon: "👨🏻‍🍳", color: .blue)
+    let tree = ProgressTree(name: "Cooking", emojiIcon: "👨🏻‍🍳", color: .green)
 
     let rootNode = TreeNode(name: "Root", emojiIcon: "👨🏻‍🍳")
     rootNode.orderKey = 1000

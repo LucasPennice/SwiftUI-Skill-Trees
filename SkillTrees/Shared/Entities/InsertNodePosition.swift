@@ -27,13 +27,13 @@ struct InsertNodePosition: Identifiable {
                 ///
                 /// Insert Node Position Above a node
                 ///
-                result.append(
-                    InsertNodePosition(
-                        parentId: node.parent!.persistentModelID,
-                        orderKey: node.orderKey,
-                        coordinates: CGPoint(x: node.coordinates.x, y: node.coordinates.y - InsertNodePosition.defaultSize.height),
-                        size: InsertNodePosition.defaultSize)
-                )
+//                result.append(
+//                    InsertNodePosition(
+//                        parentId: node.parent!.persistentModelID,
+//                        orderKey: node.orderKey,
+//                        coordinates: CGPoint(x: node.coordinates.x, y: node.coordinates.y - InsertNodePosition.defaultSize.height),
+//                        size: InsertNodePosition.defaultSize)
+//                )
 
                 ///
                 /// Insert Node Position below a node if no successors
