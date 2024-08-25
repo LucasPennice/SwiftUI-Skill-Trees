@@ -37,7 +37,9 @@ final class ProgressTree {
     }
 
     var progress: Double {
-        if treeNodes.isEmpty { return 0.0 }
+        let minProgress = 0.1
+
+        if treeNodes.isEmpty || treeNodes.count == 1 { return minProgress }
 
         let treeNodesMinusRoot = treeNodes.filter({ $0.parent != nil })
 
@@ -50,6 +52,8 @@ final class ProgressTree {
         let progress = Double(completed) / Double(quantity)
 
         let progressRounded3Decimals = Double(round(1000 * progress) / 1000)
+
+        if progressRounded3Decimals < minProgress { return minProgress }
 
         return progressRounded3Decimals
     }

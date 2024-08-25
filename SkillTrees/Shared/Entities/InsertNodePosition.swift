@@ -23,6 +23,16 @@ struct InsertNodePosition: Identifiable {
         for node in treeNodes {
             let isRootNode = node.parent == nil
 
+            if isRootNode && treeNodes.count == 1 {
+                result.append(
+                    InsertNodePosition(
+                        parentId: node.persistentModelID,
+                        orderKey: TreeNode.generateOrderKey(),
+                        coordinates: CGPoint(x: node.coordinates.x, y: node.coordinates.y + InsertNodePosition.defaultSize.height),
+                        size: InsertNodePosition.defaultSize)
+                )
+            }
+
             if !isRootNode {
                 ///
                 /// Insert Node Position Above a node

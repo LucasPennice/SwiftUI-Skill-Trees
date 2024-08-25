@@ -92,7 +92,7 @@ struct ProgressTreeView: View {
                     /// Node Labels
                     ///
                     ForEach(viewModel.progressTree.treeNodes) { node in
-                        Text("\(node.name) - C \(node.successors.count) - p \(node.parent?.name ?? "")")
+                        Text(node.name)
                             .id(node.persistentModelID)
                             .frame(maxWidth: 100)
                             .font(.system(size: 14))
@@ -117,26 +117,27 @@ struct ProgressTreeView: View {
                             .opacity(viewModel.nodeOpacity(node))
                             .scaleEffect(viewModel.nodeScale(node))
                             .allowsHitTesting(!viewModel.showingInsertNodePositions)
-                            .gesture(
-                                SimultaneousGesture(
-                                    ///
-                                    /// Tap Gesture
-                                    ///
-                                    TapGesture(count: 1).onEnded({
-                                        withAnimation { viewModel.tapNode(node) }
-                                    }),
-                                    ///
-                                    /// Drag Gesture
-                                    ///
-                                    DragGesture(minimumDistance: 0, coordinateSpace: .global)
-                                        .onChanged { positionDelta = $0.translation }
-                                        .onEnded { _ in
-                                            withAnimation {
-                                                positionDelta = CGSize.zero
-                                            }
-                                        }
-                                )
-                            )
+                            .onTapGesture { withAnimation { viewModel.tapNode(node) }}
+//                            .gesture(
+//                                SimultaneousGesture(
+//                                    ///
+//                                    /// Tap Gesture
+//                                    ///
+//                                    TapGesture(count: 1).onEnded({
+//                                        withAnimation { viewModel.tapNode(node) }
+//                                    }),
+//                                    ///
+//                                    /// Drag Gesture
+//                                    ///
+//                                    DragGesture(minimumDistance: 0, coordinateSpace: .global)
+//                                        .onChanged { positionDelta = $0.translation }
+//                                        .onEnded { _ in
+//                                            withAnimation {
+//                                                positionDelta = CGSize.zero
+//                                            }
+//                                        }
+//                                )
+//                            )
                             ///
                             /// Node Position State, updates on drag
                             ///
@@ -212,7 +213,7 @@ struct ProgressTreeView: View {
             }) {
                 ZStack {
                     if viewModel.showingInsertNodePositions {
-                        Text("Choose where to add your milestone")
+                        Text("Choose where to add your new milestone")
                             .font(.system(size: 14))
                             .foregroundColor(.white)
                             .transition(.blurReplace)
@@ -230,7 +231,9 @@ struct ProgressTreeView: View {
                             .zIndex(2)
                     }
                 }
-                .frame(width: viewModel.topTrailingButtonDimensions().width, height: viewModel.topTrailingButtonDimensions().height)
+                .frame(
+                    width: viewModel.topTrailingButtonDimensions().width,
+                    height: viewModel.topTrailingButtonDimensions().height)
                 .background(AppColors.midGray)
                 .cornerRadius(viewModel.showingInsertNodePositions ? 10 : 50)
             }
@@ -252,6 +255,8 @@ struct ProgressTreeView: View {
                    treeColor: viewModel.progressTree.color,
                    addTreeNode: viewModel.updateNewNodeTempValues
                ) })
+        /// If the tree doesn't have any nodes we automatically open the insert node mode
+        .onAppear { if viewModel.progressTree.treeNodes.count == 1 { return withAnimation { viewModel.showInsertNodePositions() }}}
     }
 
     init(modelContext: ModelContext, progressTreeId: PersistentIdentifier) {

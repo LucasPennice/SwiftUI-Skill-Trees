@@ -166,7 +166,7 @@ extension ProgressTreeView {
                 return selectConnectMilestoneParent(node)
             }
 
-            return selectNode(node)
+            if node.parent != nil { return selectNode(node) }
         }
 
         func nodeOpacity(_ node: TreeNode) -> Double {
@@ -260,7 +260,7 @@ extension ProgressTreeView {
         /// Top Trailing Button Related Functions
         ///
         func topTrailingButtonDimensions() -> CGSize {
-            if showingInsertNodePositions { return CGSize(width: 170, height: 50) }
+            if showingInsertNodePositions { return CGSize(width: 190, height: 50) }
 
             if showingConnectingMode { return CGSize(width: 90, height: 30) }
 
@@ -277,6 +277,8 @@ extension ProgressTreeView {
 
         func topTrailingButtonOpacity() -> Double {
             if selectedNode != nil { return 0 }
+
+            if showingInsertNodePositions { return 1 }
 
             if disableTopTrailingButton() == true { return 0.4 }
 

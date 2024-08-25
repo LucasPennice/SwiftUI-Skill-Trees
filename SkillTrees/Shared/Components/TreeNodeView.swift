@@ -93,7 +93,11 @@ struct TreeNodeView: View {
 
     var selected: Bool
 
+    let overrideSize: Double?
+
     var regularNodeSize: Double {
+        if overrideSize != nil { return overrideSize! }
+
         if selected {
             return 2 * TreeNodeView.defaultSize
         } else {
@@ -102,6 +106,8 @@ struct TreeNodeView: View {
     }
 
     var rootNodeSize: Double {
+        if overrideSize != nil { return overrideSize! }
+
         if selected {
             return 85
         } else {
@@ -175,6 +181,12 @@ struct TreeNodeView: View {
         }
         .padding(1)
         .transition(.blurReplace.animation(.default.delay(0.3)))
+    }
+
+    init(node: TreeNode, selected: Bool, size: Double? = nil) {
+        self.node = node
+        self.selected = selected
+        overrideSize = size
     }
 }
 

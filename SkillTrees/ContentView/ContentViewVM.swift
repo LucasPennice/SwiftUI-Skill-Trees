@@ -22,6 +22,7 @@ extension ContentView {
         ///
         var showingCollectionNotAvailablePopUp: Bool = false
         var showingAddNewTreePopUp: Bool = false
+        var editingProgressTree: ProgressTree?
         var path = NavigationPath()
 
         init(modelContext: ModelContext) {
@@ -46,6 +47,18 @@ extension ContentView {
             tree.treeNodes.append(rootNode)
 
             fetchData()
+        }
+
+        func saveProgressTreeEdit(_ tree: ProgressTree) {
+            let rootNode = tree.treeNodes.first(where: { $0.parent == nil })
+
+            if let rootNode = rootNode {
+                rootNode.updateColor(tree.color)
+                rootNode.emojiIcon = tree.emojiIcon
+                rootNode.name = tree.name
+
+                fetchData()
+            }
         }
 
         func deleteTree(tree: ProgressTree) {

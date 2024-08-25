@@ -11,6 +11,7 @@
 		D11080E92C5D1C4100C5E225 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11080E82C5D1C4100C5E225 /* ContentView.swift */; };
 		D11080EB2C5D1C4400C5E225 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D11080EA2C5D1C4400C5E225 /* Assets.xcassets */; };
 		D11080EE2C5D1C4400C5E225 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D11080ED2C5D1C4400C5E225 /* Preview Assets.xcassets */; };
+		D11F9B502C7BEB1D00ABB4A4 /* EditProgressTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B4F2C7BEB1D00ABB4A4 /* EditProgressTreeView.swift */; };
 		D151F8E92C71327E00E721C2 /* EdgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8E82C71327E00E721C2 /* EdgeView.swift */; };
 		D151F8EB2C714C0700E721C2 /* SelectedNodeSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8EA2C714C0700E721C2 /* SelectedNodeSheetView.swift */; };
 		D151F8EF2C73AF4B00E721C2 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8EE2C73AF4B00E721C2 /* ViewExtension.swift */; };
@@ -46,6 +47,7 @@
 		D1B389402C6C3BB2008E9306 /* ProgressTreeViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B3893F2C6C3BB2008E9306 /* ProgressTreeViewVM.swift */; };
 		D1B389422C6C48AF008E9306 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B389412C6C48AF008E9306 /* StringExtension.swift */; };
 		D1CEECB72C7AA4DD00C3605D /* AnyTransitionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CEECB62C7AA4DD00C3605D /* AnyTransitionExtension.swift */; };
+		D1CEECBB2C7BE6AA00C3605D /* BlurBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CEECBA2C7BE6AA00C3605D /* BlurBackground.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +56,7 @@
 		D11080E82C5D1C4100C5E225 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D11080EA2C5D1C4400C5E225 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D11080ED2C5D1C4400C5E225 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D11F9B4F2C7BEB1D00ABB4A4 /* EditProgressTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProgressTreeView.swift; sourceTree = "<group>"; };
 		D151F8E82C71327E00E721C2 /* EdgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeView.swift; sourceTree = "<group>"; };
 		D151F8EA2C714C0700E721C2 /* SelectedNodeSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedNodeSheetView.swift; sourceTree = "<group>"; };
 		D151F8EE2C73AF4B00E721C2 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
@@ -88,6 +91,7 @@
 		D1B3893F2C6C3BB2008E9306 /* ProgressTreeViewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTreeViewVM.swift; sourceTree = "<group>"; };
 		D1B389412C6C48AF008E9306 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		D1CEECB62C7AA4DD00C3605D /* AnyTransitionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTransitionExtension.swift; sourceTree = "<group>"; };
+		D1CEECBA2C7BE6AA00C3605D /* BlurBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurBackground.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +222,7 @@
 				D1B389352C6BCC3F008E9306 /* ProgressTreeCardView.swift */,
 				D1B389392C6BEA3A008E9306 /* TreeNodeView.swift */,
 				D151F8F32C73E9CF00E721C2 /* DrawCheckmarkView.swift */,
+				D1CEECBA2C7BE6AA00C3605D /* BlurBackground.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -227,6 +232,7 @@
 			children = (
 				D11080E82C5D1C4100C5E225 /* ContentView.swift */,
 				D1B3893B2C6C1A38008E9306 /* ContentViewVM.swift */,
+				D11F9B4F2C7BEB1D00ABB4A4 /* EditProgressTreeView.swift */,
 			);
 			path = ContentView;
 			sourceTree = "<group>";
@@ -326,6 +332,7 @@
 				D151F8F42C73E9CF00E721C2 /* DrawCheckmarkView.swift in Sources */,
 				D151F8EF2C73AF4B00E721C2 /* ViewExtension.swift in Sources */,
 				D11080E92C5D1C4100C5E225 /* ContentView.swift in Sources */,
+				D11F9B502C7BEB1D00ABB4A4 /* EditProgressTreeView.swift in Sources */,
 				D151F90B2C75F22800E721C2 /* RepeatingNodeInputView.swift in Sources */,
 				D151F9072C755AF500E721C2 /* ProgressiveNodeInputView.swift in Sources */,
 				D151F9002C74158D00E721C2 /* CompleteListNodeView.swift in Sources */,
@@ -350,6 +357,7 @@
 				D151F90D2C75F3B400E721C2 /* ListNodeInputView.swift in Sources */,
 				D1B389422C6C48AF008E9306 /* StringExtension.swift in Sources */,
 				D1B389342C6BC903008E9306 /* CircularProgressView.swift in Sources */,
+				D1CEECBB2C7BE6AA00C3605D /* BlurBackground.swift in Sources */,
 				D1B3892B2C69A05E008E9306 /* SwiftDataController.swift in Sources */,
 				D151F9092C75EF6900E721C2 /* NewMilestoneSheetVM.swift in Sources */,
 				D1B3893A2C6BEA3A008E9306 /* TreeNodeView.swift in Sources */,

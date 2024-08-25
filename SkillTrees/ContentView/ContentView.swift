@@ -163,14 +163,14 @@ struct ContentView: View {
                                 .listRowInsets(EdgeInsets())
                                 .frame(height: 180)
                                 .listRowBackground(AppColors.semiDarkGray)
-                                .swipeActions {
-                                    Button("Delete", systemImage: "trash", role: .destructive) {
-                                        withAnimation { viewModel.deleteTree(tree: tree) }
+                                .swipeActions(allowsFullSwipe: false) {
+                                    Button("Edit", systemImage: "pencil") {
+                                        viewModel.editingProgressTree = tree
                                     }
                                 }
                                 .contextMenu {
-                                    Button("Delete", systemImage: "trash", role: .destructive) {
-                                        withAnimation { viewModel.deleteTree(tree: tree) }
+                                    Button("Edit", systemImage: "pencil") {
+                                        viewModel.editingProgressTree = tree
                                     }
                                 }
                         }
@@ -203,6 +203,13 @@ struct ContentView: View {
             .sheet(isPresented: $viewModel.showingAddNewTreePopUp) {
                 AddNewProgressTreeView(addProgressTree: viewModel.addProgressTree)
             }
+            .sheet(item: $viewModel.editingProgressTree, content: { tree in
+                EditProgressTreeView(
+                    tree: tree,
+                    deleteTree: viewModel.deleteTree,
+                    saveProgressTreeEdit: viewModel.saveProgressTreeEdit
+                )
+            })
         }
         .environmentObject(settings)
         /// Each time the app becomes active this function runs
