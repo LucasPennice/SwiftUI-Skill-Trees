@@ -6,13 +6,15 @@
 //
 
 import MCEmojiPicker
-import SwiftData
 import SwiftUI
 
 struct AddNewProgressTreeView: View {
     @Environment(\.dismiss) var dismiss
 
+    var templates: ProgressTreeTemplates = ProgressTreeTemplates()
+
     var addProgressTree: (ProgressTree) -> Void
+    var addTemplate: (String) -> Void
 
     @State private var title = ""
     @State private var selectedEmoji = "🌳"
@@ -57,25 +59,40 @@ struct AddNewProgressTreeView: View {
                 .font(.system(size: 17))
 
             ScrollView(.horizontal) {
-                HStack {
-                    VStack(alignment: .center, spacing: 5) {
-                        ZStack {
-                            Circle()
-                                .foregroundColor(AppColors.midGray)
+                HStack(alignment:.top,spacing: 30) {
+                    ForEach(templates.templates, id: \.self.name) { template in
+                        VStack(alignment: .center, spacing: 5) {
+                            Button(action: {
+                                addTemplate(template.id)
 
-                            Image(systemName: "plus.app.fill")
-                                .font(.system(size: 20))
-                                .foregroundColor(.accentColor)
-                                .symbolRenderingMode(.hierarchical)
-                                .offset(x: 28, y: 28)
+                                dismiss()
+                            }) {
+                                ZStack(alignment: .center) {
+                                    Circle()
+                                        .fill(AppColors.midGray)
+
+                                    Text(template.emojiIcon)
+                                        .font(.system(size: 38))
+
+                                    Image(systemName: "plus.app.fill")
+                                        .font(.system(size: 20))
+                                        .foregroundColor(.accentColor)
+                                        .symbolRenderingMode(.hierarchical)
+                                        .offset(x: 28, y: 28)
+                                }
+                                .frame(width: 70, height: 70)
+                            }
+
+                            Text(template.name)
+                                .frame(width: 70)
+                                .multilineTextAlignment(.center)
+                                .font(.system(size: 12))
+                                .fontWeight(.medium)
                         }
-                        .frame(width: 70, height: 70)
-
-                        Text("Cooking")
-                            .font(.system(size: 10))
                     }
                 }
             }
+            .scrollIndicators(.hidden)
             .padding(.vertical, 5)
 
             Divider()
@@ -114,6 +131,6 @@ struct AddNewProgressTreeView: View {
 }
 
 #Preview {
-    AddNewProgressTreeView(addProgressTree: { _ in })
+    AddNewProgressTreeView(addProgressTree: { _ in }, addTemplate: { _ in })
         .modelContainer(SwiftDataController.previewContainer)
 }

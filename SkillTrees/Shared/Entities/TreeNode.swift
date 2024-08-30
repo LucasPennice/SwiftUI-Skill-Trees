@@ -63,6 +63,8 @@ final class TreeNode {
 
     var coordinates: Coordinate = Coordinate.zero
 
+    var desc: String?
+
     var progressTree: ProgressTree? {
         didSet {
             let colorArray = UIColor(progressTree.color).cgColor.components!
@@ -207,7 +209,7 @@ final class TreeNode {
         return LevelContour(leftNode: leftNode, rightNode: rightNode)
     }
 
-    init(progressTree: ProgressTree? = nil, unit: String, amount: Double, complete: Bool, progressiveQuest: Bool, name: String, emojiIcon: String, items: [NodeListItem], completionHistory: [ItemCompletionRecord]) {
+    init(progressTree: ProgressTree? = nil, unit: String, amount: Double, complete: Bool, progressiveQuest: Bool, name: String, emojiIcon: String, items: [NodeListItem], completionHistory: [ItemCompletionRecord], desc: String? = nil) {
         self.progressTree = progressTree
         self.unit = unit
         self.amount = amount
@@ -224,6 +226,7 @@ final class TreeNode {
         parent = nil
         additionalParents = []
         orderKey = TreeNode.generateOrderKey()
+        self.desc = desc
 
         let color: Color = progressTree == nil ? .green : progressTree!.color
         let colorArray = UIColor(color).cgColor.components!
@@ -237,7 +240,7 @@ final class TreeNode {
         colorB = Double(blue)
     }
 
-    init(progressTree: ProgressTree? = nil, name: String, emojiIcon: String, parent: TreeNode? = nil) {
+    init(progressTree: ProgressTree? = nil, name: String, emojiIcon: String, parent: TreeNode? = nil, desc: String? = nil) {
         self.progressTree = progressTree
         unit = ""
         amount = 0.0
@@ -252,6 +255,7 @@ final class TreeNode {
         self.parent = parent
         additionalParents = []
         repeatTimesToComplete = 1
+        self.desc = desc
 
         orderKey = TreeNode.generateOrderKey()
 

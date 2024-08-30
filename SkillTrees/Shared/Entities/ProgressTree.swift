@@ -31,6 +31,8 @@ final class ProgressTree {
         colorG = Double(green)
         colorB = Double(blue)
     }
+    
+    var createdAt: Date
 
     var color: Color {
         return Color(red: colorR, green: colorG, blue: colorB)
@@ -98,7 +100,6 @@ final class ProgressTree {
         /// We use a copy because swift data doesn't let me sort the actual array
         var treeNodesCopy = treeNodes
 
-        #warning("probar si estos sorts realmente hacen algo")
         /// Assure that root node is the first node
         treeNodesCopy.sort(by: { n1, _ in n1.parent == nil })
 
@@ -151,7 +152,7 @@ final class ProgressTree {
         var overlap = true
 
         var limiter = 0
-        let limiterBound = treeNodes.last!.layer * 2
+        let limiterBound = treeNodes.count
 
         repeat {
             let checkResult = checkOverlap(treeNodes)
@@ -437,6 +438,8 @@ final class ProgressTree {
         let red = colorArray[0]
         let green = colorArray[1]
         let blue = colorArray[2]
+        
+        self.createdAt = .now
 
         colorR = Double(red)
         colorG = Double(green)

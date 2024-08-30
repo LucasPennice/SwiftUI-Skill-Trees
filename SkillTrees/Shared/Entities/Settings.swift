@@ -11,6 +11,7 @@ import SwiftUI
 class Settings: ObservableObject {
     @AppStorage("appFirstOpenDateString") var appFirstOpenDateString: String = ""
     @AppStorage("doNotShowDiscordPopUpAgain") var doNotShowDiscordPopUpAgain: Bool = false
+    @AppStorage("onboardingFinished") var onboardingFinished: Bool = false
     @AppStorage("startDateString") var startDateString: String = ""
     @AppStorage("lastLogInDateString") var lastLogInDateString: String = ""
     /// We have a variable instead of a derived variable because the content transition doesn't work otherwise

@@ -28,6 +28,14 @@ struct SelectedNodeSheetView: View {
     var body: some View {
         ScrollView {
             VStack {
+                if node.desc != nil{
+                    Text(node.desc!)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical)
+                        .foregroundStyle(AppColors.textGray)
+                        .cornerRadius(10)
+                }
+                
                 CompleteNodeView(node: node)
                     .cornerRadius(10)
                     .padding(.bottom, 5)
@@ -177,7 +185,7 @@ struct SelectedNodeSheetView: View {
 
     let tree = ProgressTree(name: "Cooking", emojiIcon: "👨🏻‍🍳", color: .blue)
 
-    let rootNode = TreeNode(name: "Root", emojiIcon: "👨🏻‍🍳")
+    let rootNode = TreeNode(name: "Root", emojiIcon: "👨🏻‍🍳", desc: "this is my desc! i really like it")
     rootNode.orderKey = 1
     container.mainContext.insert(rootNode)
     rootNode.progressTree = tree

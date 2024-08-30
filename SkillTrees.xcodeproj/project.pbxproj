@@ -12,6 +12,16 @@
 		D11080EB2C5D1C4400C5E225 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D11080EA2C5D1C4400C5E225 /* Assets.xcassets */; };
 		D11080EE2C5D1C4400C5E225 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D11080ED2C5D1C4400C5E225 /* Preview Assets.xcassets */; };
 		D11F9B502C7BEB1D00ABB4A4 /* EditProgressTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B4F2C7BEB1D00ABB4A4 /* EditProgressTreeView.swift */; };
+		D11F9B532C7E52E000ABB4A4 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B522C7E52E000ABB4A4 /* OnboardingView.swift */; };
+		D11F9B552C7E95EC00ABB4A4 /* OnboardingWelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B542C7E95EC00ABB4A4 /* OnboardingWelcomeView.swift */; };
+		D11F9B572C7E9E7700ABB4A4 /* RotatingCircularTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B562C7E9E7700ABB4A4 /* RotatingCircularTreeView.swift */; };
+		D11F9B592C7F850200ABB4A4 /* PickTemplatesAndEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B582C7F850200ABB4A4 /* PickTemplatesAndEmailView.swift */; };
+		D11F9B5B2C7F901C00ABB4A4 /* CreatingTreesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B5A2C7F901C00ABB4A4 /* CreatingTreesView.swift */; };
+		D11F9B5E2C82141200ABB4A4 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = D11F9B5D2C82141200ABB4A4 /* RevenueCat */; };
+		D11F9B602C82141200ABB4A4 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = D11F9B5F2C82141200ABB4A4 /* RevenueCatUI */; };
+		D11F9B632C82145C00ABB4A4 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D11F9B622C82145C00ABB4A4 /* StoreKit.framework */; };
+		D11F9B652C822C9C00ABB4A4 /* RevenueCat.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B642C822C9C00ABB4A4 /* RevenueCat.swift */; };
+		D11F9B672C822EC700ABB4A4 /* PurchasesDelegateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B662C822EC700ABB4A4 /* PurchasesDelegateHandler.swift */; };
 		D151F8E92C71327E00E721C2 /* EdgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8E82C71327E00E721C2 /* EdgeView.swift */; };
 		D151F8EB2C714C0700E721C2 /* SelectedNodeSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8EA2C714C0700E721C2 /* SelectedNodeSheetView.swift */; };
 		D151F8EF2C73AF4B00E721C2 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8EE2C73AF4B00E721C2 /* ViewExtension.swift */; };
@@ -57,6 +67,14 @@
 		D11080EA2C5D1C4400C5E225 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D11080ED2C5D1C4400C5E225 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D11F9B4F2C7BEB1D00ABB4A4 /* EditProgressTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProgressTreeView.swift; sourceTree = "<group>"; };
+		D11F9B522C7E52E000ABB4A4 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		D11F9B542C7E95EC00ABB4A4 /* OnboardingWelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingWelcomeView.swift; sourceTree = "<group>"; };
+		D11F9B562C7E9E7700ABB4A4 /* RotatingCircularTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotatingCircularTreeView.swift; sourceTree = "<group>"; };
+		D11F9B582C7F850200ABB4A4 /* PickTemplatesAndEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickTemplatesAndEmailView.swift; sourceTree = "<group>"; };
+		D11F9B5A2C7F901C00ABB4A4 /* CreatingTreesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatingTreesView.swift; sourceTree = "<group>"; };
+		D11F9B622C82145C00ABB4A4 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		D11F9B642C822C9C00ABB4A4 /* RevenueCat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCat.swift; sourceTree = "<group>"; };
+		D11F9B662C822EC700ABB4A4 /* PurchasesDelegateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesDelegateHandler.swift; sourceTree = "<group>"; };
 		D151F8E82C71327E00E721C2 /* EdgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeView.swift; sourceTree = "<group>"; };
 		D151F8EA2C714C0700E721C2 /* SelectedNodeSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedNodeSheetView.swift; sourceTree = "<group>"; };
 		D151F8EE2C73AF4B00E721C2 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
@@ -99,7 +117,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D11F9B5E2C82141200ABB4A4 /* RevenueCat in Frameworks */,
 				D1B3892E2C6AA748008E9306 /* MCEmojiPicker in Frameworks */,
+				D11F9B602C82141200ABB4A4 /* RevenueCatUI in Frameworks */,
+				D11F9B632C82145C00ABB4A4 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +132,7 @@
 			children = (
 				D11080E52C5D1C4100C5E225 /* SkillTrees */,
 				D11080E42C5D1C4100C5E225 /* Products */,
+				D11F9B612C82145B00ABB4A4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -133,6 +155,7 @@
 				D11080EC2C5D1C4400C5E225 /* Preview Content */,
 				D19AB9C12C5D2E9600399662 /* DialoguePopUpView.swift */,
 				D19AB9C52C5D882000399662 /* AddNewProgressTreeView.swift */,
+				D11F9B662C822EC700ABB4A4 /* PurchasesDelegateHandler.swift */,
 			);
 			path = SkillTrees;
 			sourceTree = "<group>";
@@ -143,6 +166,26 @@
 				D11080ED2C5D1C4400C5E225 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D11F9B512C7E52C500ABB4A4 /* OnboardingView */ = {
+			isa = PBXGroup;
+			children = (
+				D11F9B522C7E52E000ABB4A4 /* OnboardingView.swift */,
+				D11F9B542C7E95EC00ABB4A4 /* OnboardingWelcomeView.swift */,
+				D11F9B562C7E9E7700ABB4A4 /* RotatingCircularTreeView.swift */,
+				D11F9B582C7F850200ABB4A4 /* PickTemplatesAndEmailView.swift */,
+				D11F9B5A2C7F901C00ABB4A4 /* CreatingTreesView.swift */,
+			);
+			path = OnboardingView;
+			sourceTree = "<group>";
+		};
+		D11F9B612C82145B00ABB4A4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D11F9B622C82145C00ABB4A4 /* StoreKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		D151F8F02C73B52900E721C2 /* SelectedNodeSheetView */ = {
@@ -211,6 +254,7 @@
 			isa = PBXGroup;
 			children = (
 				D1B389302C6AAB00008E9306 /* ProgressTreeTemplates.swift */,
+				D11F9B642C822C9C00ABB4A4 /* RevenueCat.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -230,6 +274,7 @@
 		D1B3893D2C6C1A64008E9306 /* ContentView */ = {
 			isa = PBXGroup;
 			children = (
+				D11F9B512C7E52C500ABB4A4 /* OnboardingView */,
 				D11080E82C5D1C4100C5E225 /* ContentView.swift */,
 				D1B3893B2C6C1A38008E9306 /* ContentViewVM.swift */,
 				D11F9B4F2C7BEB1D00ABB4A4 /* EditProgressTreeView.swift */,
@@ -267,6 +312,8 @@
 			name = SkillTrees;
 			packageProductDependencies = (
 				D1B3892D2C6AA748008E9306 /* MCEmojiPicker */,
+				D11F9B5D2C82141200ABB4A4 /* RevenueCat */,
+				D11F9B5F2C82141200ABB4A4 /* RevenueCatUI */,
 			);
 			productName = SkillTrees;
 			productReference = D11080E32C5D1C4100C5E225 /* SkillTrees.app */;
@@ -298,6 +345,7 @@
 			mainGroup = D11080DA2C5D1C4100C5E225;
 			packageReferences = (
 				D1B3892C2C6AA748008E9306 /* XCRemoteSwiftPackageReference "MCEmojiPicker" */,
+				D11F9B5C2C82141200ABB4A4 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 			);
 			productRefGroup = D11080E42C5D1C4100C5E225 /* Products */;
 			projectDirPath = "";
@@ -338,9 +386,11 @@
 				D151F9002C74158D00E721C2 /* CompleteListNodeView.swift in Sources */,
 				D19AB9C02C5D230600399662 /* Colors.swift in Sources */,
 				D151F8EB2C714C0700E721C2 /* SelectedNodeSheetView.swift in Sources */,
+				D11F9B672C822EC700ABB4A4 /* PurchasesDelegateHandler.swift in Sources */,
 				D151F8E92C71327E00E721C2 /* EdgeView.swift in Sources */,
 				D151F8FA2C73F3E100E721C2 /* CompleteProgressiveNodeView.swift in Sources */,
 				D1B389402C6C3BB2008E9306 /* ProgressTreeViewVM.swift in Sources */,
+				D11F9B5B2C7F901C00ABB4A4 /* CreatingTreesView.swift in Sources */,
 				D151F9022C7525E900E721C2 /* InsertNodePosition.swift in Sources */,
 				D11080E72C5D1C4100C5E225 /* SkillTreesApp.swift in Sources */,
 				D151F8F82C73F19E00E721C2 /* DateExtension.swift in Sources */,
@@ -349,16 +399,21 @@
 				D1B3893C2C6C1A38008E9306 /* ContentViewVM.swift in Sources */,
 				D1B389382C6BE193008E9306 /* ProgressTreeView.swift in Sources */,
 				D1B389252C699B75008E9306 /* ProgressTree.swift in Sources */,
+				D11F9B652C822C9C00ABB4A4 /* RevenueCat.swift in Sources */,
+				D11F9B532C7E52E000ABB4A4 /* OnboardingView.swift in Sources */,
 				D1B389362C6BCC3F008E9306 /* ProgressTreeCardView.swift in Sources */,
 				D1B389312C6AAB00008E9306 /* ProgressTreeTemplates.swift in Sources */,
 				D1B389272C699DDD008E9306 /* TreeNode.swift in Sources */,
 				D151F8FC2C7402A700E721C2 /* CompleteDefaultNodeView.swift in Sources */,
 				D1CEECB72C7AA4DD00C3605D /* AnyTransitionExtension.swift in Sources */,
+				D11F9B592C7F850200ABB4A4 /* PickTemplatesAndEmailView.swift in Sources */,
 				D151F90D2C75F3B400E721C2 /* ListNodeInputView.swift in Sources */,
 				D1B389422C6C48AF008E9306 /* StringExtension.swift in Sources */,
+				D11F9B552C7E95EC00ABB4A4 /* OnboardingWelcomeView.swift in Sources */,
 				D1B389342C6BC903008E9306 /* CircularProgressView.swift in Sources */,
 				D1CEECBB2C7BE6AA00C3605D /* BlurBackground.swift in Sources */,
 				D1B3892B2C69A05E008E9306 /* SwiftDataController.swift in Sources */,
+				D11F9B572C7E9E7700ABB4A4 /* RotatingCircularTreeView.swift in Sources */,
 				D151F9092C75EF6900E721C2 /* NewMilestoneSheetVM.swift in Sources */,
 				D1B3893A2C6BEA3A008E9306 /* TreeNodeView.swift in Sources */,
 				D151F8F62C73F12900E721C2 /* ChartView.swift in Sources */,
@@ -421,7 +476,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -478,7 +533,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -538,7 +593,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = lucasPennice.SkillTrees;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lucasPennice.SkillTrees;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -570,6 +625,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D11F9B5C2C82141200ABB4A4 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		D1B3892C2C6AA748008E9306 /* XCRemoteSwiftPackageReference "MCEmojiPicker" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/izyumkin/MCEmojiPicker";
@@ -581,6 +644,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D11F9B5D2C82141200ABB4A4 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D11F9B5C2C82141200ABB4A4 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+		D11F9B5F2C82141200ABB4A4 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D11F9B5C2C82141200ABB4A4 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCatUI;
+		};
 		D1B3892D2C6AA748008E9306 /* MCEmojiPicker */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D1B3892C2C6AA748008E9306 /* XCRemoteSwiftPackageReference "MCEmojiPicker" */;

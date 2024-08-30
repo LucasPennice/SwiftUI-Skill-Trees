@@ -32,7 +32,7 @@ extension ContentView {
 
         func fetchData() {
             do {
-                let descriptor = FetchDescriptor<ProgressTree>()
+                let descriptor = FetchDescriptor<ProgressTree>(sortBy: [SortDescriptor(\ProgressTree.createdAt)])
                 progressTrees = try modelContext.fetch(descriptor)
             } catch {
                 print("Fetch failed")
@@ -45,6 +45,12 @@ extension ContentView {
             let rootNode = TreeNode(progressTree: tree, unit: "", amount: 0.0, complete: false, progressiveQuest: false, name: tree.name, emojiIcon: tree.emojiIcon, items: [], completionHistory: [])
 
             tree.treeNodes.append(rootNode)
+
+            fetchData()
+        }
+
+        func addTemplateTree(_ templateId: String) {
+            ProgressTreeTemplates.addTemplate(templateId, modelContext: modelContext)
 
             fetchData()
         }

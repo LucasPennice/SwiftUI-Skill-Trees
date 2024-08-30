@@ -39,7 +39,8 @@ struct ChartView: View {
     let tomorrow = Date.now.dateInDays(1)
 
     var color: Color { return completionHistory.first!.treeNode!.color }
-    var targetAmount: Double { return completionHistory.first!.treeNode!.targetAmount }
+
+    var targetAmount: Double
 
     var body: some View {
         Chart {
@@ -120,5 +121,5 @@ struct ChartView: View {
         ItemCompletionRecord(date: .now, unit: "Kgs", amount: 55, treeNode: childNode1),
     ]
 
-    return ChartView(completionHistory: mockCompletionHistoryItem)
+    return ChartView(completionHistory: mockCompletionHistoryItem, targetAmount: 100.0)
 }

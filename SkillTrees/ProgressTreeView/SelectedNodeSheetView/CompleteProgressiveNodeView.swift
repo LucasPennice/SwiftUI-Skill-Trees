@@ -55,11 +55,16 @@ struct CompleteProgressiveNodeView: View {
                             node.progressMilestone()
                         }
                     })
+                    
                 }
+                
+                Text("Target is:  \(String(node.targetAmount)) \(node.unit)")
+                    .font(.system(size: 12))
+                    .foregroundStyle(AppColors.textGray)
             }
 
             if !node.completionHistory.isEmpty {
-                ChartView(completionHistory: node.completionHistory)
+                ChartView(completionHistory: node.completionHistory, targetAmount: node.targetAmount)
 
                 let lastEntry = node.completionHistory.max(by: { $0.date < $1.date })!
 
@@ -102,6 +107,7 @@ struct CompleteProgressiveNodeView: View {
     rootNode.successors.append(childNode1)
     tree.treeNodes.append(childNode1)
     childNode1.amount = 60.25
+    childNode1.unit = "kgs"
     childNode1.targetAmount = 90.25
 
     let mockCompletionHistoryItem: [ItemCompletionRecord] = [

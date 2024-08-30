@@ -13,4 +13,6 @@ struct AppColors {
     static let semiDarkGray = Color(red: 30 / 255, green: 30 / 255, blue: 30 / 255)
     static let midGray = Color(red: 44 / 255, green: 44 / 255, blue: 46 / 255)
     static let textGray = Color(red: 140 / 255, green: 139 / 255, blue: 146 / 255)
+
+    static let titleGradient = [Color(red: 211 / 255, green: 211 / 255, blue: 211 / 255), Color(red: 205 / 255, green: 229 / 255, blue: 241 / 255)]
 }
