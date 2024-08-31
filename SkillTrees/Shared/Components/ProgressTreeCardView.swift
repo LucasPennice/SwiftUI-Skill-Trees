@@ -50,9 +50,10 @@ struct ProgressTreeCardView: View {
 
                             EdgeView(
                                 startX: coordinates.x,
-                                startY: coordinates.y,
+                                startY: node.parent == nil ? coordinates.y  : coordinates.y - newNodeSize / 2,
                                 endX: successorCoord.x,
-                                endY: node.parent == nil ? successorCoord.y + rootEdgeStartDelta : successorCoord.y
+                                endY: successorCoord.y + newNodeSize / 2
+//                                endY: node.parent == nil ? successorCoord.y + rootEdgeStartDelta : successorCoord.y
                             )
                             .stroke(successor.complete ? successor.color : AppColors.midGray, lineWidth: 2)
                         }
@@ -133,8 +134,11 @@ struct ProgressTreeCardView: View {
         var maxX: Double?
         var minY: Double?
         var maxY: Double?
+        var rootX: Double?
 
         for node in tree.treeNodes {
+            if node.parent == nil { rootX = node.coordinates.x }
+
             if minX == nil || node.coordinates.x < minX! { minX = node.coordinates.x }
             if minY == nil || node.coordinates.y < minY! { minY = node.coordinates.y }
 
@@ -165,52 +169,33 @@ struct ProgressTreeCardView: View {
             ? ProgressTreeCardView.squareCanvasSize / 2
             : newPadding / 2 - (TreeNodeView.defaultRootNodeSize / sqrt(2) - TreeNodeView.defaultSize) / 2
 
-        let scaleX = (treeWidth == 0 ? 1 : (ProgressTreeCardView.squareCanvasSize - newPadding) / treeWidth)
+        var scaleX = (treeWidth == 0 ? 1 : (ProgressTreeCardView.squareCanvasSize - newPadding) / treeWidth)
+        scaleX = scaleX < 0.3 ? 0.3 : scaleX
 
-        let scaleY = treeHeight == 0 ? 1 : (ProgressTreeCardView.squareCanvasSize - newPadding) / treeHeight
+        var scaleY = treeHeight == 0 ? 1 : (ProgressTreeCardView.squareCanvasSize - newPadding) / treeHeight
+        scaleY = scaleY < 0.35 ? 0.35 : scaleY
 
-        scale = scaleX > scaleY ? scaleY : scaleX
+        let calculatedScale = scaleX > scaleY ? scaleY : scaleX
+
+        scale = calculatedScale < 0.6 ? 0.6 : calculatedScale
 
         scaleNodeCoord = { node in
             CGPoint(
-                x: (node.coordinates.x - removeLeftPadding) * scaleX + xCorrection,
+                x: ((node.coordinates.x - rootX!) * calculatedScale) + ProgressTreeCardView.squareCanvasSize / 2,
                 y: (node.coordinates.y - removeTopPadding) * scaleY + yCorrection)
+//                x: (node.coordinates.x - removeLeftPadding ) * scaleX + xCorrection,
+//                y: (node.coordinates.y - removeTopPadding) * scaleY + yCorrection)
         }
     }
 }
 
 #Preview {
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try! ModelContainer(for: ProgressTree.self, configurations: config)
+    let container = SwiftDataController.previewContainer
 
-    let tree = ProgressTree(name: "Cooking", emojiIcon: "👨🏻‍🍳", color: .green)
+    let descriptor = FetchDescriptor<ProgressTree>()
 
-    let rootNode = TreeNode(name: "Root", emojiIcon: "👨🏻‍🍳")
-    rootNode.orderKey = 1000
-    container.mainContext.insert(rootNode)
-    rootNode.progressTree = tree
-    tree.treeNodes.append(rootNode)
-    try? container.mainContext.save()
+    let trees = try? container.mainContext.fetch(descriptor)
 
-    let childNode1 = TreeNode(name: "LEVEL 1", emojiIcon: "👨🏻‍🍳")
-    childNode1.orderKey = 2000
-    container.mainContext.insert(childNode1)
-    childNode1.progressTree = tree
-    childNode1.parent = rootNode
-    rootNode.successors.append(childNode1)
-    tree.treeNodes.append(childNode1)
-
-    let childNode12 = TreeNode(name: "LEVEL 1.2", emojiIcon: "👨🏻‍🍳")
-    childNode12.orderKey = 3000
-    container.mainContext.insert(childNode12)
-    childNode12.progressTree = tree
-    childNode12.parent = rootNode
-    rootNode.successors.append(childNode12)
-    tree.treeNodes.append(childNode12)
-
-    _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-
-    return ProgressTreeCardView(tree: tree)
+    return ProgressTreeCardView(tree: trees![0])
         .modelContainer(container)
 }
-
