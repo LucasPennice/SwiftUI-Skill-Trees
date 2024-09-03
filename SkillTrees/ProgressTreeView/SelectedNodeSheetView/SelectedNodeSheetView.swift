@@ -28,14 +28,14 @@ struct SelectedNodeSheetView: View {
     var body: some View {
         ScrollView {
             VStack {
-                if node.desc != nil{
+                if node.desc != nil {
                     Text(node.desc!)
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical)
                         .foregroundStyle(AppColors.textGray)
                         .cornerRadius(10)
                 }
-                
+
                 CompleteNodeView(node: node)
                     .cornerRadius(10)
                     .padding(.bottom, 5)
@@ -70,25 +70,25 @@ struct SelectedNodeSheetView: View {
                     .cornerRadius(10)
                     .padding(.bottom, 5)
 
-                /// NOT IMPLEMENTED 🚨
-                Button(action: { }) {
-                    HStack {
-                        Text("Move Milestone\(node.successors.isEmpty ? "" : " & Descendants")")
-                            .font(.system(size: 18))
-                            .foregroundColor(.white)
-
-                        Spacer()
-
-                        Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
-                            .foregroundColor(.white)
-                    }
-                    .padding(.horizontal)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .frame(height: 45)
-                    .background(AppColors.midGray)
-                    .cornerRadius(10)
-                    .padding(.bottom, 5)
-                }
+//                /// NOT IMPLEMENTED 🚨
+//                Button(action: { }) {
+//                    HStack {
+//                        Text("Move Milestone\(node.successors.isEmpty ? "" : " & Descendants")")
+//                            .font(.system(size: 18))
+//                            .foregroundColor(.white)
+//
+//                        Spacer()
+//
+//                        Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
+//                            .foregroundColor(.white)
+//                    }
+//                    .padding(.horizontal)
+//                    .frame(minWidth: 0, maxWidth: .infinity)
+//                    .frame(height: 45)
+//                    .background(AppColors.midGray)
+//                    .cornerRadius(10)
+//                    .padding(.bottom, 5)
+//                }
 
                 Button(action: {
                     withAnimation {

@@ -5,6 +5,7 @@
 //  Created by Lucas Pennice on 27/08/2024.
 //
 
+import RevenueCatUI
 import SwiftData
 import SwiftUI
 
@@ -80,7 +81,7 @@ struct OnboardingView: View {
                 .clipped()
 
                 Button(action: {
-                    withAnimation { moveToNextStep() }
+                    withAnimation { completeOnboarding() }
                 }) {
                     Text("Get my Plan")
                         .fontWeight(.bold)
@@ -91,13 +92,6 @@ struct OnboardingView: View {
             }
             .padding()
             .tag(3)
-
-            VStack {
-                Text("Paywall View")
-
-                Button("Mock purchase / Start trial", action: { completeOnboarding() })
-            }
-            .tag(4)
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         .onAppear {

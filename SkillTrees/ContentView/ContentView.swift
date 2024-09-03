@@ -5,6 +5,7 @@
 //  Created by Lucas Pennice on 02/08/2024.
 //
 
+import RevenueCat
 import SwiftData
 import SwiftUI
 
@@ -24,9 +25,11 @@ class AppDateFormatter {
 }
 
 struct ContentView: View {
+    @EnvironmentObject var settings: Settings
+
     @State private var viewModel: ViewModel
 
-    @StateObject var settings = Settings()
+    var showPaywall: () -> Void
 
     var body: some View {
         Group {
@@ -34,29 +37,29 @@ struct ContentView: View {
                 NavigationStack {
                     ZStack {
                         VStack(alignment: .center) {
-                            HStack {
-                                HStack {
-                                    Image(systemName: "flame")
-                                        .font(.system(size: 18))
-                                        .foregroundStyle(AppColors.textGray)
-
-                                    Text("\(settings.streakDays)")
-                                        .fontWeight(.medium)
-                                        .font(.system(size: 18))
-                                        .foregroundStyle(.white)
-                                        .contentTransition(.numericText())
-                                }
-                                .frame(height: 33)
-                                .padding(.horizontal)
-                                .background(AppColors.darkGray)
-                                .cornerRadius(15)
-
-                                Spacer()
-
-                                Button("", systemImage: "gear") {}
-                                    .font(.system(size: 20))
-                            }
-                            .padding(.horizontal)
+//                            HStack {
+//                                HStack {
+//                                    Image(systemName: "flame")
+//                                        .font(.system(size: 18))
+//                                        .foregroundStyle(AppColors.textGray)
+//
+//                                    Text("\(settings.streakDays)")
+//                                        .fontWeight(.medium)
+//                                        .font(.system(size: 18))
+//                                        .foregroundStyle(.white)
+//                                        .contentTransition(.numericText())
+//                                }
+//                                .frame(height: 33)
+//                                .padding(.horizontal)
+//                                .background(AppColors.darkGray)
+//                                .cornerRadius(15)
+//
+//                                Spacer()
+//
+//                                Button("", systemImage: "gear") {}
+//                                    .font(.system(size: 20))
+//                            }
+//                            .padding(.horizontal)
 
                             HStack {
                                 Text("Progress Trees")
@@ -109,48 +112,48 @@ struct ContentView: View {
                                     .listRowBackground(AppColors.semiDarkGray)
                                 }
 
-                                ///
-                                /// OPEN COLLECTION BUTTON
-                                /// Navigates only after the user earns their first collectible (🚨 NOT IMPLEMENTED)
-                                /// Lock icon goes away after the user earns their first collectible (🚨 NOT IMPLEMENTED)
-                                ///
-                                if false {
-                                    NavigationLink(destination: Text("Hello, World!")) {}
-                                        .opacity(0)
-                                        .background(
-                                            HStack {
-                                                Image(systemName: "lock.fill")
-                                                    .foregroundColor(AppColors.textGray)
-
-                                                Text("Collection")
-                                                    .foregroundColor(.white)
-                                                Spacer()
-                                                Image(systemName: "chevron.right")
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fit)
-                                                    .frame(width: 7)
-                                                    .foregroundColor(AppColors.textGray)
-                                            }
-                                        )
-                                        .listRowBackground(AppColors.semiDarkGray)
-                                } else {
-                                    Button(action: { viewModel.showingCollectionNotAvailablePopUp = true }) {
-                                        HStack {
-                                            Image(systemName: "lock.fill")
-                                                .foregroundColor(AppColors.textGray)
-
-                                            Text("Collection")
-                                                .foregroundColor(.white)
-                                            Spacer()
-                                            Image(systemName: "chevron.right")
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width: 7)
-                                                .foregroundColor(AppColors.textGray)
-                                        }
-                                    }
-                                    .listRowBackground(AppColors.semiDarkGray)
-                                }
+//                                ///
+//                                /// OPEN COLLECTION BUTTON
+//                                /// Navigates only after the user earns their first collectible (🚨 NOT IMPLEMENTED)
+//                                /// Lock icon goes away after the user earns their first collectible (🚨 NOT IMPLEMENTED)
+//                                ///
+//                                if false {
+//                                    NavigationLink(destination: Text("Hello, World!")) {}
+//                                        .opacity(0)
+//                                        .background(
+//                                            HStack {
+//                                                Image(systemName: "lock.fill")
+//                                                    .foregroundColor(AppColors.textGray)
+//
+//                                                Text("Collection")
+//                                                    .foregroundColor(.white)
+//                                                Spacer()
+//                                                Image(systemName: "chevron.right")
+//                                                    .resizable()
+//                                                    .aspectRatio(contentMode: .fit)
+//                                                    .frame(width: 7)
+//                                                    .foregroundColor(AppColors.textGray)
+//                                            }
+//                                        )
+//                                        .listRowBackground(AppColors.semiDarkGray)
+//                                } else {
+//                                    Button(action: { viewModel.showingCollectionNotAvailablePopUp = true }) {
+//                                        HStack {
+//                                            Image(systemName: "lock.fill")
+//                                                .foregroundColor(AppColors.textGray)
+//
+//                                            Text("Collection")
+//                                                .foregroundColor(.white)
+//                                            Spacer()
+//                                            Image(systemName: "chevron.right")
+//                                                .resizable()
+//                                                .aspectRatio(contentMode: .fit)
+//                                                .frame(width: 7)
+//                                                .foregroundColor(AppColors.textGray)
+//                                        }
+//                                    }
+//                                    .listRowBackground(AppColors.semiDarkGray)
+//                                }
 
                                 ///
                                 /// List of all Progress Trees
@@ -214,26 +217,28 @@ struct ContentView: View {
                         )
                     })
                 }
-                .environmentObject(settings)
+
             } else {
                 OnboardingView(completeOnboarding: {
                     settings.onboardingFinished = true
+                    showPaywall()
                     viewModel.fetchData()
                 })
             }
         }
         /// Each time the app becomes active this function runs
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-            settings.updateStreak()
-        }
+//        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+//            settings.updateStreak()
+//        }
     }
 
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, showPaywall: @escaping () -> Void) {
         _viewModel = State(initialValue: ViewModel(modelContext: modelContext))
+        self.showPaywall = showPaywall
     }
 }
 
 #Preview {
-    ContentView(modelContext: SwiftDataController.previewContainer.mainContext)
+    ContentView(modelContext: SwiftDataController.previewContainer.mainContext, showPaywall: {})
         .modelContainer(SwiftDataController.previewContainer)
 }

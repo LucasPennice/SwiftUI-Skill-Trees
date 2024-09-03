@@ -6,14 +6,17 @@
 //
 
 import SwiftUI
+import RevenueCat
 
 struct PickTemplatesAndEmailView: View {
+    @EnvironmentObject var settings: Settings
+
     @State private var progress = 0.5
 
     @State private var hasPickedTemplates = false
-    @State private var email = "lucaspennice@gmail.com"
+    @State private var email = ""
     @State private var agreeToGetEmails = false
-    
+
     @FocusState private var focusedField: Bool
 
     var moveToNextStep: () -> Void
@@ -178,7 +181,11 @@ struct PickTemplatesAndEmailView: View {
                     Spacer()
 
                     Button(action: {
-                        withAnimation { moveToNextStep() }
+                        withAnimation {
+                            settings.userEmail = email
+                            Purchases.shared.attribution.setAttributes(["$email": email])
+                            moveToNextStep()
+                        }
                     }) {
                         Text("Continue")
                             .fontWeight(.bold)

@@ -17,11 +17,11 @@
 		D11F9B572C7E9E7700ABB4A4 /* RotatingCircularTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B562C7E9E7700ABB4A4 /* RotatingCircularTreeView.swift */; };
 		D11F9B592C7F850200ABB4A4 /* PickTemplatesAndEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B582C7F850200ABB4A4 /* PickTemplatesAndEmailView.swift */; };
 		D11F9B5B2C7F901C00ABB4A4 /* CreatingTreesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B5A2C7F901C00ABB4A4 /* CreatingTreesView.swift */; };
-		D11F9B5E2C82141200ABB4A4 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = D11F9B5D2C82141200ABB4A4 /* RevenueCat */; };
-		D11F9B602C82141200ABB4A4 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = D11F9B5F2C82141200ABB4A4 /* RevenueCatUI */; };
 		D11F9B632C82145C00ABB4A4 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D11F9B622C82145C00ABB4A4 /* StoreKit.framework */; };
 		D11F9B652C822C9C00ABB4A4 /* RevenueCat.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B642C822C9C00ABB4A4 /* RevenueCat.swift */; };
 		D11F9B672C822EC700ABB4A4 /* PurchasesDelegateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11F9B662C822EC700ABB4A4 /* PurchasesDelegateHandler.swift */; };
+		D13889B72C8368DD004EB9F0 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = D13889B62C8368DD004EB9F0 /* RevenueCat */; };
+		D13889B92C8368DD004EB9F0 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = D13889B82C8368DD004EB9F0 /* RevenueCatUI */; };
 		D151F8E92C71327E00E721C2 /* EdgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8E82C71327E00E721C2 /* EdgeView.swift */; };
 		D151F8EB2C714C0700E721C2 /* SelectedNodeSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8EA2C714C0700E721C2 /* SelectedNodeSheetView.swift */; };
 		D151F8EF2C73AF4B00E721C2 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F8EE2C73AF4B00E721C2 /* ViewExtension.swift */; };
@@ -117,10 +117,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D11F9B5E2C82141200ABB4A4 /* RevenueCat in Frameworks */,
+				D13889B92C8368DD004EB9F0 /* RevenueCatUI in Frameworks */,
 				D1B3892E2C6AA748008E9306 /* MCEmojiPicker in Frameworks */,
-				D11F9B602C82141200ABB4A4 /* RevenueCatUI in Frameworks */,
 				D11F9B632C82145C00ABB4A4 /* StoreKit.framework in Frameworks */,
+				D13889B72C8368DD004EB9F0 /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,8 +312,8 @@
 			name = SkillTrees;
 			packageProductDependencies = (
 				D1B3892D2C6AA748008E9306 /* MCEmojiPicker */,
-				D11F9B5D2C82141200ABB4A4 /* RevenueCat */,
-				D11F9B5F2C82141200ABB4A4 /* RevenueCatUI */,
+				D13889B62C8368DD004EB9F0 /* RevenueCat */,
+				D13889B82C8368DD004EB9F0 /* RevenueCatUI */,
 			);
 			productName = SkillTrees;
 			productReference = D11080E32C5D1C4100C5E225 /* SkillTrees.app */;
@@ -345,7 +345,7 @@
 			mainGroup = D11080DA2C5D1C4100C5E225;
 			packageReferences = (
 				D1B3892C2C6AA748008E9306 /* XCRemoteSwiftPackageReference "MCEmojiPicker" */,
-				D11F9B5C2C82141200ABB4A4 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+				D13889B52C8368DD004EB9F0 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 			);
 			productRefGroup = D11080E42C5D1C4100C5E225 /* Products */;
 			projectDirPath = "";
@@ -557,14 +557,14 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = lucasPennice.SkillTrees;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lucasPennice.SkillTrees;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -586,8 +586,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -625,7 +625,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D11F9B5C2C82141200ABB4A4 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+		D13889B52C8368DD004EB9F0 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
 			requirement = {
@@ -644,14 +644,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D11F9B5D2C82141200ABB4A4 /* RevenueCat */ = {
+		D13889B62C8368DD004EB9F0 /* RevenueCat */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D11F9B5C2C82141200ABB4A4 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			package = D13889B52C8368DD004EB9F0 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
 			productName = RevenueCat;
 		};
-		D11F9B5F2C82141200ABB4A4 /* RevenueCatUI */ = {
+		D13889B82C8368DD004EB9F0 /* RevenueCatUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D11F9B5C2C82141200ABB4A4 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			package = D13889B52C8368DD004EB9F0 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
 			productName = RevenueCatUI;
 		};
 		D1B3892D2C6AA748008E9306 /* MCEmojiPicker */ = {

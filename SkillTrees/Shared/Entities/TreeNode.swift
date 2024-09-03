@@ -122,6 +122,24 @@ final class TreeNode {
         //
     }
 
+    func findFirstIncompleteNode(_ node: TreeNode?) -> TreeNode? {
+        guard let node = node else { return nil }
+
+        // If the node is incomplete and either it has no successors, or all successors are complete
+        if !node.complete && (node.successors.isEmpty || node.successors.allSatisfy { $0.complete }) {
+            return node
+        }
+
+        // Traverse successors
+        for successor in node.sortedSuccessors {
+            if let found = findFirstIncompleteNode(successor) {
+                return found
+            }
+        }
+
+        return nil
+    }
+
     func progressMilestone() {
         let nodeType = getNodeType()
 

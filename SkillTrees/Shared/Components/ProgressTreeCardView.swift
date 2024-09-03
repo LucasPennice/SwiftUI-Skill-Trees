@@ -22,6 +22,10 @@ struct ProgressTreeCardView: View {
         return (TreeNodeView.defaultRootNodeSize * scale) / sqrt(2) - (TreeNodeView.defaultSize * scale) / 2 - 2
     }
 
+    var rootNode: TreeNode
+
+    var nextMilestone: TreeNode? { return rootNode.findFirstIncompleteNode(rootNode) }
+
     var body: some View {
         ZStack(alignment: .leading) {
             ///
@@ -50,10 +54,9 @@ struct ProgressTreeCardView: View {
 
                             EdgeView(
                                 startX: coordinates.x,
-                                startY: node.parent == nil ? coordinates.y  : coordinates.y - newNodeSize / 2,
+                                startY: node.parent == nil ? coordinates.y : coordinates.y - newNodeSize / 2,
                                 endX: successorCoord.x,
                                 endY: successorCoord.y + newNodeSize / 2
-//                                endY: node.parent == nil ? successorCoord.y + rootEdgeStartDelta : successorCoord.y
                             )
                             .stroke(successor.complete ? successor.color : AppColors.midGray, lineWidth: 2)
                         }
@@ -86,31 +89,31 @@ struct ProgressTreeCardView: View {
                     }
 
                     Spacer()
-
-                    ///
-                    /// Card Footer
-                    ///
-                    VStack(alignment: .leading, spacing: 5) {
-                        /// NEXT MILESTONE (🚨 NOT IMPLEMENTED)
-                        Text("Next Milestone")
-                            .font(.system(size: 16))
-
-                        HStack {
-                            Text(tree.emojiIcon)
-                                .font(.system(size: 14))
-
-                            Text("Finish Thesis")
+                    if nextMilestone != nil {
+                        ///
+                        /// Card Footer
+                        ///
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Next Milestone")
                                 .font(.system(size: 16))
-                                .opacity(0.8)
 
-                            Spacer()
+                            HStack {
+                                Text(nextMilestone!.emojiIcon)
+                                    .font(.system(size: 14))
 
-                            CircularProgressView(strokeColor: tree.color, bgColor: AppColors.midGray, size: 15, progress: 0.24)
+                                Text(nextMilestone!.name)
+                                    .font(.system(size: 16))
+                                    .opacity(0.8)
+
+                                Spacer()
+
+                                CircularProgressView(strokeColor: nextMilestone!.color, bgColor: AppColors.midGray, size: 15, progress: nextMilestone!.calculateProgress())
+                            }
+                            .frame(height: 32)
+                            .padding(.horizontal, 5)
+                            .background(AppColors.darkGray)
+                            .cornerRadius(10)
                         }
-                        .frame(height: 32)
-                        .padding(.horizontal, 5)
-                        .background(AppColors.darkGray)
-                        .cornerRadius(10)
                     }
                 }
                 .frame(minHeight: 0, maxHeight: .infinity)
@@ -134,10 +137,11 @@ struct ProgressTreeCardView: View {
         var maxX: Double?
         var minY: Double?
         var maxY: Double?
-        var rootX: Double?
+
+        var root: TreeNode?
 
         for node in tree.treeNodes {
-            if node.parent == nil { rootX = node.coordinates.x }
+            if node.parent == nil { root = node }
 
             if minX == nil || node.coordinates.x < minX! { minX = node.coordinates.x }
             if minY == nil || node.coordinates.y < minY! { minY = node.coordinates.y }
@@ -146,20 +150,12 @@ struct ProgressTreeCardView: View {
             if maxY == nil || node.coordinates.y > maxY! { maxY = node.coordinates.y }
         }
 
-        let removeLeftPadding = minX!
         let removeTopPadding = minY!
 
         let treeWidth = maxX! - minX!
         let treeHeight = maxY! - minY!
 
         let newPadding = 1.3 * TreeNodeView.defaultRootNodeSize
-
-        ///
-        /// Centers node when treeWidth = 0, adds horizontal padding otherwise
-        ///
-        let xCorrection = treeWidth == 0
-            ? ProgressTreeCardView.squareCanvasSize / 2
-            : newPadding / 2
 
         ///
         /// Center root node when treeHeight = 0
@@ -181,11 +177,11 @@ struct ProgressTreeCardView: View {
 
         scaleNodeCoord = { node in
             CGPoint(
-                x: ((node.coordinates.x - rootX!) * calculatedScale) + ProgressTreeCardView.squareCanvasSize / 2,
+                x: ((node.coordinates.x - root!.coordinates.x) * calculatedScale) + ProgressTreeCardView.squareCanvasSize / 2,
                 y: (node.coordinates.y - removeTopPadding) * scaleY + yCorrection)
-//                x: (node.coordinates.x - removeLeftPadding ) * scaleX + xCorrection,
-//                y: (node.coordinates.y - removeTopPadding) * scaleY + yCorrection)
         }
+
+        rootNode = root!
     }
 }
 
