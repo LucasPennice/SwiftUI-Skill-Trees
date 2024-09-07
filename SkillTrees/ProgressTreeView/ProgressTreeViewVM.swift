@@ -170,7 +170,7 @@ extension ProgressTreeView {
         }
 
         func nodeOpacity(_ node: TreeNode) -> Double {
-            if showingInsertNodePositions == true { return lowOpacity }
+            if showingInsertNodePositions == true { return 0.7 }
 
             if showingConnectingMode == true {
                 if node.persistentModelID == connectingMilestoneChild!.persistentModelID { return 1 }
@@ -217,7 +217,7 @@ extension ProgressTreeView {
         ///
 
         func labelOpacity(_ node: TreeNode) -> Double {
-            if showingInsertNodePositions == true { return lowOpacity }
+            if showingInsertNodePositions == true { return .zero }
 
             if showingConnectingMode == true {
                 if node.persistentModelID == connectingMilestoneChild?.persistentModelID

@@ -262,6 +262,8 @@ struct ProgressTreeTemplates {
             child7.successors.append(child73)
             tree.treeNodes.append(child73)
 
+            for node in tree.treeNodes { node.updateColor(tree.color) }
+
             _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
             return
@@ -522,9 +524,9 @@ struct ProgressTreeTemplates {
             child7.successors.append(child73)
             tree.treeNodes.append(child73)
 
-            _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+            for node in tree.treeNodes { node.updateColor(tree.color) }
 
-            return
+            _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         }
 
         if templateId == "GENERAL_EXERCISE" {
@@ -692,6 +694,8 @@ struct ProgressTreeTemplates {
             child62.parent = child6
             child6.successors.append(child62)
             tree.treeNodes.append(child62)
+
+            for node in tree.treeNodes { node.updateColor(tree.color) }
 
             _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
@@ -890,6 +894,8 @@ struct ProgressTreeTemplates {
             child5.successors.append(child51)
             tree.treeNodes.append(child51)
 
+            for node in tree.treeNodes { node.updateColor(tree.color) }
+
             _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
             return
@@ -1062,6 +1068,8 @@ struct ProgressTreeTemplates {
             child53.parent = child5
             child5.successors.append(child53)
             tree.treeNodes.append(child53)
+
+            for node in tree.treeNodes { node.updateColor(tree.color) }
 
             _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
@@ -1270,6 +1278,8 @@ struct ProgressTreeTemplates {
             child6.successors.append(child63)
             tree.treeNodes.append(child63)
 
+            for node in tree.treeNodes { node.updateColor(tree.color) }
+
             _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
             return
@@ -1460,6 +1470,8 @@ struct ProgressTreeTemplates {
             child62.parent = child6
             child6.successors.append(child62)
             tree.treeNodes.append(child62)
+
+            for node in tree.treeNodes { node.updateColor(tree.color) }
 
             _ = tree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 

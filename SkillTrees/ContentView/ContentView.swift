@@ -25,6 +25,7 @@ class AppDateFormatter {
 }
 
 struct ContentView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @EnvironmentObject var settings: Settings
 
     @State private var viewModel: ViewModel
@@ -83,33 +84,35 @@ struct ContentView: View {
                             List {
                                 ///
                                 /// JOIN COMMUNITY BUTTON
-                                /// Visible only after the user uses the app for 3 days
+                                /// Visible only after the user uses the app for 1 day
                                 /// After the user presses the close button it should show up again
-                                /// Tapping it takes you to the discord server (🚨 NOT IMPLEMENTED)
+                                /// Tapping it takes you to the discord server
                                 ///
-                                if settings.daysSinceFirstOpen >= 3 && !settings.doNotShowDiscordPopUpAgain {
-                                    HStack(alignment: .top) {
-                                        VStack(alignment: .leading, spacing: 5) {
-                                            Text("We’d love to hear your thoughts")
-                                                .font(.system(size: 16))
-                                                .foregroundColor(.white)
+                                if settings.daysSinceFirstOpen >= 1 && !settings.doNotShowDiscordPopUpAgain {
+                                    Link(destination: URL(string: "https://discord.gg/nMjHEdhg8m")!) {
+                                        HStack(alignment: .top) {
+                                            VStack(alignment: .leading, spacing: 5) {
+                                                Text("We’d love to hear your thoughts")
+                                                    .font(.system(size: 16))
+                                                    .foregroundColor(.white)
 
-                                            Text("Tap here to join our Discord")
-                                                .font(.system(size: 14))
-                                                .foregroundStyle(AppColors.textGray)
+                                                Text("Tap here to join our Discord")
+                                                    .font(.system(size: 14))
+                                                    .foregroundStyle(AppColors.textGray)
+                                            }
+
+                                            Spacer()
+
+                                            Image(systemName: "xmark")
+                                                .font(.system(size: 14).bold())
+                                                .foregroundColor(AppColors.textGray)
+                                                .frame(width: 24, height: 24)
+                                                .background(AppColors.darkGray)
+                                                .cornerRadius(20)
+                                                .onTapGesture { withAnimation { settings.doNotShowDiscordPopUpAgain = true } }
                                         }
-
-                                        Spacer()
-
-                                        Image(systemName: "xmark")
-                                            .font(.system(size: 14).bold())
-                                            .foregroundColor(AppColors.textGray)
-                                            .frame(width: 24, height: 24)
-                                            .background(AppColors.darkGray)
-                                            .cornerRadius(20)
-                                            .onTapGesture { withAnimation { settings.doNotShowDiscordPopUpAgain = true } }
+                                        .listRowBackground(AppColors.semiDarkGray)
                                     }
-                                    .listRowBackground(AppColors.semiDarkGray)
                                 }
 
 //                                ///
@@ -166,7 +169,7 @@ struct ContentView: View {
                                         .opacity(0)
                                         .background(ProgressTreeCardView(tree: tree))
                                         .listRowInsets(EdgeInsets())
-                                        .frame(height: 180)
+                                        .frame(height: ProgressTreeCardView.cardHeight)
                                         .listRowBackground(AppColors.semiDarkGray)
                                         .swipeActions(allowsFullSwipe: false) {
                                             Button("Edit", systemImage: "pencil") {
@@ -183,7 +186,7 @@ struct ContentView: View {
                             .navigationDestination(for: ProgressTree.self) { tree in ProgressTreeView(modelContext: viewModel.modelContext, progressTreeId: tree.persistentModelID) }
                             .scrollContentBackground(.hidden)
                             .listStyle(InsetGroupedListStyle())
-                            .listRowSpacing(18)
+                            .listRowSpacing(24)
                             .environment(\.defaultMinListRowHeight, 10)
                             .scrollBounceBehavior(.basedOnSize)
                             .scrollIndicators(.hidden)
@@ -239,6 +242,10 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(modelContext: SwiftDataController.previewContainer.mainContext, showPaywall: {})
+    let settings = Settings()
+    settings.onboardingFinished = true
+
+    return ContentView(modelContext: SwiftDataController.previewContainer.mainContext, showPaywall: {})
+        .environmentObject(settings)
         .modelContainer(SwiftDataController.previewContainer)
 }

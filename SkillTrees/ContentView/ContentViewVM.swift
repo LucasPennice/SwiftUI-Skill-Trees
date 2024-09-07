@@ -32,7 +32,7 @@ extension ContentView {
 
         func fetchData() {
             do {
-                let descriptor = FetchDescriptor<ProgressTree>(sortBy: [SortDescriptor(\ProgressTree.createdAt)])
+                let descriptor = FetchDescriptor<ProgressTree>(sortBy: [SortDescriptor(\ProgressTree.orderKey, order: .reverse)])
                 progressTrees = try modelContext.fetch(descriptor)
             } catch {
                 print("Fetch failed")
@@ -58,8 +58,9 @@ extension ContentView {
         func saveProgressTreeEdit(_ tree: ProgressTree) {
             let rootNode = tree.treeNodes.first(where: { $0.parent == nil })
 
+            for node in tree.treeNodes { node.updateColor(tree.color) }
+
             if let rootNode = rootNode {
-                rootNode.updateColor(tree.color)
                 rootNode.emojiIcon = tree.emojiIcon
                 rootNode.name = tree.name
 

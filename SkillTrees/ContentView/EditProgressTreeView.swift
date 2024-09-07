@@ -19,9 +19,7 @@ struct EditProgressTreeView: View {
 
     @State private var showingEmojiPicker = false
     @State private var showingDeleteTreeConfirmation = false
-    @State private var treeColor: Color {
-        didSet { tree.updateColor(treeColor) }
-    }
+    @State private var treeColor: Color
 
     var body: some View {
         NavigationStack {
@@ -81,6 +79,8 @@ struct EditProgressTreeView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
+                        tree.updateColor(treeColor)
+
                         saveProgressTreeEdit(tree)
 
                         dismiss()

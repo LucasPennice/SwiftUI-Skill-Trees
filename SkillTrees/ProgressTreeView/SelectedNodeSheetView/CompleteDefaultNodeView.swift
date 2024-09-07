@@ -16,61 +16,16 @@ struct CompleteDefaultNodeView: View {
 
     var body: some View {
         ZStack {
-            Rectangle()
-                .foregroundColor(AppColors.darkGray)
-                .edgesIgnoringSafeArea(.all)
-                .highPriorityGesture(DragGesture(minimumDistance: 0)
-                    .onChanged({ value in
-                        if showPath == false { withAnimation { showPath = true }}
-
-                        self.addNewPoint(value)
-                    })
-                    .onEnded({ _ in
-                       withAnimation {
-                            node.progressMilestone()
-                        }
-
-                        withAnimation { showPath = false }
-
-                        points = []
-                    }))
-
-            VStack {
-                Image(systemName: "hand.draw")
-                    .font(.system(size: 30))
-                    .foregroundColor(.gray.opacity(0.2))
-
-                Text("Draw a checkmark to complete")
-                    .font(.system(size: 12))
-                    .foregroundColor(.gray.opacity(0.2))
-            }
-            .allowsHitTesting(false)
-
-            if showPath {
-                DrawShape(points: points)
-                    .stroke(lineWidth: 5)
-                    .foregroundColor(.green)
-                    .transition(.asymmetric(insertion: .opacity, removal: .opacity.combined(with: .scale(scale: 0))))
-                    .zIndex(2)
-            }
+            DrawCheckmarkView(
+                runOnFingerLifted: { withAnimation { node.progressMilestone() }},
+                frameDimensions:
+                DrawCheckMarkViewDimensions(minWidth: 0, maxWidth: .infinity, height: 105)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(AppColors.midGray, lineWidth: 3)
+            )
         }
-        .clipped()
-        .sensoryFeedback(.success, trigger: points.isEmpty, condition: { old, new in
-            old == true && new == false
-        })
-        .frame(minWidth: 0, maxWidth: .infinity)
-        .frame(height: 105)
-        .cornerRadius(10)
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(AppColors.midGray, lineWidth: 3)
-        )
-        .background(.clear)
-    }
-
-    private func addNewPoint(_ value: DragGesture.Value) {
-        // here you can make some calculations based on previous points
-        points.append(value.location)
     }
 }
 

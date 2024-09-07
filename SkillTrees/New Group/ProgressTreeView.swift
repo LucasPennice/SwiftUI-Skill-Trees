@@ -96,12 +96,13 @@ struct ProgressTreeView: View {
                             .id(node.persistentModelID)
                             .frame(maxWidth: 100)
                             .font(.system(size: 14))
-                            .opacity(viewModel.labelOpacity(node))
+                            
                             .multilineTextAlignment(.center)
                             .padding(7)
                             .background(AppColors.darkGray)
                             .cornerRadius(7)
                             .foregroundColor(.white)
+                            .opacity(viewModel.labelOpacity(node))
                             .position(CGPoint(x: node.coordinates.x, y: node.coordinates.y))
                             .offset(y: TreeNodeView.defaultSize / 2 + viewModel.getLabelVerticalOffset(text: node.name) + 20)
                             .zIndex(1)
@@ -154,7 +155,8 @@ struct ProgressTreeView: View {
                                 .fill(
                                     viewModel.selectedInsertNodePosition?.id == insertNodePosition.id
                                         ? Color.accentColor.opacity(0.4)
-                                        : AppColors.textGray.opacity(0.4))
+                                        : AppColors.textGray.opacity(0.6))
+                                .padding(5)
                                 .frame(width: insertNodePosition.size.width, height: insertNodePosition.size.height)
                                 .position(CGPoint(x: insertNodePosition.coordinates.x, y: insertNodePosition.coordinates.y))
                                 .transition(.blurReplace)

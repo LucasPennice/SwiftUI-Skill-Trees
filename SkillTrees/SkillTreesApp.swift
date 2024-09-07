@@ -59,7 +59,7 @@ struct SkillTreesApp: App {
         do {
             container = try ModelContainer(for: ProgressTree.self)
         } catch {
-            fatalError("Failed to create ModelContainer for Movie.")
+            fatalError("Failed to create ModelContainer for Progress Tree.")
         }
 
         /// Revenue Cat Configuration

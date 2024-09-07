@@ -298,5 +298,5 @@ struct NodeListItem: Codable, Hashable, Identifiable {
     var id = UUID()
     var name: String
     var complete: Bool
-    var createdAt: Date = Date.now
+    var orderKey = Int(Date.now.timeIntervalSince1970)
 }

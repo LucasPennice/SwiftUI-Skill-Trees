@@ -169,7 +169,7 @@ struct TreeNodeView: View {
 
             Text(node.emojiIcon)
                 .foregroundStyle(.white)
-                .font(.system(size: regularNodeSize * 0.55))
+                .font(.system(size: regularNodeSize * 0.50))
 
             if showNodeType {
                 Image(systemName: nodeTypeIcon)

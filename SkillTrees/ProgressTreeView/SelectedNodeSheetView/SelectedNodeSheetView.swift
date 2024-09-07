@@ -18,9 +18,7 @@ struct SelectedNodeSheetView: View {
     var showConnectingMode: (TreeNode) -> Void
 
     @State private var showingEmojiPicker: Bool
-    @State private var nodeColor: Color {
-        didSet { node.updateColor(nodeColor) }
-    }
+    @State private var nodeColor: Color
 
     @State private var showingDeleteMilestoneConfirmation = false
     @State private var showingDeleteAdditionalConnectionsConfirmation = false
@@ -69,6 +67,7 @@ struct SelectedNodeSheetView: View {
                     .background(AppColors.midGray)
                     .cornerRadius(10)
                     .padding(.bottom, 5)
+                    .onChange(of: nodeColor, initial: false) { node.updateColor(nodeColor) }
 
 //                /// NOT IMPLEMENTED 🚨
 //                Button(action: { }) {

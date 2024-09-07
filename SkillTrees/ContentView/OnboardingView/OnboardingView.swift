@@ -74,6 +74,7 @@ struct OnboardingView: View {
                 ScrollView {
                     ForEach(trees) { tree in
                         ProgressTreeCardView(tree: tree)
+                            .padding(.bottom)
                     }
                 }
                 .scrollIndicators(.hidden)

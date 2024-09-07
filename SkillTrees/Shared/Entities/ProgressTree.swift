@@ -20,6 +20,9 @@ final class ProgressTree {
 
     private static let SPACE_BETWEEN_NODES = 1
 
+    /// Only used to force a specific order (because append order is not reliable on Swift Data)
+    let orderKey: Int
+
     func updateColor(_ newColor: Color) {
         let colorArray = UIColor(newColor).cgColor.components!
 
@@ -31,8 +34,6 @@ final class ProgressTree {
         colorG = Double(green)
         colorB = Double(blue)
     }
-    
-    var createdAt: Date
 
     var color: Color {
         return Color(red: colorR, green: colorG, blue: colorB)
@@ -106,7 +107,7 @@ final class ProgressTree {
         /// Sort nodes by layers, smaller layers first
         treeNodesCopy.sort(by: { $0.layer < $1.layer })
 
-        setNodesLayer(&treeNodesCopy)
+        setNodesLayer(node: treeNodesCopy.first(where: { $0.parent == nil })!)
 
         initialCoordinates(node: treeNodesCopy.first(where: { $0.parent == nil })!)
 
@@ -124,20 +125,17 @@ final class ProgressTree {
     }
 
     /// Updates the layer value for each node
-    private func setNodesLayer(_ treeNodes: inout [TreeNode]) {
-        treeNodes.forEach { node in
-            let isRootNode = node.parent == nil
-
-            /// For each source node it sets it to layer 1
-            if isRootNode {
-                node.layer = 1
-                node.coordinates.y = Double(node.layer)
-            } else {
-                node.layer = node.parent!.layer + 1
-                /// We update the node's Y coordinate to match that of its layer
-                node.coordinates.y = Double(node.layer)
-            }
+    private func setNodesLayer(node: TreeNode) {
+        /// If root node
+        if node.parent == nil {
+            node.layer = 1
+            node.coordinates.y = Double(1)
+        } else {
+            node.layer = node.parent!.layer + 1
+            node.coordinates.y = Double(node.parent!.layer + 1)
         }
+
+        node.sortedSuccessors.forEach { setNodesLayer(node: $0) }
     }
 
     func appendSubTreeToArray(_ node: TreeNode, _ arr: inout [TreeNode]) {
@@ -438,8 +436,8 @@ final class ProgressTree {
         let red = colorArray[0]
         let green = colorArray[1]
         let blue = colorArray[2]
-        
-        self.createdAt = .now
+
+        orderKey = Int(Date.now.timeIntervalSince1970)
 
         colorR = Double(red)
         colorG = Double(green)

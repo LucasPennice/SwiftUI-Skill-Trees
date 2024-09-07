@@ -5,8 +5,8 @@
 //  Created by Lucas Pennice on 28/08/2024.
 //
 
-import SwiftUI
 import RevenueCat
+import SwiftUI
 
 struct PickTemplatesAndEmailView: View {
     @EnvironmentObject var settings: Settings
@@ -24,6 +24,18 @@ struct PickTemplatesAndEmailView: View {
     @Binding var selected: [String]
 
     let templates = ProgressTreeTemplates()
+
+    func submit() {
+        focusedField = false
+        Purchases.shared.attribution.setAttributes(["$email": email])
+        settings.userEmail = email
+
+        moveToNextStep()
+    }
+
+    var allowToContinue: Bool {
+        return (email.isValidEmailAddress() && agreeToGetEmails == true)
+    }
 
     var body: some View {
         VStack {
@@ -150,8 +162,17 @@ struct PickTemplatesAndEmailView: View {
                             .disableAutocorrection(true)
                             .autocapitalization(.none)
                             .focused($focusedField)
+                            .submitLabel(.return)
                             .onSubmit {
                                 focusedField = false
+
+                                if allowToContinue == true {
+                                    return DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                        withAnimation {
+                                            submit()
+                                        }
+                                    }
+                                }
                             }
 
                         Button(action: { withAnimation { agreeToGetEmails = true }}) {
@@ -181,10 +202,12 @@ struct PickTemplatesAndEmailView: View {
                     Spacer()
 
                     Button(action: {
-                        withAnimation {
-                            settings.userEmail = email
-                            Purchases.shared.attribution.setAttributes(["$email": email])
-                            moveToNextStep()
+                        focusedField = false
+
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            withAnimation {
+                                submit()
+                            }
                         }
                     }) {
                         Text("Continue")
@@ -192,8 +215,9 @@ struct PickTemplatesAndEmailView: View {
                             .frame(minWidth: 0, maxWidth: 290)
                             .frame(height: 34)
                     }
+
                     .buttonStyle(.borderedProminent)
-                    .disabled(!(email.isValidEmailAddress() && agreeToGetEmails == true))
+                    .disabled(!allowToContinue)
                 }
                 .transition(.move(edge: .trailing))
             }
