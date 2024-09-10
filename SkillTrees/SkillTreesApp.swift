@@ -54,7 +54,9 @@ struct SkillTreesApp: App {
                     dismissPaywall()
                 }
                 .fullScreenCover(isPresented: $displayPaywall) { PaywallView(displayCloseButton: false) }
-                .sheet(isPresented: $surveySheetHandler.showingProductMarketFitSurvey, content: { ProductMarketFitSurveyView() })
+                .sheet(isPresented: $surveySheetHandler.showingProductMarketFitSurvey, content: {
+                    ProductMarketFitSurveyView(completeProductMarketFitSurvey: surveySheetHandler.completeProductMarketFitSurvey)
+                })
 //                .sheet(isPresented: $surveySheetHandler.showingTrialCancelSurvey, content: { Text("Trial cancel survey") })
         }
         .modelContainer(for: ProgressTree.self)

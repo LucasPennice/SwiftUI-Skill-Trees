@@ -9,12 +9,14 @@ import StoreKit
 import SwiftUI
 
 struct ProductMarketFitSurveyView: View {
+    var completeProductMarketFitSurvey: (String, String, String, String, String) -> Void
+
     @Environment(\.dismiss) var dismiss
     @Environment(\.requestReview) var requestReview
     ///
     /// UI State
     ///
-    @State private var currentStep = 1
+    @State private var currentStep = 0
     ///
     /// Answer State
     ///
@@ -26,6 +28,12 @@ struct ProductMarketFitSurveyView: View {
 
     func increaseStep() {
         currentStep = currentStep + 1
+    }
+
+    func closeSheet() {
+        completeProductMarketFitSurvey(answer1, answer2, answer3, answer4, answer5)
+
+        dismiss()
     }
 
     var body: some View {
@@ -279,8 +287,7 @@ struct ProductMarketFitSurveyView: View {
                 .buttonStyle(.borderedProminent)
 
                 Button(action: {
-                    withAnimation { dismiss() }
-
+                    closeSheet()
                 }) {
                     Text("I don't love Skill Trees")
                         .frame(minWidth: 0, maxWidth: .infinity)
@@ -321,7 +328,7 @@ struct ProductMarketFitSurveyView: View {
 
                     requestReview()
 
-                    dismiss()
+                    closeSheet()
 
                 }) {
                     Text("Sure Thing, copy to clipboard")
@@ -334,7 +341,7 @@ struct ProductMarketFitSurveyView: View {
                 .buttonStyle(.borderedProminent)
 
                 Button(action: {
-                    dismiss()
+                    closeSheet()
                 }) {
                     Text("I'm good")
                         .frame(minWidth: 0, maxWidth: .infinity)
@@ -349,9 +356,10 @@ struct ProductMarketFitSurveyView: View {
         .ignoresSafeArea()
         .presentationBackgroundInteraction(.enabled)
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .interactiveDismissDisabled()
     }
 }
 
 #Preview {
-    ProductMarketFitSurveyView()
+    ProductMarketFitSurveyView(completeProductMarketFitSurvey: { _, _, _, _, _ in })
 }

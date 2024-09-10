@@ -185,7 +185,9 @@ struct ContentView: View {
                                         }
                                 }
                             }
-                            .navigationDestination(for: ProgressTree.self) { tree in ProgressTreeView(modelContext: viewModel.modelContext, progressTreeId: tree.persistentModelID) }
+                            .navigationDestination(for: ProgressTree.self) { tree in
+                                ProgressTreeView(modelContext: viewModel.modelContext, progressTreeId: tree.persistentModelID)
+                            }
                             .scrollContentBackground(.hidden)
                             .listStyle(InsetGroupedListStyle())
                             .listRowSpacing(24)
@@ -225,7 +227,7 @@ struct ContentView: View {
                     .onChange(of: scenePhase, initial: true) { _, newPhase in
                         if newPhase == .active {
                             Task {
-                                await surveySheetHandler.runOnAppActive()
+                                await surveySheetHandler.runOnAppActive(countCompleteOrProgressedNodes: viewModel.countCompleteOrProgressedNodes)
                             }
                         }
                     }

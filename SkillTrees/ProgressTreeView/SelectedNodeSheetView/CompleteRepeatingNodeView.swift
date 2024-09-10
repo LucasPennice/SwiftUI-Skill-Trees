@@ -9,7 +9,6 @@ import SwiftData
 import SwiftUI
 
 struct CompleteRepeatingNodeView: View {
-    @EnvironmentObject var surveySheetHandler: SurveySheetHandler
     var node: TreeNode
 
     var body: some View {
@@ -25,9 +24,6 @@ struct CompleteRepeatingNodeView: View {
 
                     DrawCheckmarkView(runOnFingerLifted: {
                         withAnimation { node.progressMilestone() }
-
-                        surveySheetHandler.runOnProgressMilestone()
-
                     })
                 }
 

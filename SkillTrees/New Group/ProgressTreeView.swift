@@ -96,7 +96,7 @@ struct ProgressTreeView: View {
                             .id(node.persistentModelID)
                             .frame(maxWidth: 100)
                             .font(.system(size: 14))
-                            
+
                             .multilineTextAlignment(.center)
                             .padding(7)
                             .background(AppColors.darkGray)

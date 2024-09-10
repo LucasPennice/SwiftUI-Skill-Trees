@@ -8,25 +8,12 @@
 import Foundation
 import Mixpanel
 import RevenueCat
+import SwiftData
 import SwiftUI
 
 /// Keys from the network response we get from calling the backend survey handler endpoint
 struct SurveySheetResponse: Codable {
     let completedCancelTrialSurvey: Bool
-}
-
-class SurveySheetHandlerSingleton: ObservableObject {
-    static let shared: SurveySheetHandlerSingleton = SurveySheetHandlerSingleton()
-
-    
-    @AppStorage("madeProgressOrCompletedNMilestones") var madeProgressOrCompletedNMilestones: Int = 0
-
-    func runOnProgressMilestone() {
-        madeProgressOrCompletedNMilestones = madeProgressOrCompletedNMilestones + 1
-    }
-
-    private init() {
-    }
 }
 
 class SurveySheetHandler: ObservableObject {
@@ -35,26 +22,10 @@ class SurveySheetHandler: ObservableObject {
     ///
     @AppStorage("shownTrialCancelSurvey") var shownTrialCancelSurvey: Bool = false
     @AppStorage("shownProductMarketFitSurvey") var shownProductMarketFitSurvey: Bool = false
-
-    ///
-    /// Data for Survey Trigger
-    ///
-    @AppStorage("madeProgressOrCompletedNMilestones") var madeProgressOrCompletedNMilestones: Int = 0
-
     /// Trigger on app active
     @Published var showingTrialCancelSurvey = false
     /// Shown after user makes progress on 3 milestones
     @Published var showingProductMarketFitSurvey = false
-
-    func runOnProgressMilestone() {
-        showingProductMarketFitSurvey = true
-//        madeProgressOrCompletedNMilestones = madeProgressOrCompletedNMilestones + 1
-
-//        if madeProgressOrCompletedNMilestones >= 3 &&
-//            shownProductMarketFitSurvey == false {
-//            showingProductMarketFitSurvey = true
-//        }
-    }
 
     func completeProductMarketFitSurvey(
         _ answer1: String,
@@ -126,7 +97,7 @@ class SurveySheetHandler: ObservableObject {
     }
 
     /// This function is called anytime the app becomes active
-    func runOnAppActive() async {
+    func runOnAppActive(countCompleteOrProgressedNodes: @escaping () -> Int) async {
         do {
             if !shownTrialCancelSurvey {
                 let customerInfo = try await Purchases.shared.customerInfo()
@@ -149,7 +120,21 @@ class SurveySheetHandler: ObservableObject {
                     await MainActor.run {
                         if parsedResponse.completedCancelTrialSurvey == false {
                             showingTrialCancelSurvey = true
+
+                            return
                         }
+                    }
+                }
+            }
+
+            if !shownProductMarketFitSurvey {
+                let completeOrProgressedNodes = countCompleteOrProgressedNodes()
+
+                await MainActor.run {
+                    if completeOrProgressedNodes >= 3 {
+                        showingProductMarketFitSurvey = true
+
+                        return
                     }
                 }
             }

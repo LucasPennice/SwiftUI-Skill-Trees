@@ -39,6 +39,13 @@ extension ContentView {
             }
         }
 
+        func countCompleteOrProgressedNodes() -> Int {
+            let descriptor = FetchDescriptor<ItemCompletionRecord>()
+            let completeOrProgressedNodes = (try? modelContext.fetchCount(descriptor)) ?? 0
+
+            return completeOrProgressedNodes
+        }
+
         func addProgressTree(_ tree: ProgressTree) {
             modelContext.insert(tree)
 

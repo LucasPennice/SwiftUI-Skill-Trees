@@ -11,8 +11,6 @@ import SwiftUI
 struct CompleteProgressiveNodeView: View {
     var node: TreeNode
 
-    @EnvironmentObject var surveySheetHandler: SurveySheetHandler
-
     @State private var unitInteger: Int
     @State private var unitDecimal: Double
 
@@ -56,8 +54,6 @@ struct CompleteProgressiveNodeView: View {
                         withAnimation {
                             node.progressMilestone()
                         }
-
-                        surveySheetHandler.runOnProgressMilestone()
                     })
                 }
 
