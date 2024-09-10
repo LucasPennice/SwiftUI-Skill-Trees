@@ -39,6 +39,10 @@
 		D151F9092C75EF6900E721C2 /* NewMilestoneSheetVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F9082C75EF6900E721C2 /* NewMilestoneSheetVM.swift */; };
 		D151F90B2C75F22800E721C2 /* RepeatingNodeInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F90A2C75F22700E721C2 /* RepeatingNodeInputView.swift */; };
 		D151F90D2C75F3B400E721C2 /* ListNodeInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D151F90C2C75F3B400E721C2 /* ListNodeInputView.swift */; };
+		D16723F82C8F5831001B8AB8 /* Mixpanel in Frameworks */ = {isa = PBXBuildFile; productRef = D16723F72C8F5831001B8AB8 /* Mixpanel */; };
+		D16723FA2C8F6097001B8AB8 /* SurveySheetHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16723F92C8F6097001B8AB8 /* SurveySheetHandler.swift */; };
+		D189CF562C8F866A00DC1A66 /* ProductMarketFitSurveyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D189CF552C8F866A00DC1A66 /* ProductMarketFitSurveyView.swift */; };
+		D189CF582C90E73D00DC1A66 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D189CF572C90E73D00DC1A66 /* ViewModifiers.swift */; };
 		D19AB9C02C5D230600399662 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AB9BF2C5D230600399662 /* Colors.swift */; };
 		D19AB9C22C5D2E9600399662 /* DialoguePopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AB9C12C5D2E9600399662 /* DialoguePopUpView.swift */; };
 		D19AB9C62C5D882000399662 /* AddNewProgressTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AB9C52C5D882000399662 /* AddNewProgressTreeView.swift */; };
@@ -92,6 +96,9 @@
 		D151F9082C75EF6900E721C2 /* NewMilestoneSheetVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMilestoneSheetVM.swift; sourceTree = "<group>"; };
 		D151F90A2C75F22700E721C2 /* RepeatingNodeInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatingNodeInputView.swift; sourceTree = "<group>"; };
 		D151F90C2C75F3B400E721C2 /* ListNodeInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListNodeInputView.swift; sourceTree = "<group>"; };
+		D16723F92C8F6097001B8AB8 /* SurveySheetHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySheetHandler.swift; sourceTree = "<group>"; };
+		D189CF552C8F866A00DC1A66 /* ProductMarketFitSurveyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductMarketFitSurveyView.swift; sourceTree = "<group>"; };
+		D189CF572C90E73D00DC1A66 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		D19AB9BF2C5D230600399662 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		D19AB9C12C5D2E9600399662 /* DialoguePopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialoguePopUpView.swift; sourceTree = "<group>"; };
 		D19AB9C52C5D882000399662 /* AddNewProgressTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewProgressTreeView.swift; sourceTree = "<group>"; };
@@ -118,6 +125,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D13889B92C8368DD004EB9F0 /* RevenueCatUI in Frameworks */,
+				D16723F82C8F5831001B8AB8 /* Mixpanel in Frameworks */,
 				D1B3892E2C6AA748008E9306 /* MCEmojiPicker in Frameworks */,
 				D11F9B632C82145C00ABB4A4 /* StoreKit.framework in Frameworks */,
 				D13889B72C8368DD004EB9F0 /* RevenueCat in Frameworks */,
@@ -214,6 +222,14 @@
 			path = NewMilestoneSheetView;
 			sourceTree = "<group>";
 		};
+		D189CF542C8F865B00DC1A66 /* Surveys */ = {
+			isa = PBXGroup;
+			children = (
+				D189CF552C8F866A00DC1A66 /* ProductMarketFitSurveyView.swift */,
+			);
+			path = Surveys;
+			sourceTree = "<group>";
+		};
 		D19AB9BD2C5D22EB00399662 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -235,6 +251,7 @@
 				D1B389262C699DDD008E9306 /* TreeNode.swift */,
 				D1B389282C699DFD008E9306 /* ItemCompletionRecord.swift */,
 				D151F9012C7525E800E721C2 /* InsertNodePosition.swift */,
+				D16723F92C8F6097001B8AB8 /* SurveySheetHandler.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -246,6 +263,7 @@
 				D151F8EE2C73AF4B00E721C2 /* ViewExtension.swift */,
 				D151F8F72C73F19E00E721C2 /* DateExtension.swift */,
 				D1CEECB62C7AA4DD00C3605D /* AnyTransitionExtension.swift */,
+				D189CF572C90E73D00DC1A66 /* ViewModifiers.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -262,6 +280,7 @@
 		D1B389322C6BC8F5008E9306 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				D189CF542C8F865B00DC1A66 /* Surveys */,
 				D1B389332C6BC903008E9306 /* CircularProgressView.swift */,
 				D1B389352C6BCC3F008E9306 /* ProgressTreeCardView.swift */,
 				D1B389392C6BEA3A008E9306 /* TreeNodeView.swift */,
@@ -314,6 +333,7 @@
 				D1B3892D2C6AA748008E9306 /* MCEmojiPicker */,
 				D13889B62C8368DD004EB9F0 /* RevenueCat */,
 				D13889B82C8368DD004EB9F0 /* RevenueCatUI */,
+				D16723F72C8F5831001B8AB8 /* Mixpanel */,
 			);
 			productName = SkillTrees;
 			productReference = D11080E32C5D1C4100C5E225 /* SkillTrees.app */;
@@ -346,6 +366,7 @@
 			packageReferences = (
 				D1B3892C2C6AA748008E9306 /* XCRemoteSwiftPackageReference "MCEmojiPicker" */,
 				D13889B52C8368DD004EB9F0 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+				D16723F62C8F5831001B8AB8 /* XCRemoteSwiftPackageReference "mixpanel-swift" */,
 			);
 			productRefGroup = D11080E42C5D1C4100C5E225 /* Products */;
 			projectDirPath = "";
@@ -389,6 +410,7 @@
 				D11F9B672C822EC700ABB4A4 /* PurchasesDelegateHandler.swift in Sources */,
 				D151F8E92C71327E00E721C2 /* EdgeView.swift in Sources */,
 				D151F8FA2C73F3E100E721C2 /* CompleteProgressiveNodeView.swift in Sources */,
+				D189CF562C8F866A00DC1A66 /* ProductMarketFitSurveyView.swift in Sources */,
 				D1B389402C6C3BB2008E9306 /* ProgressTreeViewVM.swift in Sources */,
 				D11F9B5B2C7F901C00ABB4A4 /* CreatingTreesView.swift in Sources */,
 				D151F9022C7525E900E721C2 /* InsertNodePosition.swift in Sources */,
@@ -399,6 +421,7 @@
 				D1B3893C2C6C1A38008E9306 /* ContentViewVM.swift in Sources */,
 				D1B389382C6BE193008E9306 /* ProgressTreeView.swift in Sources */,
 				D1B389252C699B75008E9306 /* ProgressTree.swift in Sources */,
+				D189CF582C90E73D00DC1A66 /* ViewModifiers.swift in Sources */,
 				D11F9B652C822C9C00ABB4A4 /* RevenueCat.swift in Sources */,
 				D11F9B532C7E52E000ABB4A4 /* OnboardingView.swift in Sources */,
 				D1B389362C6BCC3F008E9306 /* ProgressTreeCardView.swift in Sources */,
@@ -407,6 +430,7 @@
 				D151F8FC2C7402A700E721C2 /* CompleteDefaultNodeView.swift in Sources */,
 				D1CEECB72C7AA4DD00C3605D /* AnyTransitionExtension.swift in Sources */,
 				D11F9B592C7F850200ABB4A4 /* PickTemplatesAndEmailView.swift in Sources */,
+				D16723FA2C8F6097001B8AB8 /* SurveySheetHandler.swift in Sources */,
 				D151F90D2C75F3B400E721C2 /* ListNodeInputView.swift in Sources */,
 				D1B389422C6C48AF008E9306 /* StringExtension.swift in Sources */,
 				D11F9B552C7E95EC00ABB4A4 /* OnboardingWelcomeView.swift in Sources */,
@@ -633,6 +657,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		D16723F62C8F5831001B8AB8 /* XCRemoteSwiftPackageReference "mixpanel-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mixpanel/mixpanel-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		D1B3892C2C6AA748008E9306 /* XCRemoteSwiftPackageReference "MCEmojiPicker" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/izyumkin/MCEmojiPicker";
@@ -653,6 +685,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D13889B52C8368DD004EB9F0 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
 			productName = RevenueCatUI;
+		};
+		D16723F72C8F5831001B8AB8 /* Mixpanel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D16723F62C8F5831001B8AB8 /* XCRemoteSwiftPackageReference "mixpanel-swift" */;
+			productName = Mixpanel;
 		};
 		D1B3892D2C6AA748008E9306 /* MCEmojiPicker */ = {
 			isa = XCSwiftPackageProductDependency;

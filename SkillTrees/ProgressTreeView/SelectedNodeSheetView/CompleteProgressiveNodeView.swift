@@ -11,6 +11,8 @@ import SwiftUI
 struct CompleteProgressiveNodeView: View {
     var node: TreeNode
 
+    @EnvironmentObject var surveySheetHandler: SurveySheetHandler
+
     @State private var unitInteger: Int
     @State private var unitDecimal: Double
 
@@ -54,10 +56,11 @@ struct CompleteProgressiveNodeView: View {
                         withAnimation {
                             node.progressMilestone()
                         }
+
+                        surveySheetHandler.runOnProgressMilestone()
                     })
-                    
                 }
-                
+
                 Text("Target is:  \(String(node.targetAmount)) \(node.unit)")
                     .font(.system(size: 12))
                     .foregroundStyle(AppColors.textGray)

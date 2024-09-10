@@ -26,7 +26,9 @@ class AppDateFormatter {
 
 struct ContentView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.scenePhase) var scenePhase
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject var surveySheetHandler: SurveySheetHandler
 
     @State private var viewModel: ViewModel
 
@@ -219,6 +221,14 @@ struct ContentView: View {
                             saveProgressTreeEdit: viewModel.saveProgressTreeEdit
                         )
                     })
+                    /// Each time the app becomes active this function runs
+                    .onChange(of: scenePhase, initial: true) { _, newPhase in
+                        if newPhase == .active {
+                            Task {
+                                await surveySheetHandler.runOnAppActive()
+                            }
+                        }
+                    }
                 }
 
             } else {
@@ -229,10 +239,6 @@ struct ContentView: View {
                 })
             }
         }
-        /// Each time the app becomes active this function runs
-//        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-//            settings.updateStreak()
-//        }
     }
 
     init(modelContext: ModelContext, showPaywall: @escaping () -> Void) {

@@ -9,6 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct CompleteRepeatingNodeView: View {
+    @EnvironmentObject var surveySheetHandler: SurveySheetHandler
     var node: TreeNode
 
     var body: some View {
@@ -22,7 +23,12 @@ struct CompleteRepeatingNodeView: View {
 
                     Spacer()
 
-                    DrawCheckmarkView(runOnFingerLifted: { withAnimation { node.progressMilestone() } })
+                    DrawCheckmarkView(runOnFingerLifted: {
+                        withAnimation { node.progressMilestone() }
+
+                        surveySheetHandler.runOnProgressMilestone()
+
+                    })
                 }
 
                 Divider()

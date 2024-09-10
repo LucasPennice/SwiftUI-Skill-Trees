@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import Mixpanel
 import SwiftData
 import SwiftUI
 
-enum TreeNodeType {
+enum TreeNodeType: String {
     case List
     case Default
     case Repeat
@@ -142,6 +143,19 @@ final class TreeNode {
 
     func progressMilestone() {
         let nodeType = getNodeType()
+
+        ///
+        /// Analytics
+        ///
+        Mixpanel.mainInstance().track(
+            event: "Progress Milestone",
+            properties: [
+                "Milestone Type": nodeType.rawValue,
+            ]
+        )
+        ///
+        ///
+        ///
 
         /// Record the completion event regardless of the node type
         completionHistory.append(ItemCompletionRecord(date: .now, unit: unit, amount: amount, treeNode: self))

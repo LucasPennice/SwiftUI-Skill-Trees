@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Mixpanel
 
 struct CreatingTreesView: View {
     var filteredTemplates: [TemplatePreview]
@@ -44,6 +45,8 @@ struct CreatingTreesView: View {
             if currentStep == 2 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                     withAnimation { moveToNextStep() }
+                    
+                    Mixpanel.mainInstance().track(event: "Onboarding - Complete Creating Trees")
                 }
             }
         }

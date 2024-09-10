@@ -1479,6 +1479,8 @@ struct ProgressTreeTemplates {
         }
     }
 
+    
+    
     var templates: [TemplatePreview] {
         return [
             TemplatePreview(id: "GENERAL_EXERCISE", name: "Exercise", emojiIcon: "🏋🏻‍♀️", color: .green),

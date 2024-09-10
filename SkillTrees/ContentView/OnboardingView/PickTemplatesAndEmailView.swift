@@ -5,6 +5,7 @@
 //  Created by Lucas Pennice on 28/08/2024.
 //
 
+import Mixpanel
 import RevenueCat
 import SwiftUI
 
@@ -27,8 +28,12 @@ struct PickTemplatesAndEmailView: View {
 
     func submit() {
         focusedField = false
+
         Purchases.shared.attribution.setAttributes(["$email": email])
+        Mixpanel.mainInstance().people.set(properties: ["$email": email])
         settings.userEmail = email
+
+        Mixpanel.mainInstance().track(event: "Onboarding - Complete Enter Email")
 
         moveToNextStep()
     }
@@ -127,6 +132,8 @@ struct PickTemplatesAndEmailView: View {
                     .scrollIndicators(.hidden)
 
                     Button(action: {
+                        Mixpanel.mainInstance().track(event: "Onboarding - Complete Pick Templates")
+
                         withAnimation {
                             progress = 1
                             hasPickedTemplates = true

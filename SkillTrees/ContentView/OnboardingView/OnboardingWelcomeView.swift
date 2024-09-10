@@ -5,6 +5,7 @@
 //  Created by Lucas Pennice on 27/08/2024.
 //
 
+import Mixpanel
 import SwiftUI
 
 struct OnboardingWelcomeView: View {
@@ -42,7 +43,12 @@ struct OnboardingWelcomeView: View {
                         .padding(.vertical, 15)
                         .opacity(0.7)
 
-                    Button(action: { moveToNextStep() }) {
+                    Button(action: {
+                        Mixpanel.mainInstance().track(event: "Onboarding - Complete Get Started")
+
+                        moveToNextStep()
+
+                    }) {
                         Text("Get Started")
                             .fontWeight(.bold)
                             .frame(minWidth: 0, maxWidth: 290)

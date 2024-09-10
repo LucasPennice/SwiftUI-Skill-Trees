@@ -9,6 +9,8 @@ import SwiftData
 import SwiftUI
 
 struct CompleteDefaultNodeView: View {
+    @EnvironmentObject var surveySheetHandler: SurveySheetHandler
+
     @State private var points: [CGPoint] = []
     @State private var showPath: Bool = false
 
@@ -17,7 +19,11 @@ struct CompleteDefaultNodeView: View {
     var body: some View {
         ZStack {
             DrawCheckmarkView(
-                runOnFingerLifted: { withAnimation { node.progressMilestone() }},
+                runOnFingerLifted: {
+                    surveySheetHandler.runOnProgressMilestone()
+
+                    withAnimation { node.progressMilestone() }
+                },
                 frameDimensions:
                 DrawCheckMarkViewDimensions(minWidth: 0, maxWidth: .infinity, height: 105)
             )

@@ -6,14 +6,16 @@
 //
 
 import Foundation
+import Mixpanel
 import RevenueCat
 
-class PurchasesDelegateHandler : NSObject, ObservableObject {
+class PurchasesDelegateHandler: NSObject, ObservableObject {
     static let shared = PurchasesDelegateHandler()
 }
 
-extension PurchasesDelegateHandler : PurchasesDelegate {
+extension PurchasesDelegateHandler: PurchasesDelegate {
     func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {
-            /// - handle any changes to the user's CustomerInfo
-        }
+        Mixpanel.mainInstance().identify(distinctId: customerInfo.originalAppUserId)
+        /// - handle any changes to the user's CustomerInfo
+    }
 }

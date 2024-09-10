@@ -5,6 +5,7 @@
 //  Created by Lucas Pennice on 02/08/2024.
 //
 
+import Mixpanel
 import RevenueCat
 import RevenueCatUI
 import SwiftData
@@ -15,7 +16,9 @@ struct SkillTreesApp: App {
     let container: ModelContainer
 
     @State var displayPaywall = false
+
     @StateObject var settings = Settings()
+    @StateObject var surveySheetHandler = SurveySheetHandler()
 
     func dismissPaywall() {
         displayPaywall = false
@@ -30,6 +33,7 @@ struct SkillTreesApp: App {
             ContentView(modelContext: container.mainContext, showPaywall: showPaywall)
                 .preferredColorScheme(.dark)
                 .environmentObject(settings)
+                .environmentObject(surveySheetHandler)
                 /// We display the paywall manually because it's a hard paywall and revenue cat does not let us present a paywall without a close button with this method
                 /// Handles paywall display after the user completes onboarding, doesn't run when settings.onboardingFinished updates so we manually update displayPaywall once the user is onboarded
                 .presentPaywallIfNeeded { customerInfo in
@@ -50,6 +54,8 @@ struct SkillTreesApp: App {
                     dismissPaywall()
                 }
                 .fullScreenCover(isPresented: $displayPaywall) { PaywallView(displayCloseButton: false) }
+                .sheet(isPresented: $surveySheetHandler.showingProductMarketFitSurvey, content: { ProductMarketFitSurveyView() })
+//                .sheet(isPresented: $surveySheetHandler.showingTrialCancelSurvey, content: { Text("Trial cancel survey") })
         }
         .modelContainer(for: ProgressTree.self)
     }
@@ -62,8 +68,11 @@ struct SkillTreesApp: App {
             fatalError("Failed to create ModelContainer for Progress Tree.")
         }
 
+        /// Mixpanel Configuration
+        Mixpanel.initialize(token: "5a141ce3c43980d8fab68b96e1256525", trackAutomaticEvents: true)
+
         /// Revenue Cat Configuration
-        Purchases.logLevel = .debug
+        Purchases.logLevel = .info
 
         Purchases.configure(with: Configuration.builder(withAPIKey: RevenueCatConstants.apiKey).with(storeKitVersion: .storeKit2).build())
 

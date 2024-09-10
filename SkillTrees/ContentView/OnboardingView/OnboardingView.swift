@@ -5,6 +5,7 @@
 //  Created by Lucas Pennice on 27/08/2024.
 //
 
+import Mixpanel
 import RevenueCatUI
 import SwiftData
 import SwiftUI
@@ -82,7 +83,10 @@ struct OnboardingView: View {
                 .clipped()
 
                 Button(action: {
+                    Mixpanel.mainInstance().track(event: "Onboarding - Completed Onboarding")
+
                     withAnimation { completeOnboarding() }
+
                 }) {
                     Text("Get my Plan")
                         .fontWeight(.bold)

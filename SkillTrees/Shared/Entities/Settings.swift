@@ -17,6 +17,7 @@ class Settings: ObservableObject {
     @AppStorage("lastLogInDateString") var lastLogInDateString: String = ""
     /// We have a variable instead of a derived variable because the content transition doesn't work otherwise
     @AppStorage("streakDays") var streakDays: Int = 3
+    
 
     var appFirstOpenDate: Date {
         return AppDateFormatter.shared.formatter.date(from: appFirstOpenDateString) ?? .now

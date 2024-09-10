@@ -50,7 +50,6 @@ struct DrawCheckmarkView: View {
                 .font(.system(size: 30))
                 .foregroundColor(AppColors.midGray)
                 /// This frames width gives the impression of "drawing" the checkmark when it's width is less than 30
-
                 .keyframeAnimator(
                     initialValue: CGFloat.zero,
                     content: { view, value in
@@ -59,7 +58,7 @@ struct DrawCheckmarkView: View {
 
                     },
                     keyframes: { _ in
-                        CubicKeyframe(0.0, duration: 1.0)
+                        CubicKeyframe(1.0, duration: 1.0)
                         LinearKeyframe(3.0, duration: 0.3)
                         CubicKeyframe(14.0, duration: 0.7)
                         /// Pause
@@ -67,12 +66,11 @@ struct DrawCheckmarkView: View {
                         /// Resume
                         CubicKeyframe(30.0, duration: 0.8)
                         /// Pause
-                        LinearKeyframe(0.0, duration: 0.5)
+                        LinearKeyframe(1.0, duration: 0.5)
                         /// Resume
-                        LinearKeyframe(0.0, duration: 1.3)
+                        LinearKeyframe(1.0, duration: 1.3)
 
                     })
-
                 .clipped()
                 .frame(width: 30, height: 30, alignment: .leading)
                 .allowsHitTesting(false)
