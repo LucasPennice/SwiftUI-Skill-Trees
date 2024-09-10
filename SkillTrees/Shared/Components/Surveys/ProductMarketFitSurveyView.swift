@@ -26,10 +26,6 @@ struct ProductMarketFitSurveyView: View {
     @State private var answer4: String = ""
     @State private var answer5: String = ""
 
-    func increaseStep() {
-        currentStep = currentStep + 1
-    }
-
     func closeSheet() {
         completeProductMarketFitSurvey(answer1, answer2, answer3, answer4, answer5)
 
@@ -98,7 +94,7 @@ struct ProductMarketFitSurveyView: View {
                 Spacer()
 
                 Button(action: {
-                    withAnimation { increaseStep() }
+                    withAnimation { currentStep = 1 }
 
                 }) {
                     Text("Continue")
@@ -111,7 +107,7 @@ struct ProductMarketFitSurveyView: View {
                 .buttonStyle(.borderedProminent)
 
                 Button(action: {
-                    withAnimation { increaseStep() }
+                    withAnimation { currentStep = 1 }
 
                 }) {
                     Text("I don't care")
@@ -142,8 +138,7 @@ struct ProductMarketFitSurveyView: View {
                 Spacer()
 
                 Button(action: {
-                    withAnimation { increaseStep() }
-
+                    withAnimation { currentStep = 2 }
                 }) {
                     Text("Next")
                         .fontWeight(.bold)
@@ -155,8 +150,7 @@ struct ProductMarketFitSurveyView: View {
                 .disabled(answer2.isEmpty)
 
                 Button(action: {
-                    withAnimation { increaseStep() }
-
+                    withAnimation { currentStep = 2 }
                 }) {
                     Text("No one")
                         .frame(minWidth: 0, maxWidth: .infinity)
@@ -186,8 +180,7 @@ struct ProductMarketFitSurveyView: View {
                 Spacer()
 
                 Button(action: {
-                    withAnimation { increaseStep() }
-
+                    withAnimation { currentStep = 3 }
                 }) {
                     Text("Almost Done")
                         .fontWeight(.bold)
@@ -199,8 +192,7 @@ struct ProductMarketFitSurveyView: View {
                 .disabled(answer3.isEmpty)
 
                 Button(action: {
-                    withAnimation { increaseStep() }
-
+                    withAnimation { currentStep = 3 }
                 }) {
                     Text("I don't get anything from it")
                         .frame(minWidth: 0, maxWidth: .infinity)
@@ -230,8 +222,7 @@ struct ProductMarketFitSurveyView: View {
                 Spacer()
 
                 Button(action: {
-                    withAnimation { increaseStep() }
-
+                    withAnimation { currentStep = 4 }
                 }) {
                     Text("One Last Thing")
                         .fontWeight(.bold)
@@ -243,8 +234,7 @@ struct ProductMarketFitSurveyView: View {
                 .buttonStyle(.borderedProminent)
 
                 Button(action: {
-                    withAnimation { increaseStep() }
-
+                    withAnimation { currentStep = 4 }
                 }) {
                     Text("I don't want it to improve")
                         .frame(minWidth: 0, maxWidth: .infinity)
@@ -274,8 +264,7 @@ struct ProductMarketFitSurveyView: View {
                 Spacer()
 
                 Button(action: {
-                    withAnimation { increaseStep() }
-
+                    withAnimation { currentStep = 5 }
                 }) {
                     Text("That's why")
                         .fontWeight(.bold)

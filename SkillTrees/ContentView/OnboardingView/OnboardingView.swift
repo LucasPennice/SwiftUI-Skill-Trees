@@ -35,21 +35,15 @@ struct OnboardingView: View {
         return templates.templates.filter({ template in { selectedKeys.contains(where: { key in key == template.id }) }() })
     }
 
-    func moveToNextStep() {
-        withAnimation {
-            currentStep = currentStep + 1
-        }
-    }
-
     var body: some View {
         TabView(selection: $currentStep) {
-            OnboardingWelcomeView(moveToNextStep: moveToNextStep)
+            OnboardingWelcomeView(moveToNextStep: { withAnimation { currentStep = 1 }})
                 .tag(0)
 
-            PickTemplatesAndEmailView(moveToNextStep: moveToNextStep, selected: $selectedKeys)
+            PickTemplatesAndEmailView(moveToNextStep: { withAnimation { currentStep = 2 }}, selected: $selectedKeys)
                 .tag(1)
 
-            CreatingTreesView(filteredTemplates: filteredTemplates, currentStep: currentStep, moveToNextStep: moveToNextStep)
+            CreatingTreesView(filteredTemplates: filteredTemplates, currentStep: currentStep, moveToNextStep: { withAnimation { currentStep = 3 }})
                 .tag(2)
 
             VStack(alignment: .leading) {
@@ -99,9 +93,7 @@ struct OnboardingView: View {
             .tag(3)
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-        .onAppear {
-            UIScrollView.appearance().isScrollEnabled = false
-        }
+        .ignoresSafeArea()
     }
 }
 

@@ -169,18 +169,6 @@ struct PickTemplatesAndEmailView: View {
                             .disableAutocorrection(true)
                             .autocapitalization(.none)
                             .focused($focusedField)
-                            .submitLabel(.return)
-                            .onSubmit {
-                                focusedField = false
-
-                                if allowToContinue == true {
-                                    return DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                        withAnimation {
-                                            submit()
-                                        }
-                                    }
-                                }
-                            }
 
                         Button(action: { withAnimation { agreeToGetEmails = true }}) {
                             ZStack(alignment: .center) {
