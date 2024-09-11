@@ -67,6 +67,7 @@ extension NewMilestoneSheetView {
                 completionHistory: []
             )
 
+            newNode.updateColor(color)
             newNode.orderKey = insertNodePosition.orderKey
             newNode.targetAmount = Double(unitInteger) + unitDecimal
             newNode.repeatTimesToComplete = repeatTimesToComplete
