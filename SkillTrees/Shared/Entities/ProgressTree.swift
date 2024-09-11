@@ -104,9 +104,6 @@ final class ProgressTree {
         /// Assure that root node is the first node
         treeNodesCopy.sort(by: { n1, _ in n1.parent == nil })
 
-        /// Sort nodes by layers, smaller layers first
-        treeNodesCopy.sort(by: { $0.layer < $1.layer })
-
         setNodesLayer(node: treeNodesCopy.first(where: { $0.parent == nil })!)
 
         initialCoordinates(node: treeNodesCopy.first(where: { $0.parent == nil })!)

@@ -12,15 +12,15 @@ import UIKit
 
 extension ProgressTreeView {
     @Observable
-    class ViewModel {
+    final class ViewModel {
         var modelContext: ModelContext
         var scrollViewProxy: ScrollViewProxy?
         ///
         /// Data State
         ///
-        var progressTree = ProgressTree(name: "Loading", emojiIcon: "⏳", color: .accentColor)
+        @MainActor var progressTree = ProgressTree(name: "Loading", emojiIcon: "⏳", color: .accentColor)
         private var progressTreeId: PersistentIdentifier
-        var insertNodePositions: [InsertNodePosition] = []
+        @MainActor var insertNodePositions: [InsertNodePosition] = []
         ///
         /// New node related
         /// Only needed because we call the add node function once the new node sheet closes, loosing it's internal state
@@ -30,17 +30,18 @@ extension ProgressTreeView {
         ///
         /// UI State
         ///
-        var selectedNode: TreeNode?
-        var canvasSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        private(set) var showingInsertNodePositions = false
-        var selectedInsertNodePosition: InsertNodePosition?
-        private(set) var showingConnectingMode = false
-        let lowOpacity = 0.4
+        @MainActor var selectedNode: TreeNode?
+        @MainActor var canvasSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        @MainActor private(set) var showingInsertNodePositions = false
+        @MainActor var selectedInsertNodePosition: InsertNodePosition?
+        @MainActor private(set) var showingConnectingMode = false
         ///
         /// Connecting milestone state
         ///
-        var connectingMilestoneChild: TreeNode?
-        var connectingMilestoneParent: TreeNode?
+        @MainActor var connectingMilestoneChild: TreeNode?
+        @MainActor var connectingMilestoneParent: TreeNode?
+
+        let lowOpacity = 0.4
 
         init(modelContext: ModelContext, progressTreeId: PersistentIdentifier) {
             self.modelContext = modelContext
@@ -48,6 +49,7 @@ extension ProgressTreeView {
             self.progressTreeId = progressTreeId
         }
 
+        @MainActor
         func fetchData() {
             do {
                 let fetchProgressTreePredicate = #Predicate<ProgressTree> { tree in tree.persistentModelID == progressTreeId }
@@ -58,15 +60,14 @@ extension ProgressTreeView {
 
                 let updatedCanvasSize = progressTree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
-                withAnimation {
-                    canvasSize = updatedCanvasSize
-                }
+                withAnimation { canvasSize = updatedCanvasSize }
 
             } catch {
                 print("Fetch failed")
             }
         }
 
+        @MainActor
         func deleteNode(_ node: TreeNode) {
             if node.parent == nil { return }
 
@@ -83,6 +84,7 @@ extension ProgressTreeView {
             fetchData()
         }
 
+        @MainActor
         func getLabelVerticalOffset(text: String) -> Double {
             let size = text.sizeOfString()
             let verticalPadding = 7.0
@@ -111,20 +113,24 @@ extension ProgressTreeView {
             return result.sizeOfString().height / 2 + verticalPadding
         }
 
+        @MainActor
         func showInsertNodePositions() {
             showingInsertNodePositions = true
 
             insertNodePositions = InsertNodePosition.getTreeInsertPositions(treeNodes: progressTree.treeNodes)
         }
 
+        @MainActor
         func tapInsertNodePosition(_ insertNodePosition: InsertNodePosition) {
             selectedInsertNodePosition = insertNodePosition
         }
 
+        @MainActor
         func hideInsertNodePositions() {
             showingInsertNodePositions = false
         }
 
+        @MainActor
         func updateNewNodeTempValues(newNode: TreeNode, parentNodeId: PersistentIdentifier) {
             tempNewNode = newNode
             tempNewNodeParentId = parentNodeId
@@ -132,6 +138,7 @@ extension ProgressTreeView {
             selectedInsertNodePosition = nil
         }
 
+        @MainActor
         func addTreeNode() {
             if let newNode = tempNewNode {
                 if let parentNodeId = tempNewNodeParentId {
@@ -150,12 +157,15 @@ extension ProgressTreeView {
                         tempNewNode = nil
                         tempNewNodeParentId = nil
 
+                        try? modelContext.save()
+
                         fetchData()
                     }
                 }
             }
         }
 
+        @MainActor
         func showConnectingMode(_ selectedNode: TreeNode) {
             connectingMilestoneChild = selectedNode
             showingConnectingMode = true
@@ -164,6 +174,7 @@ extension ProgressTreeView {
         ///
         /// Node Related Functions
         ///
+        @MainActor
         func tapNode(_ node: TreeNode) {
             if showingConnectingMode && connectingMilestoneChild != nil {
                 if node.layer >= connectingMilestoneChild!.layer
@@ -176,6 +187,7 @@ extension ProgressTreeView {
             if node.parent != nil { return selectNode(node) }
         }
 
+        @MainActor
         func nodeOpacity(_ node: TreeNode) -> Double {
             if showingInsertNodePositions == true { return 0.7 }
 
@@ -192,6 +204,7 @@ extension ProgressTreeView {
             return 1
         }
 
+        @MainActor
         func nodeScale(_ node: TreeNode) -> Double {
             if showingConnectingMode == true {
                 if node.persistentModelID == connectingMilestoneChild!.persistentModelID
@@ -205,6 +218,7 @@ extension ProgressTreeView {
             return 1
         }
 
+        @MainActor
         func selectNode(_ node: TreeNode) {
             if selectedNode != nil && selectedNode!.persistentModelID == node.persistentModelID {
                 selectedNode = nil
@@ -213,6 +227,7 @@ extension ProgressTreeView {
             }
         }
 
+        @MainActor
         func selectConnectMilestoneParent(_ node: TreeNode) {
             if node.persistentModelID == connectingMilestoneChild?.persistentModelID { return }
 
@@ -223,6 +238,7 @@ extension ProgressTreeView {
         /// Opacity, Scaling Related Functions
         ///
 
+        @MainActor
         func labelOpacity(_ node: TreeNode) -> Double {
             if showingInsertNodePositions == true { return .zero }
 
@@ -238,6 +254,7 @@ extension ProgressTreeView {
             return 1
         }
 
+        @MainActor
         func edgeOpacity(_ node: TreeNode) -> Double {
             if showingInsertNodePositions == true { return lowOpacity }
 
@@ -249,12 +266,14 @@ extension ProgressTreeView {
         ///
         /// Top Leading Button Related Functions
         ///
+        @MainActor
         func cancelConnectAdditionalMilestone() {
             showingConnectingMode = false
             connectingMilestoneChild = nil
             connectingMilestoneParent = nil
         }
 
+        @MainActor
         func topLeadingButtonDimensions() -> CGSize {
             if showingInsertNodePositions { return CGSize(width: 80, height: 30) }
 
@@ -266,6 +285,7 @@ extension ProgressTreeView {
         ///
         /// Top Trailing Button Related Functions
         ///
+        @MainActor
         func topTrailingButtonDimensions() -> CGSize {
             if showingInsertNodePositions { return CGSize(width: 190, height: 50) }
 
@@ -274,6 +294,7 @@ extension ProgressTreeView {
             return CGSize(width: 30, height: 30)
         }
 
+        @MainActor
         func disableTopTrailingButton() -> Bool {
             if showingInsertNodePositions { return true }
 
@@ -282,6 +303,7 @@ extension ProgressTreeView {
             return false
         }
 
+        @MainActor
         func topTrailingButtonOpacity() -> Double {
             if selectedNode != nil { return 0 }
 
@@ -292,6 +314,7 @@ extension ProgressTreeView {
             return 1
         }
 
+        @MainActor
         func connectAdditionalMilestone() {
             if let node = connectingMilestoneChild {
                 if let additionalParent = connectingMilestoneParent {
