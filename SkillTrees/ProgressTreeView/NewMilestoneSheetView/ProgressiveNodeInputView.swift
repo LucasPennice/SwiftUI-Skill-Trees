@@ -53,6 +53,7 @@ struct ProgressiveNodeInputView: View {
                 .background(AppColors.midGray)
                 .cornerRadius(10)
                 .padding(.bottom, 5)
+                .tappableTextField()
         }
         .transition(.blurReplace)
     }

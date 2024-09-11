@@ -117,6 +117,7 @@ struct AddNewProgressTreeView: View {
                 .background(AppColors.midGray)
                 .cornerRadius(10)
                 .padding(.bottom, 5)
+                .tappableTextField()
 
             ColorPicker("Color", selection: $treeColor, supportsOpacity: false)
                 .padding()

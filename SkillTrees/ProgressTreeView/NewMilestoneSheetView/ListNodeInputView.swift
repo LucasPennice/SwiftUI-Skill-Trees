@@ -69,6 +69,7 @@ struct ListNodeInputView: View {
                     .padding(.leading)
                     .submitLabel(.done)
                     .onSubmit { runOnSubmit() }
+                    .tappableTextField()
 
                 Button(action: { runOnSubmit() }) {
                     Image(systemName: "plus.circle.fill")

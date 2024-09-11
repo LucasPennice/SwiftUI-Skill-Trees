@@ -38,6 +38,7 @@ struct NewMilestoneSheetView: View {
                             .background(AppColors.midGray)
                             .cornerRadius(10)
                             .padding(.bottom, 5)
+                            .tappableTextField()
                     }
 
                     ColorPicker("Color", selection: $viewModel.color, supportsOpacity: false)
