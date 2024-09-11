@@ -26,7 +26,7 @@ struct ProgressTreeView: View {
     #warning("no anda el scroll on tap")
 
     var body: some View {
-        ScrollViewReader { _ in
+        ScrollViewReader { proxy in
             ScrollView([.horizontal, .vertical], showsIndicators: false) {
                 ZStack {
                     ///
@@ -143,6 +143,7 @@ struct ProgressTreeView: View {
                             /// Node Position State, updates on drag
                             ///
                             .position(CGPoint(x: node.coordinates.x + positionDelta.width, y: node.coordinates.y + positionDelta.height))
+                            .if(node.parent == nil) { $0.id("root") }
                     }
 
                     ///
@@ -170,6 +171,7 @@ struct ProgressTreeView: View {
                 .defaultScrollAnchor(.center)
                 .onTapGesture { if viewModel.selectedNode != nil { withAnimation { viewModel.selectedNode = nil }} }
             }
+            .onAppear { viewModel.scrollViewProxy = proxy }
             .defaultScrollAnchor(.center)
         }
         ///
@@ -257,8 +259,15 @@ struct ProgressTreeView: View {
                    treeColor: viewModel.progressTree.color,
                    addTreeNode: viewModel.updateNewNodeTempValues
                ) })
-        /// If the tree doesn't have any nodes we automatically open the insert node mode
-        .onAppear { if viewModel.progressTree.treeNodes.count == 1 { return withAnimation { viewModel.showInsertNodePositions() }}}
+        .onAppear {
+            viewModel.fetchData()
+
+            #warning("doesn't work all that well, fix on ios18")
+            if let proxy = viewModel.scrollViewProxy { proxy.scrollTo("root", anchor: .center) }
+
+            /// If the tree doesn't have any nodes we automatically open the insert node mode
+            if viewModel.progressTree.treeNodes.count == 1 { return withAnimation { viewModel.showInsertNodePositions() }}
+        }
     }
 
     init(modelContext: ModelContext, progressTreeId: PersistentIdentifier) {

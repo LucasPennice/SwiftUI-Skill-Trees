@@ -14,22 +14,31 @@ extension ProgressTreeView {
     @Observable
     class ViewModel {
         var modelContext: ModelContext
+        var scrollViewProxy: ScrollViewProxy?
+        ///
         /// Data State
+        ///
         var progressTree = ProgressTree(name: "Loading", emojiIcon: "⏳", color: .accentColor)
         private var progressTreeId: PersistentIdentifier
         var insertNodePositions: [InsertNodePosition] = []
+        ///
         /// New node related
         /// Only needed because we call the add node function once the new node sheet closes, loosing it's internal state
+        ///
         var tempNewNode: TreeNode?
         var tempNewNodeParentId: PersistentIdentifier?
+        ///
         /// UI State
+        ///
         var selectedNode: TreeNode?
         var canvasSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         private(set) var showingInsertNodePositions = false
         var selectedInsertNodePosition: InsertNodePosition?
         private(set) var showingConnectingMode = false
         let lowOpacity = 0.4
+        ///
         /// Connecting milestone state
+        ///
         var connectingMilestoneChild: TreeNode?
         var connectingMilestoneParent: TreeNode?
 
@@ -38,7 +47,8 @@ extension ProgressTreeView {
 
             self.progressTreeId = progressTreeId
 
-            fetchData()
+            /// DO NOT fetch the data here. Do it on .onAppear
+            /// It crashes otherwise
         }
 
         func fetchData() {
@@ -296,8 +306,5 @@ extension ProgressTreeView {
                 }
             }
         }
-        ///
-        ///
-        ///
     }
 }
