@@ -253,7 +253,9 @@ struct ProgressTreeView: View {
             showConnectingMode: viewModel.showConnectingMode
         ) })
         .sheet(item: $viewModel.selectedInsertNodePosition,
-               onDismiss: { withAnimation { viewModel.addTreeNode() } },
+               onDismiss: {
+                   withAnimation { viewModel.addTreeNode() }
+               },
                content: { NewMilestoneSheetView(
                    insertNodePosition: $0,
                    treeColor: viewModel.progressTree.color,
@@ -263,7 +265,7 @@ struct ProgressTreeView: View {
             viewModel.fetchData()
 
             #warning("doesn't work all that well, fix on ios18")
-            if let proxy = viewModel.scrollViewProxy { proxy.scrollTo("root", anchor: .center) }
+            if let proxy = viewModel.scrollViewProxy { proxy.scrollTo("root") }
 
             /// If the tree doesn't have any nodes we automatically open the insert node mode
             if viewModel.progressTree.treeNodes.count == 1 { return withAnimation { viewModel.showInsertNodePositions() }}

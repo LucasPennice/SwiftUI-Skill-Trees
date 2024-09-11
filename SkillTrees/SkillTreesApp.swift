@@ -61,7 +61,7 @@ struct SkillTreesApp: App {
                     TrialCancelSurveyView(completeTrialCancelSurvey: surveySheetHandler.completeTrialCancelSurvey)
                 })
         }
-        .modelContainer(for: ProgressTree.self)
+        .modelContainer(for: ProgressTree.self, isAutosaveEnabled: true)
     }
 
     init() {

@@ -46,9 +46,6 @@ extension ProgressTreeView {
             self.modelContext = modelContext
 
             self.progressTreeId = progressTreeId
-
-            /// DO NOT fetch the data here. Do it on .onAppear
-            /// It crashes otherwise
         }
 
         func fetchData() {

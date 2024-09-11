@@ -225,7 +225,8 @@ final class ProgressTree {
             /// Initialize the contour dictionary
             treeNodes.forEach { contour[$0.layer] = [] }
 
-            recursiveBuildContour(treeNodes[0])
+            /// Necessary because swift data does not respect the order of the nodes...
+            recursiveBuildContour(treeNodes.first(where: { $0.parent == nil })!)
 
             func recursiveBuildContour(_ node: TreeNode) {
                 /// For the root node the only node in the contour is itself

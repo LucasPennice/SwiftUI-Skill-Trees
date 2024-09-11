@@ -166,7 +166,7 @@ final class TreeNode {
 
         if nodeType == .Progressive && amount >= targetAmount { return complete = true }
 
-        if nodeType == .Repeat && completionHistory.count > repeatTimesToComplete { return complete = true }
+        if nodeType == .Repeat && completionHistory.count >= repeatTimesToComplete { return complete = true }
     }
 
     func calculateProgress() -> Double {
