@@ -24,8 +24,6 @@ struct PickTemplatesAndEmailView: View {
 
     @Binding var selected: [String]
 
-    let templates = ProgressTreeTemplates()
-
     func submit() {
         focusedField = false
 
@@ -90,7 +88,7 @@ struct PickTemplatesAndEmailView: View {
                         .fontWeight(.medium)
                         .opacity(0.7)
 
-                    List(templates.templates, id: \.self.id) { template in
+                    List(ProgressTreeTemplateHandler.templates, id: \.self.id) { template in
                         Button(action: {
                             if selected.contains(where: { $0 == template.id }) { return withAnimation { selected = selected.filter({ $0 != template.id }) }}
 

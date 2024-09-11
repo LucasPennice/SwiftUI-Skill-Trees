@@ -19,20 +19,24 @@ struct OnboardingView: View {
 
     @Query var trees: [ProgressTree]
 
-    let templates = ProgressTreeTemplates()
-
     @State private var currentStep = 0 {
         didSet {
-            if currentStep == 3 {
-                selectedKeys.forEach { key in
-                    ProgressTreeTemplates.addTemplate(key, modelContext: modelContext)
+            Task {
+                do {
+                    if currentStep == 3 {
+                        let templateHandler = ProgressTreeTemplateHandler(modelContainer: modelContext.container)
+
+                        try await templateHandler.backgroundInsertAddTemplate(selectedKeys)
+                    }
+                } catch {
+                    print(error)
                 }
             }
         }
     }
 
     var filteredTemplates: [TemplatePreview] {
-        return templates.templates.filter({ template in { selectedKeys.contains(where: { key in key == template.id }) }() })
+        return ProgressTreeTemplateHandler.templates.filter({ template in { selectedKeys.contains(where: { key in key == template.id }) }() })
     }
 
     var body: some View {

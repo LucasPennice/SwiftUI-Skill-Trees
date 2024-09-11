@@ -11,8 +11,6 @@ import SwiftUI
 struct AddNewProgressTreeView: View {
     @Environment(\.dismiss) var dismiss
 
-    var templates: ProgressTreeTemplates = ProgressTreeTemplates()
-
     var addProgressTree: (ProgressTree) -> Void
     var addTemplate: (String) -> Void
 
@@ -59,8 +57,8 @@ struct AddNewProgressTreeView: View {
                 .font(.system(size: 17))
 
             ScrollView(.horizontal) {
-                HStack(alignment:.top,spacing: 30) {
-                    ForEach(templates.templates, id: \.self.name) { template in
+                HStack(alignment: .top, spacing: 30) {
+                    ForEach(ProgressTreeTemplateHandler.templates, id: \.self.name) { template in
                         VStack(alignment: .center, spacing: 5) {
                             Button(action: {
                                 addTemplate(template.id)

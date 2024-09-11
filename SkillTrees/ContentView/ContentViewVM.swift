@@ -57,9 +57,17 @@ extension ContentView {
         }
 
         func addTemplateTree(_ templateId: String) {
-            ProgressTreeTemplates.addTemplate(templateId, modelContext: modelContext)
+            let templateHandler = ProgressTreeTemplateHandler(modelContainer: modelContext.container)
 
-            fetchData()
+            Task {
+                do {
+                    try await templateHandler.backgroundInsertAddTemplate([templateId])
+
+                    fetchData()
+                } catch {
+                    print(error)
+                }
+            }
         }
 
         func saveProgressTreeEdit(_ tree: ProgressTree) {
