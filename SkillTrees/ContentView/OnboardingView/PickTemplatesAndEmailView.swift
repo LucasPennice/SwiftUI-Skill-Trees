@@ -109,12 +109,12 @@ struct PickTemplatesAndEmailView: View {
                                 Spacer()
 
                                 ZStack {
-                                    Circle()
+                                    RoundedRectangle(cornerSize: CGSize(width: 4, height: 4))
                                         .fill(AppColors.midGray)
                                         .frame(width: 21, height: 21)
 
                                     if selected.contains(where: { $0 == template.id }) {
-                                        Circle()
+                                        RoundedRectangle(cornerSize: CGSize(width: 4, height: 4))
                                             .fill(Color.accentColor)
                                             .frame(width: 15, height: 15)
                                             .transition(.blurReplace)

@@ -57,7 +57,9 @@ struct SkillTreesApp: App {
                 .sheet(isPresented: $surveySheetHandler.showingProductMarketFitSurvey, content: {
                     ProductMarketFitSurveyView(completeProductMarketFitSurvey: surveySheetHandler.completeProductMarketFitSurvey)
                 })
-//                .sheet(isPresented: $surveySheetHandler.showingTrialCancelSurvey, content: { Text("Trial cancel survey") })
+                .sheet(isPresented: $surveySheetHandler.showingTrialCancelSurvey, content: {
+                    TrialCancelSurveyView(completeTrialCancelSurvey: surveySheetHandler.completeTrialCancelSurvey)
+                })
         }
         .modelContainer(for: ProgressTree.self)
     }

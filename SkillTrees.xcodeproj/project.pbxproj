@@ -43,6 +43,7 @@
 		D16723FA2C8F6097001B8AB8 /* SurveySheetHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16723F92C8F6097001B8AB8 /* SurveySheetHandler.swift */; };
 		D189CF562C8F866A00DC1A66 /* ProductMarketFitSurveyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D189CF552C8F866A00DC1A66 /* ProductMarketFitSurveyView.swift */; };
 		D189CF582C90E73D00DC1A66 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D189CF572C90E73D00DC1A66 /* ViewModifiers.swift */; };
+		D189CF5A2C91BE1600DC1A66 /* TrialCancelSurveyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D189CF592C91BE1600DC1A66 /* TrialCancelSurveyView.swift */; };
 		D19AB9C02C5D230600399662 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AB9BF2C5D230600399662 /* Colors.swift */; };
 		D19AB9C22C5D2E9600399662 /* DialoguePopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AB9C12C5D2E9600399662 /* DialoguePopUpView.swift */; };
 		D19AB9C62C5D882000399662 /* AddNewProgressTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19AB9C52C5D882000399662 /* AddNewProgressTreeView.swift */; };
@@ -99,6 +100,7 @@
 		D16723F92C8F6097001B8AB8 /* SurveySheetHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySheetHandler.swift; sourceTree = "<group>"; };
 		D189CF552C8F866A00DC1A66 /* ProductMarketFitSurveyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductMarketFitSurveyView.swift; sourceTree = "<group>"; };
 		D189CF572C90E73D00DC1A66 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
+		D189CF592C91BE1600DC1A66 /* TrialCancelSurveyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrialCancelSurveyView.swift; sourceTree = "<group>"; };
 		D19AB9BF2C5D230600399662 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		D19AB9C12C5D2E9600399662 /* DialoguePopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialoguePopUpView.swift; sourceTree = "<group>"; };
 		D19AB9C52C5D882000399662 /* AddNewProgressTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewProgressTreeView.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 			isa = PBXGroup;
 			children = (
 				D189CF552C8F866A00DC1A66 /* ProductMarketFitSurveyView.swift */,
+				D189CF592C91BE1600DC1A66 /* TrialCancelSurveyView.swift */,
 			);
 			path = Surveys;
 			sourceTree = "<group>";
@@ -421,6 +424,7 @@
 				D1B3893C2C6C1A38008E9306 /* ContentViewVM.swift in Sources */,
 				D1B389382C6BE193008E9306 /* ProgressTreeView.swift in Sources */,
 				D1B389252C699B75008E9306 /* ProgressTree.swift in Sources */,
+				D189CF5A2C91BE1600DC1A66 /* TrialCancelSurveyView.swift in Sources */,
 				D189CF582C90E73D00DC1A66 /* ViewModifiers.swift in Sources */,
 				D11F9B652C822C9C00ABB4A4 /* RevenueCat.swift in Sources */,
 				D11F9B532C7E52E000ABB4A4 /* OnboardingView.swift in Sources */,
@@ -578,6 +582,7 @@
 				DEVELOPMENT_TEAM = 4M2Z49546J;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Skill Trees Pro";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -607,6 +612,7 @@
 				DEVELOPMENT_TEAM = 4M2Z49546J;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Skill Trees Pro";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

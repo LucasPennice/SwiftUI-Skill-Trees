@@ -49,16 +49,15 @@ class SurveySheetHandler: ObservableObject {
         )
     }
 
-    func closeTrialCancelSurvey() {
+    func completeTrialCancelSurvey(_ cancelReasons: [String], _ otherReason: String) async {
         showingTrialCancelSurvey = false
         shownTrialCancelSurvey = true
-    }
-
-    func completeTrialCancelSurvey(_ cancelReasons: [String]) async throws {
+        
         Mixpanel.mainInstance().track(
             event: "Complete Trial Cancel Survey",
             properties: [
                 "Reasons": cancelReasons,
+                "Other": otherReason,
             ]
         )
 
