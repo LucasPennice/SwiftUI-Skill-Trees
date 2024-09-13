@@ -264,9 +264,6 @@ struct ProgressTreeView: View {
         .onAppear {
             viewModel.fetchData(skipUpdateCoordinates: true)
 
-            #warning("doesn't work all that well, fix on ios18")
-            if let proxy = viewModel.scrollViewProxy { proxy.scrollTo("root") }
-
             /// If the tree doesn't have any nodes we automatically open the insert node mode
             if viewModel.progressTree.treeNodes.count == 1 { return withAnimation { viewModel.showInsertNodePositions() }}
         }

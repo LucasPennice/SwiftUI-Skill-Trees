@@ -58,16 +58,35 @@ extension ProgressTreeView {
 
                 progressTree = try modelContext.fetch(fetchProgressTreeDescriptor)[0]
 
-                if skipUpdateCoordinates != true {
+                /// if it's the first time a user open's a progress tree we override the skipUpdatesPreference
+                let overrideSkipUpdates = progressTree.treeNodes.count == 1
+
+                if overrideSkipUpdates == true || skipUpdateCoordinates != true {
                     let updatedCanvasSize = progressTree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
-                    withAnimation { canvasSize = updatedCanvasSize }
+                    withAnimation {
+                        canvasSize = updatedCanvasSize
+                    } completion: {
+                        if overrideSkipUpdates {
+                            if let proxy = self.scrollViewProxy {
+                                withAnimation {
+                                    proxy.scrollTo("root", anchor: .center)
+                                }
+                            }
+                        }
+                    }
                 } else {
                     withAnimation {
                         canvasSize = CanvasDimensions.getCanvasDimensions(
                             screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height),
                             treeNodes: progressTree.treeNodes
                         )
+                    } completion: {
+                        if let proxy = self.scrollViewProxy {
+                            withAnimation {
+                                proxy.scrollTo("root", anchor: .center)
+                            }
+                        }
                     }
                 }
 
@@ -193,7 +212,19 @@ extension ProgressTreeView {
                 return selectConnectMilestoneParent(node)
             }
 
-            if node.parent != nil { return selectNode(node) }
+            if node.parent != nil {
+//                if let proxy = scrollViewProxy {
+//                    withAnimation {
+//                        proxy.scrollTo(
+//                            "root",
+//                            anchor: UnitPoint(
+//                                x: 0.5,
+//                                y: (canvasSize.height - 100) / canvasSize.height
+//                            ))
+//                    }
+//                }
+                return selectNode(node)
+            }
         }
 
         @MainActor
