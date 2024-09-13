@@ -50,7 +50,7 @@ extension ProgressTreeView {
         }
 
         @MainActor
-        func fetchData() {
+        func fetchData(skipUpdateCoordinates: Bool? = nil) {
             do {
                 let fetchProgressTreePredicate = #Predicate<ProgressTree> { tree in tree.persistentModelID == progressTreeId }
 
@@ -58,9 +58,18 @@ extension ProgressTreeView {
 
                 progressTree = try modelContext.fetch(fetchProgressTreeDescriptor)[0]
 
-                let updatedCanvasSize = progressTree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+                if skipUpdateCoordinates != true {
+                    let updatedCanvasSize = progressTree.updateNodeCoordinates(screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
-                withAnimation { canvasSize = updatedCanvasSize }
+                    withAnimation { canvasSize = updatedCanvasSize }
+                } else {
+                    withAnimation {
+                        canvasSize = CanvasDimensions.getCanvasDimensions(
+                            screenDimension: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height),
+                            treeNodes: progressTree.treeNodes
+                        )
+                    }
+                }
 
             } catch {
                 print("Fetch failed")
@@ -159,6 +168,10 @@ extension ProgressTreeView {
 
                         try? modelContext.save()
 
+                        #warning("siguen siendo lentas las updates. deberia testear correr la funcion de fetchear en otro hilo")
+                        #warning("como cuando hago lo de meter las templates. eso me parece que es un cuello de botella bastante")
+                        #warning("grande")
+                        
                         fetchData()
                     }
                 }

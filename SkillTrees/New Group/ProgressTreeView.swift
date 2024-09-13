@@ -262,7 +262,7 @@ struct ProgressTreeView: View {
                    addTreeNode: viewModel.updateNewNodeTempValues
                ) })
         .onAppear {
-            viewModel.fetchData()
+            viewModel.fetchData(skipUpdateCoordinates: true)
 
             #warning("doesn't work all that well, fix on ios18")
             if let proxy = viewModel.scrollViewProxy { proxy.scrollTo("root") }

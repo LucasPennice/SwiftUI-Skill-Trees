@@ -83,39 +83,43 @@ struct ContentView: View {
                             }
                             .padding(.horizontal)
 
-                            List {
-                                ///
-                                /// JOIN COMMUNITY BUTTON
-                                /// Visible only after the user uses the app for 1 day
-                                /// After the user presses the close button it should show up again
-                                /// Tapping it takes you to the discord server
-                                ///
-                                if settings.daysSinceFirstOpen >= 1 && !settings.doNotShowDiscordPopUpAgain {
-                                    Link(destination: URL(string: "https://discord.gg/nMjHEdhg8m")!) {
-                                        HStack(alignment: .top) {
-                                            VStack(alignment: .leading, spacing: 5) {
-                                                Text("We’d love to hear your thoughts")
-                                                    .font(.system(size: 16))
-                                                    .foregroundColor(.white)
+                            ScrollView {
+                                LazyVStack {
+                                    ///
+                                    /// JOIN COMMUNITY BUTTON
+                                    /// Visible only after the user uses the app for 1 day
+                                    /// After the user presses the close button it should show up again
+                                    /// Tapping it takes you to the discord server
+                                    ///
+                                    if settings.daysSinceFirstOpen >= 1 && !settings.doNotShowDiscordPopUpAgain {
+                                        Link(destination: URL(string: "https://discord.gg/nMjHEdhg8m")!) {
+                                            HStack(alignment: .top) {
+                                                VStack(alignment: .leading, spacing: 5) {
+                                                    Text("We’d love to hear your thoughts")
+                                                        .font(.system(size: 16))
+                                                        .foregroundColor(.white)
 
-                                                Text("Tap here to join our Discord")
-                                                    .font(.system(size: 14))
-                                                    .foregroundStyle(AppColors.textGray)
+                                                    Text("Tap here to join our Discord")
+                                                        .font(.system(size: 14))
+                                                        .foregroundStyle(AppColors.textGray)
+                                                }
+
+                                                Spacer()
+
+                                                Image(systemName: "xmark")
+                                                    .font(.system(size: 14).bold())
+                                                    .foregroundColor(AppColors.textGray)
+                                                    .frame(width: 24, height: 24)
+                                                    .background(AppColors.darkGray)
+                                                    .cornerRadius(20)
+                                                    .onTapGesture { withAnimation { settings.doNotShowDiscordPopUpAgain = true } }
                                             }
-
-                                            Spacer()
-
-                                            Image(systemName: "xmark")
-                                                .font(.system(size: 14).bold())
-                                                .foregroundColor(AppColors.textGray)
-                                                .frame(width: 24, height: 24)
-                                                .background(AppColors.darkGray)
-                                                .cornerRadius(20)
-                                                .onTapGesture { withAnimation { settings.doNotShowDiscordPopUpAgain = true } }
+                                            .padding()
+                                            .background(AppColors.semiDarkGray)
+                                            .cornerRadius(10)
+                                            .padding(.bottom)
                                         }
-                                        .listRowBackground(AppColors.semiDarkGray)
                                     }
-                                }
 
 //                                ///
 //                                /// OPEN COLLECTION BUTTON
@@ -160,38 +164,30 @@ struct ContentView: View {
 //                                    .listRowBackground(AppColors.semiDarkGray)
 //                                }
 
-                                ///
-                                /// List of all Progress Trees
-                                ///
-                                ForEach(viewModel.progressTrees) { tree in
                                     ///
-                                    /// Progress Tree Card With Navigation
+                                    /// List of all Progress Trees
                                     ///
-                                    NavigationLink(value: tree) {}
-                                        .opacity(0)
-                                        .background(ProgressTreeCardView(tree: tree))
-                                        .listRowInsets(EdgeInsets())
-                                        .frame(height: ProgressTreeCardView.cardHeight)
-                                        .listRowBackground(AppColors.semiDarkGray)
-                                        .swipeActions(allowsFullSwipe: false) {
-                                            Button("Edit", systemImage: "pencil") {
-                                                viewModel.editingProgressTree = tree
+                                    ForEach(viewModel.progressTrees) { tree in
+                                        ///
+                                        /// Progress Tree Card With Navigation
+                                        ///
+                                        NavigationLink(value: tree) { ProgressTreeCardView(tree: tree) }
+                                            .foregroundStyle(.white)
+                                            .contextMenu {
+                                                Button("Edit", systemImage: "pencil") {
+                                                    viewModel.editingProgressTree = tree
+                                                }
                                             }
-                                        }
-                                        .contextMenu {
-                                            Button("Edit", systemImage: "pencil") {
-                                                viewModel.editingProgressTree = tree
-                                            }
-                                        }
+                                            .padding(.bottom)
+                                    }
                                 }
+                                .padding(.horizontal)
                             }
                             .navigationDestination(for: ProgressTree.self) { tree in
                                 ProgressTreeView(modelContext: viewModel.modelContext, progressTreeId: tree.persistentModelID)
                             }
                             .scrollContentBackground(.hidden)
                             .listStyle(InsetGroupedListStyle())
-                            .listRowSpacing(24)
-                            .environment(\.defaultMinListRowHeight, 10)
                             .scrollBounceBehavior(.basedOnSize)
                             .scrollIndicators(.hidden)
                         }
