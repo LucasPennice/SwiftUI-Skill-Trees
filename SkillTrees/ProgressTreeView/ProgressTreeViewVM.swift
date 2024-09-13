@@ -47,7 +47,6 @@ extension ProgressTreeView {
             self.modelContext = modelContext
 
             self.progressTreeId = progressTreeId
-            //
         }
 
         @MainActor
