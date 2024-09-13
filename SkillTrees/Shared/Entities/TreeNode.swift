@@ -223,7 +223,9 @@ final class TreeNode {
     }
 
     func getSuccessorsContour() -> LevelContour? {
-        if sortedSuccessors.isEmpty { return nil }
+        if successors.isEmpty { return nil }
+
+        let sortedSuccessors = self.sortedSuccessors
 
         var leftNode = sortedSuccessors.first!
         var rightNode = sortedSuccessors.first!

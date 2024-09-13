@@ -157,9 +157,7 @@ final class ProgressTree {
 
             let overlapAmount: Double = checkResult!.2
 
-            let nodesToShiftByOverlapAmount = getNodesToShiftByOverlapAmount(checkResult!, treeNodes: treeNodes)
-
-            let nodesToShiftByHalfOverlapAmount = getNodesToShiftByHalfOverlapAmount(checkResult!, treeNodes: treeNodes)
+            let (nodesToShiftByOverlapAmount, nodesToShiftByHalfOverlapAmount) = getNodesToShift(checkResult!, treeNodes: treeNodes)
 
             nodesToShiftByOverlapAmount.forEach { $0.coordinates.x += overlapAmount }
 
@@ -232,7 +230,7 @@ final class ProgressTree {
                 }
 
                 /// If the current node has successors, get their layer's contour
-                if !node.sortedSuccessors.isEmpty { contour[node.layer + 1]!.insert(node.getSuccessorsContour()!, at: 0) }
+                if !node.successors.isEmpty { contour[node.layer + 1]!.insert(node.getSuccessorsContour()!, at: 0) }
 
                 node.sortedSuccessors.forEach { recursiveBuildContour($0) }
             }
@@ -245,77 +243,70 @@ final class ProgressTree {
             return contour
         }
 
-        func getNodesToShiftByOverlapAmount(_ checkResult: (PersistentIdentifier, PersistentIdentifier, Double), treeNodes: [TreeNode]) -> [TreeNode] {
-            var result: [TreeNode] = []
-
+        func getNodesToShift(_ checkResult: (PersistentIdentifier, PersistentIdentifier, Double), treeNodes: [TreeNode]) -> ([TreeNode], [TreeNode]) {
             let leftNodeInConflict = treeNodes.first(where: { $0.id == checkResult.0 })
             let rightNodeInConflict = treeNodes.first(where: { $0.id == checkResult.1 })
 
             let pathToLeftNodeInConflict = bfsPath(from: treeNodes[0], to: leftNodeInConflict!)
             let pathToRightNodeInConflict = bfsPath(from: treeNodes[0], to: rightNodeInConflict!)
 
-            if pathToLeftNodeInConflict == nil || pathToLeftNodeInConflict!.isEmpty { return [] }
-            if pathToRightNodeInConflict == nil || pathToRightNodeInConflict!.isEmpty { return [] }
+            if pathToLeftNodeInConflict == nil || pathToLeftNodeInConflict!.isEmpty { return ([], []) }
+            if pathToRightNodeInConflict == nil || pathToRightNodeInConflict!.isEmpty { return ([], []) }
 
             let lastCommonNode = findLastCommonNode(path1: pathToLeftNodeInConflict!, path2: pathToRightNodeInConflict!)
 
-            if lastCommonNode == nil { return [] }
+            if lastCommonNode == nil { return ([], []) }
 
-            let firstChildrenToGetShifted = firstCommonElement(array1: pathToRightNodeInConflict!, array2: lastCommonNode!.sortedSuccessors)
+            let lastCommonNodeSortedSuccessors = lastCommonNode!.sortedSuccessors
 
-            if firstChildrenToGetShifted == nil { return [] }
+            ///
+            /// For nodesToShiftByOverlapAmount acts as : firstChildrenToGetShifted
+            /// For nodesToShiftByHalfOverlapAmount acts as : upperBoundNode
+            ///
+            let firstCommonNodeBetweenPathToRightNodeAndLastCommonNode = firstCommonElement(array1: pathToRightNodeInConflict!, array2: lastCommonNodeSortedSuccessors)
+            ///
+            /// Get nodes to shift by overlap amount
+            ///
+            var nodesToShiftByOverlapAmount: [TreeNode] = []
 
-            let n = lastCommonNode!.sortedSuccessors.firstIndex(where: { $0.id == firstChildrenToGetShifted!.id })
+            if firstCommonNodeBetweenPathToRightNodeAndLastCommonNode != nil {
+                let n = lastCommonNodeSortedSuccessors.firstIndex(where: { $0.id == firstCommonNodeBetweenPathToRightNodeAndLastCommonNode!.id })
 
-            if n == nil { return [] }
+                if n != nil {
+                    for i in n! ... lastCommonNodeSortedSuccessors.count - 1 {
+                        let item = lastCommonNodeSortedSuccessors[i]
 
-            for i in n! ... lastCommonNode!.sortedSuccessors.count - 1 {
-                let item = lastCommonNode!.sortedSuccessors[i]
-
-                appendSubTreeToArray(item, &result)
-            }
-
-            return result
-        }
-
-        func getNodesToShiftByHalfOverlapAmount(_ checkResult: (PersistentIdentifier, PersistentIdentifier, Double), treeNodes: [TreeNode]) -> [TreeNode] {
-            var result: [TreeNode] = []
-
-            let leftNodeInConflict = treeNodes.first(where: { $0.id == checkResult.0 })
-            let rightNodeInConflict = treeNodes.first(where: { $0.id == checkResult.1 })
-
-            let pathToLeftNodeInConflict = bfsPath(from: treeNodes[0], to: leftNodeInConflict!)
-            let pathToRightNodeInConflict = bfsPath(from: treeNodes[0], to: rightNodeInConflict!)
-
-            if pathToLeftNodeInConflict == nil || pathToLeftNodeInConflict!.isEmpty { return [] }
-            if pathToRightNodeInConflict == nil || pathToRightNodeInConflict!.isEmpty { return [] }
-
-            let lastCommonNode = findLastCommonNode(path1: pathToLeftNodeInConflict!, path2: pathToRightNodeInConflict!)
-
-            if lastCommonNode == nil { return [] }
-
-            let lowerBoundNode = firstCommonElement(array1: pathToLeftNodeInConflict!, array2: lastCommonNode!.sortedSuccessors)
-            let upperBoundNode = firstCommonElement(array1: pathToRightNodeInConflict!, array2: lastCommonNode!.sortedSuccessors)
-
-            if lowerBoundNode == nil && upperBoundNode == nil { return [] }
-
-            let lowerBound = lastCommonNode!.sortedSuccessors.firstIndex(where: { $0.id == lowerBoundNode!.id })
-            let upperBound = lastCommonNode!.sortedSuccessors.firstIndex(where: { $0.id == upperBoundNode!.id })
-
-            if lowerBound == nil && upperBound == nil { return [] }
-
-            /// Get nodes from layer 1 to last common node layer
-            treeNodes.forEach {
-                if $0.layer <= lastCommonNode!.layer { result.append($0) }
-            }
-
-            if (upperBound! - lowerBound!) > 1 {
-                for index in lowerBound! + 1 ... upperBound! - 1 {
-                    appendSubTreeToArray(lastCommonNode!.sortedSuccessors[index], &result)
+                        appendSubTreeToArray(item, &nodesToShiftByOverlapAmount)
+                    }
                 }
             }
 
-            return result
+            ///
+            /// Get nodes to shift by half overlap amount
+            ///
+            var nodesToShiftByHalfOverlapAmount: [TreeNode] = []
+
+            let lowerBoundNode = firstCommonElement(array1: pathToLeftNodeInConflict!, array2: lastCommonNodeSortedSuccessors)
+
+            if !(lowerBoundNode == nil && firstCommonNodeBetweenPathToRightNodeAndLastCommonNode == nil) {
+                let lowerBound = lastCommonNodeSortedSuccessors.firstIndex(where: { $0.id == lowerBoundNode!.id })
+                let upperBound = lastCommonNodeSortedSuccessors.firstIndex(where: { $0.id == firstCommonNodeBetweenPathToRightNodeAndLastCommonNode!.id })
+
+                if !(lowerBound == nil && upperBound == nil) {
+                    /// Get nodes from layer 1 to last common node layer
+                    treeNodes.forEach {
+                        if $0.layer <= lastCommonNode!.layer { nodesToShiftByHalfOverlapAmount.append($0) }
+                    }
+
+                    if (upperBound! - lowerBound!) > 1 {
+                        for index in lowerBound! + 1 ... upperBound! - 1 {
+                            appendSubTreeToArray(lastCommonNodeSortedSuccessors[index], &nodesToShiftByHalfOverlapAmount)
+                        }
+                    }
+                }
+            }
+
+            return (nodesToShiftByOverlapAmount, nodesToShiftByHalfOverlapAmount)
         }
 
         func findLastCommonNode(path1: [TreeNode], path2: [TreeNode]) -> TreeNode? {
@@ -348,11 +339,13 @@ final class ProgressTree {
         /// The width of the successor layer
         let successorsWidth = Double(ProgressTree.SPACE_BETWEEN_NODES * (node.successors.count - 1))
 
-        for (index, successor) in node.sortedSuccessors.enumerated() {
+        let sortedSuccessors = node.sortedSuccessors
+
+        for (index, successor) in sortedSuccessors.enumerated() {
             successor.coordinates.x = node.coordinates.x + Double(index * ProgressTree.SPACE_BETWEEN_NODES) - successorsWidth / 2
         }
 
-        node.sortedSuccessors.forEach { initialCoordinates(node: $0) }
+        sortedSuccessors.forEach { initialCoordinates(node: $0) }
     }
 
     /// Makes sure all coordinates are positive

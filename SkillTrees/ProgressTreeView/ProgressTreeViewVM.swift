@@ -168,10 +168,6 @@ extension ProgressTreeView {
 
                         try? modelContext.save()
 
-                        #warning("siguen siendo lentas las updates. deberia testear correr la funcion de fetchear en otro hilo")
-                        #warning("como cuando hago lo de meter las templates. eso me parece que es un cuello de botella bastante")
-                        #warning("grande")
-                        
                         fetchData()
                     }
                 }
